@@ -1,1 +1,45 @@
+@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@500;700;800&display=swap');
 @import "tailwindcss";
+
+body {
+  font-family: 'Raleway', sans-serif;
+  font-weight: 500;
+  color: #1D1E1D;
+  background-color: #FAF8F6;
+}
+
+:root {
+    --e-global-color-accent: #C7DA46;
+    --e-global-color-primary: #03291F;
+    --e-global-color-secondary: #C7DA46;
+    --e-global-color-text: #1D1E1D;
+    --e-global-color-15cc862: #D2E06C;
+    --e-global-color-9c67582: #DEE790;
+    --e-global-color-78b31fe: #E8EFB5;
+    --e-global-color-e2c70a0: #F3F7DA;
+    --e-global-color-8e41f82: #03291F;
+    --e-global-color-3e427bd: #1E3E35;
+    --e-global-color-e7cab51: #455E57;
+    --e-global-color-4562ce5: #455E57;
+    --e-global-color-6655f78: #829490;
+    --e-global-color-3bc5e83: #CED5D2;
+    --e-global-color-23775c2: #393E3A;
+    --e-global-color-e31ae5b: #5B5E5B;
+    --e-global-color-cf584a1: #919392;
+    --e-global-color-55a7c57: #D3D4D3;
+    --e-global-color-5b18cd8: #FAF8F6;
+    --e-global-color-4d44528: #E9E6E4;
+    --e-global-color-5bedc29: #CFCBCA;
+    --e-global-color-8a037f3: #C2BFBD;
+    --e-global-color-00ee15a: #ACA9A7;
+    --e-global-color-8316a6b: #F3F7DA38;
+    --e-global-color-d938428: #455E570A;
+    --e-global-typography-primary-font-family: "Raleway";
+    --e-global-typography-primary-font-weight: 700;
+    --e-global-typography-secondary-font-family: "Raleway";
+    --e-global-typography-secondary-font-weight: 500;
+    --e-global-typography-text-font-family: "Raleway";
+    --e-global-typography-text-font-weight: 500;
+    --e-global-typography-accent-font-family: "Raleway";
+    --e-global-typography-accent-font-weight: 800;
+}

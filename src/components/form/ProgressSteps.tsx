@@ -14,11 +14,11 @@ export const ProgressSteps = ({ steps, currentStep }: ProgressStepsProps) => {
           const Icon = step.icon;
           return (
             <div key={index} className="flex items-center">
-              <div className={`flex flex-col items-center ${index <= currentStep ? 'text-blue-600' : 'text-gray-400'}`}>
+              <div className={`flex flex-col items-center ${index <= currentStep ? 'text-accent' : 'text-gray-medium'}`}>
                 <div className={`w-12 h-12 rounded-full flex items-center justify-center mb-2 ${
-                  index < currentStep ? 'bg-blue-600 text-white' : 
-                  index === currentStep ? 'bg-blue-600 text-white ring-4 ring-blue-200' : 
-                  'bg-gray-200'
+                  index < currentStep ? 'bg-accent text-primary' : 
+                  index === currentStep ? 'bg-accent text-primary ring-4 ring-accent-light-2' : 
+                  'bg-gray-light-1'
                 }`}>
                   {index < currentStep ? <CheckCircle className="w-6 h-6" /> : <Icon className="w-6 h-6" />}
                 </div>
@@ -26,7 +26,7 @@ export const ProgressSteps = ({ steps, currentStep }: ProgressStepsProps) => {
               </div>
               {index < steps.length - 1 && (
                 <div className={`w-full h-1 mx-2 ${
-                  index < currentStep ? 'bg-blue-600' : 'bg-gray-200'
+                  index < currentStep ? 'bg-accent' : 'bg-gray-light-1'
                 }`} />
               )}
             </div>

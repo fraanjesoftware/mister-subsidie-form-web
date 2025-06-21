@@ -83,11 +83,11 @@ const App = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
+    <div className="min-h-screen bg-gradient-to-br from-accent-light-4 to-gray-light-2">
       <div className="max-w-4xl mx-auto px-4 py-8">
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">SLIM Subsidie Aanvraag</h1>
-          <p className="text-gray-600">Vraag eenvoudig uw SLIM-subsidie aan via Mistersubsidie</p>
+          <h1 className="text-3xl font-extrabold text-primary mb-2">SLIM Subsidie Aanvraag</h1>
+          <p className="text-gray-dark-2 font-medium">Vraag eenvoudig uw SLIM-subsidie aan via Mistersubsidie</p>
         </div>
         
         <ProgressSteps steps={STEPS} currentStep={currentStep} />
