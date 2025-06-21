@@ -24,7 +24,7 @@ export const Navigation = ({
       <button
         onClick={onPrev}
         disabled={currentStep === 0}
-        className={`flex items-center px-6 py-3 rounded-lg font-medium transition-all ${
+        className={`flex items-center px-6 py-3 rounded-lg font-extrabold transition-all ${
           currentStep === 0
             ? 'bg-gray-200 text-gray-400 cursor-not-allowed opacity-50'
             : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-300 shadow-sm'
@@ -42,9 +42,9 @@ export const Navigation = ({
         <button
           onClick={onNext}
           disabled={!isStepValid}
-          className={`flex items-center px-6 py-3 rounded-lg font-medium transition-all ${
+          className={`flex items-center px-6 py-3 rounded-lg font-extrabold transition-all ${
             isStepValid
-              ? 'bg-[#C8DA47] text-[#03291F] hover:bg-[#D2E06C] shadow-sm'
+              ? 'bg-[#C8DA47] text-[#03291F] hover:bg-[#F3F7DA] hover:outline hover:outline-3 hover:outline-black shadow-sm cursor-pointer'
               : 'bg-gray-300 text-gray-500 cursor-not-allowed opacity-50'
           }`}
         >
@@ -55,9 +55,9 @@ export const Navigation = ({
         <button
           onClick={onSubmit}
           disabled={!isStepValid}
-          className={`flex items-center px-6 py-3 rounded-lg font-medium transition-all ${
+          className={`flex items-center px-6 py-3 rounded-lg font-extrabold transition-all ${
             isStepValid
-              ? 'bg-[#C8DA47] text-[#03291F] hover:bg-[#D2E06C] shadow-sm'
+              ? 'bg-[#C8DA47] text-[#03291F] hover:bg-[#F3F7DA] hover:outline hover:outline-3 hover:outline-black shadow-sm cursor-pointer'
               : 'bg-gray-300 text-gray-500 cursor-not-allowed opacity-50'
           }`}
         >
