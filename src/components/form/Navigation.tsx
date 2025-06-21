@@ -27,7 +27,7 @@ export const Navigation = ({
         className={`flex items-center px-6 py-3 rounded-lg font-extrabold transition-all ${
           currentStep === 0
             ? 'bg-gray-200 text-gray-400 cursor-not-allowed opacity-50'
-            : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-300 shadow-sm'
+            : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-300 shadow-sm cursor-pointer'
         }`}
       >
         <ChevronLeft className="w-5 h-5 mr-2" />

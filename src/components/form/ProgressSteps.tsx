@@ -22,7 +22,7 @@ export const ProgressSteps = ({ steps, currentStep }: ProgressStepsProps) => {
                 }`}>
                   {index < currentStep ? <CheckCircle className="w-6 h-6" /> : <Icon className="w-6 h-6" />}
                 </div>
-                <span className="text-xs font-medium text-center hidden sm:block">{step.title}</span>
+                <span className="text-xs font-medium text-center text-black hidden sm:block">{step.title}</span>
               </div>
               {index < steps.length - 1 && (
                 <div className={`w-full h-1 mx-2 ${
