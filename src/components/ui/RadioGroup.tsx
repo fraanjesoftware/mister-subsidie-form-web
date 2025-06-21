@@ -18,15 +18,19 @@ export const RadioGroup = ({ name, options, value, onChange }: RadioGroupProps) 
       {options.map((option) => (
         <label
           key={option.value}
-          className="block p-4 border-2 rounded-lg cursor-pointer hover:bg-gray-light-2 transition-colors"
-          style={{ borderColor: value === option.value ? '#C7DA46' : '#D3D4D3' }}
+          className={`block p-4 border-2 rounded-lg cursor-pointer transition-all ${
+            value === option.value 
+              ? 'bg-[#F3F7DA] hover:bg-[#E8EFB5]' 
+              : 'hover:bg-gray-50 hover:border-[#DEE790]'
+          }`}
+          style={{ borderColor: value === option.value ? '#C8DA47' : '#D3D4D3' }}
         >
           <div className="flex items-start space-x-3">
             <input
               type="radio"
               name={name}
               value={option.value}
-              className="mt-1 w-4 h-4 text-accent"
+              className="mt-1 w-4 h-4 text-[#C8DA47]"
               checked={value === option.value}
               onChange={(e) => onChange(e.target.value)}
             />

@@ -14,7 +14,7 @@ export const Input = ({ label, error, hint, className = '', ...props }: InputPro
         {hint && <span className="text-xs text-gray-medium font-medium block">{hint}</span>}
       </label>
       <input
-        className={`w-full px-4 py-2 font-medium border border-gray-light-1 rounded-lg focus:ring-2 focus:ring-accent focus:border-accent ${
+        className={`w-full px-4 py-2 font-medium border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#C8DA47] focus:border-[#C8DA47] ${
           error ? 'border-red-500' : ''
         } ${className}`}
         {...props}

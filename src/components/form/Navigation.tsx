@@ -26,8 +26,8 @@ export const Navigation = ({
         disabled={currentStep === 0}
         className={`flex items-center px-6 py-3 rounded-lg font-medium transition-all ${
           currentStep === 0
-            ? 'bg-gray-light-1 text-gray-medium cursor-not-allowed'
-            : 'bg-white text-gray-dark-1 hover:bg-gray-light-2 border border-gray-light-1'
+            ? 'bg-gray-200 text-gray-400 cursor-not-allowed opacity-50'
+            : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-300 shadow-sm'
         }`}
       >
         <ChevronLeft className="w-5 h-5 mr-2" />
@@ -44,8 +44,8 @@ export const Navigation = ({
           disabled={!isStepValid}
           className={`flex items-center px-6 py-3 rounded-lg font-medium transition-all ${
             isStepValid
-              ? 'bg-accent text-primary hover:bg-accent-light-1'
-              : 'bg-gray-light-1 text-gray-medium cursor-not-allowed'
+              ? 'bg-[#C8DA47] text-[#03291F] hover:bg-[#D2E06C] shadow-sm'
+              : 'bg-gray-300 text-gray-500 cursor-not-allowed opacity-50'
           }`}
         >
           Volgende
@@ -57,8 +57,8 @@ export const Navigation = ({
           disabled={!isStepValid}
           className={`flex items-center px-6 py-3 rounded-lg font-medium transition-all ${
             isStepValid
-              ? 'bg-accent text-primary hover:bg-accent-light-1'
-              : 'bg-gray-light-1 text-gray-medium cursor-not-allowed'
+              ? 'bg-[#C8DA47] text-[#03291F] hover:bg-[#D2E06C] shadow-sm'
+              : 'bg-gray-300 text-gray-500 cursor-not-allowed opacity-50'
           }`}
         >
           <CheckCircle className="w-5 h-5 mr-2" />
