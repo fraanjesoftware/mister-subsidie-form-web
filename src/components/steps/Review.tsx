@@ -1,6 +1,5 @@
 import { FormData } from '../../types';
 import { Card, Alert } from '../ui';
-import { AlertCircle } from 'lucide-react';
 
 interface ReviewProps {
   formData: FormData;
