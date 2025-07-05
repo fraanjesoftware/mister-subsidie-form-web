@@ -1,4 +1,4 @@
-import { AlertCircle } from 'lucide-react';
+import { IconAlertCircle } from '@tabler/icons-react';
 
 interface AlertProps {
   type: 'info' | 'warning' | 'error';
@@ -21,7 +21,7 @@ export const Alert = ({ type, children }: AlertProps) => {
   return (
     <div className={`p-4 rounded-lg ${styles[type]}`}>
       <div className="flex items-start space-x-3">
-        <AlertCircle className={`w-5 h-5 mt-0.5 ${iconColors[type]}`} />
+        <IconAlertCircle className={`w-5 h-5 mt-0.5 ${iconColors[type]}`} />
         <div className="text-sm font-medium">{children}</div>
       </div>
     </div>
