@@ -1,4 +1,4 @@
-import { IconCircleCheck } from '@tabler/icons-react';
+import { CheckCircle } from 'lucide-react';
 import { Step } from '../../types';
 
 interface ProgressStepsProps {
@@ -20,7 +20,7 @@ export const ProgressSteps = ({ steps, currentStep }: ProgressStepsProps) => {
                   index === currentStep ? 'bg-[#C8DA47] text-[#03291F] ring-4 ring-[#DEE790]' : 
                   'bg-gray-200'
                 }`}>
-                  {index < currentStep ? <IconCircleCheck className="w-6 h-6" /> : <Icon className="w-6 h-6" />}
+                  {index < currentStep ? <CheckCircle className="w-6 h-6" /> : <Icon className="w-6 h-6" />}
                 </div>
                 <span className="text-xs font-medium text-center text-black hidden sm:block">{step.title}</span>
               </div>
