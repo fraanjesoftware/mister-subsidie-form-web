@@ -14,6 +14,8 @@ import { prepareFormData } from './utils/prepareFormData';
 
 const App = () => {
   const [currentStep, setCurrentStep] = useState(0);
+  const [isTestLoading, setIsTestLoading] = useState(false);
+  const [testResponse, setTestResponse] = useState<any>(null);
   const { formData, handleInputChange, handleNestedInputChange } = useFormData();
   const { isStepValid } = useStepValidation(formData);
 
@@ -26,6 +28,77 @@ const App = () => {
   const handlePrev = () => {
     if (currentStep > 0) {
       setCurrentStep(currentStep - 1);
+    }
+  };
+
+  const handleTestDocuSign = async () => {
+    setIsTestLoading(true);
+    setTestResponse(null);
+
+    const testData = {
+      "signer": {
+        "email": "multi-form-test@example.com",
+        "name": "Multi Form Tester"
+      },
+      "forms": [
+        {
+          "formType": "deMinimis",
+          "formData": {
+            "selectedOption": 1,
+            "generalData": {
+              "companyName": "Multi Test Company B.V.",
+              "kvkNumber": "88888888",
+              "street": "Multistraat",
+              "houseNumber": "999",
+              "city": "Rotterdam",
+              "postalCode": "3000AA",
+              "signerName": "Multi Form Tester",
+              "date": "05-07-25"
+            },
+            "addSignatureAnchors": true
+          }
+        },
+        {
+          "formType": "mkb",
+          "formData": {
+            "companyName": "Multi Test Company B.V.",
+            "financialYear": "2024",
+            "employees": 75,
+            "annualTurnover": 12000000,
+            "balanceTotal": 6000000,
+            "signerName": "Multi Form Tester",
+            "signerPosition": "CEO",
+            "dateAndLocation": "Rotterdam, 05-07-2025",
+            "isIndependent": true,
+            "hasLargeCompanyOwnership": false,
+            "hasPartnerCompanies": false,
+            "addSignatureAnchors": true
+          }
+        }
+      ],
+      "returnUrl": "https://example.com/multi-signing-complete"
+    };
+
+    try {
+      const response = await fetch(
+        'https://mister-subsidie-form-api-h8fvgydvheenczea.westeurope-01.azurewebsites.net/api/createSigningSession',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(testData),
+        }
+      );
+
+      const result = await response.json();
+      setTestResponse(result);
+      console.log('DocuSign API Response:', result);
+    } catch (error) {
+      console.error('Error calling DocuSign API:', error);
+      setTestResponse({ error: error.message });
+    } finally {
+      setIsTestLoading(false);
     }
   };
 
@@ -88,6 +161,43 @@ const App = () => {
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-primary mb-2">SLIM Subsidie Aanvraag</h1>
           <p className="text-gray-dark-2 font-medium">Vraag eenvoudig uw SLIM-subsidie aan via Mistersubsidie</p>
+        </div>
+
+        {/* Test DocuSign Button */}
+        <div className="bg-white rounded-xl shadow-lg p-6 mb-6">
+          <h2 className="text-lg font-semibold mb-4">DocuSign API Test</h2>
+          <button
+            onClick={handleTestDocuSign}
+            disabled={isTestLoading}
+            className={`px-6 py-3 rounded-lg font-medium transition-all ${
+              isTestLoading 
+                ? 'bg-gray-400 cursor-not-allowed' 
+                : 'bg-primary hover:bg-primary-dark text-white'
+            }`}
+          >
+            {isTestLoading ? 'Loading...' : 'Test DocuSign API'}
+          </button>
+          
+          {testResponse && (
+            <div className="mt-4 p-4 bg-gray-100 rounded-lg">
+              <h3 className="font-semibold mb-2">API Response:</h3>
+              <pre className="text-sm overflow-x-auto whitespace-pre-wrap">
+                {JSON.stringify(testResponse, null, 2)}
+              </pre>
+              {testResponse.signingUrl && (
+                <div className="mt-4">
+                  <a 
+                    href={testResponse.signingUrl} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="inline-block px-4 py-2 bg-primary text-white rounded hover:bg-primary-dark transition-colors"
+                  >
+                    Open DocuSign Signing Session
+                  </a>
+                </div>
+              )}
+            </div>
+          )}
         </div>
         
         <ProgressSteps steps={STEPS} currentStep={currentStep} />
