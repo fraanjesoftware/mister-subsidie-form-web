@@ -7,7 +7,6 @@ interface NavigationProps {
   onNext: () => void;
   onSubmit: () => void;
   isStepValid: boolean;
-  isSubmitting?: boolean;
 }
 
 export const Navigation = ({ 
@@ -16,8 +15,7 @@ export const Navigation = ({
   onPrev, 
   onNext, 
   onSubmit, 
-  isStepValid,
-  isSubmitting = false
+  isStepValid 
 }: NavigationProps) => {
   const isLastStep = currentStep === totalSteps - 1;
 
@@ -56,24 +54,15 @@ export const Navigation = ({
       ) : (
         <button
           onClick={onSubmit}
-          disabled={!isStepValid || isSubmitting}
+          disabled={!isStepValid}
           className={`flex items-center px-6 py-3 rounded-2xl font-extrabold transition-all ${
-            isStepValid && !isSubmitting
+            isStepValid
               ? 'bg-[#C8DA47] text-[#03291F] hover:bg-[#F3F7DA] hover:outline hover:outline-3 hover:outline-black shadow-sm cursor-pointer'
               : 'bg-gray-300 text-gray-500 cursor-not-allowed opacity-50'
           }`}
         >
-          {isSubmitting ? (
-            <>
-              <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-[#03291F] mr-2"></div>
-              Bezig met verzenden...
-            </>
-          ) : (
-            <>
-              <IconCircleCheck className="w-5 h-5 mr-2" />
-              Aanvraag indienen
-            </>
-          )}
+          <IconCircleCheck className="w-5 h-5 mr-2" />
+          Aanvraag indienen
         </button>
       )}
     </div>

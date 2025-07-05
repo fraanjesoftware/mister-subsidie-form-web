@@ -11,13 +11,9 @@ import {
 import { STEPS } from './constants/steps';
 import { useFormData, useStepValidation } from './hooks';
 import { prepareFormData } from './utils/prepareFormData';
-import { createSigningSession, createTestSigningSession } from './services/api';
-import { initializeDocuSignEmbeddedSigning } from './services/docusign';
 
 const App = () => {
   const [currentStep, setCurrentStep] = useState(0);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isTestLoading, setIsTestLoading] = useState(false);
   const { formData, handleInputChange, handleNestedInputChange } = useFormData();
   const { isStepValid } = useStepValidation(formData);
 
@@ -33,78 +29,38 @@ const App = () => {
     }
   };
 
-  const handleTestDocuSign = async () => {
-    try {
-      setIsTestLoading(true);
-      console.log('Sending test DocuSign request...');
-      
-      const response = await createTestSigningSession();
-      
-      console.log('Test signing session created:', response);
-      
-      if (response.envelopeId) {
-        localStorage.setItem('testEnvelopeId', response.envelopeId);
-        
-        if (response.redirectUrl) {
-          initializeDocuSignEmbeddedSigning(response.envelopeId, response.redirectUrl);
-        } else {
-          alert(`Test DocuSign envelope aangemaakt!\n\nEnvelope ID: ${response.envelopeId}`);
-        }
-      }
-    } catch (error) {
-      console.error('Error in test DocuSign:', error);
-      const errorMessage = error instanceof Error ? error.message : 'Onbekende fout';
-      
-      // Check if it's a CORS error
-      if (errorMessage.includes('Failed to fetch')) {
-        alert(`CORS Error: De API server staat geen requests toe van localhost.\n\nMogelijke oplossingen:\n1. Vraag de API beheerder om CORS te configureren voor localhost:5173\n2. Test vanaf de gedeployde versie van de applicatie\n3. Gebruik een browser extensie zoals "CORS Unblock" voor testing\n\nTechnische details: ${errorMessage}`);
-      } else {
-        alert(`Test fout: ${errorMessage}`);
-      }
-    } finally {
-      setIsTestLoading(false);
-    }
-  };
-
-  const handleSubmit = async () => {
-    try {
-      setIsSubmitting(true);
-      const allData = prepareFormData(formData);
-      console.log('Formulieren data:', allData);
-      
-      // Save to localStorage
-      localStorage.setItem('slimFormData', JSON.stringify(allData));
-      
-      // Call API to create signing session
-      const response = await createSigningSession(allData.structured);
-      
-      console.log('Signing session created:', response);
-      
-      // Initialize DocuSign embedded signing
-      if (response.envelopeId) {
-        // Store envelope ID for reference
-        localStorage.setItem('currentEnvelopeId', response.envelopeId);
-        
-        // If API provides a redirect URL, use it
-        if (response.redirectUrl) {
-          initializeDocuSignEmbeddedSigning(response.envelopeId, response.redirectUrl);
-        } else {
-          // Otherwise show success message with envelope ID
-          alert(`Uw aanvraag is succesvol verzonden!\n\nEnvelope ID: ${response.envelopeId}\n\nU wordt doorgestuurd naar de ondertekeningspagina.`);
-          
-          // Here you would typically redirect to a signing page
-          // For now, we'll show the envelope ID
-          console.log('Envelope ID received:', response.envelopeId);
-        }
-      }
-    } catch (error) {
-      console.error('Error submitting form:', error);
-      setIsSubmitting(false);
-      
-      // Show error message
-      const errorMessage = error instanceof Error ? error.message : 'Onbekende fout';
-      alert(`Er is een fout opgetreden bij het verzenden van uw aanvraag:\n\n${errorMessage}\n\nProbeer het later opnieuw of neem contact op met support.`);
-    }
+  const handleSubmit = () => {
+    const allData = prepareFormData(formData);
+    console.log('Formulieren data:', allData);
+    
+    // Save to localStorage
+    localStorage.setItem('slimFormData', JSON.stringify(allData));
+    
+    // Download structured data as JSON
+    const structuredDataStr = JSON.stringify(allData.structured, null, 2);
+    const structuredDataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(structuredDataStr);
+    const structuredFileName = `slim-aanvraag-structured-${formData.bedrijfsnaam.replace(/\s+/g, '-').toLowerCase()}-${new Date().toISOString().split('T')[0]}.json`;
+    
+    // Download PDF field mapping as JSON
+    const pdfDataStr = JSON.stringify(allData.pdfFields, null, 2);
+    const pdfDataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(pdfDataStr);
+    const pdfFileName = `slim-aanvraag-pdf-fields-${formData.bedrijfsnaam.replace(/\s+/g, '-').toLowerCase()}-${new Date().toISOString().split('T')[0]}.json`;
+    
+    // Create download for structured data
+    const link1 = document.createElement('a');
+    link1.setAttribute('href', structuredDataUri);
+    link1.setAttribute('download', structuredFileName);
+    link1.click();
+    
+    // Create download for PDF field mapping (with small delay)
+    setTimeout(() => {
+      const link2 = document.createElement('a');
+      link2.setAttribute('href', pdfDataUri);
+      link2.setAttribute('download', pdfFileName);
+      link2.click();
+    }, 500);
+    
+    alert('Uw aanvraag is succesvol verwerkt! Er zijn 2 bestanden gedownload:\n\n1. Gestructureerde data (voor archivering)\n2. PDF veld mapping (voor automatisch invullen van PDFs)');
   };
 
   const renderStep = () => {
@@ -132,27 +88,6 @@ const App = () => {
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-primary mb-2">SLIM Subsidie Aanvraag</h1>
           <p className="text-gray-dark-2 font-medium">Vraag eenvoudig uw SLIM-subsidie aan via Mistersubsidie</p>
-          
-          {/* Test DocuSign Button */}
-          <div className="mt-4">
-            <button
-              onClick={handleTestDocuSign}
-              disabled={isTestLoading}
-              className="px-6 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors"
-            >
-              {isTestLoading ? (
-                <>
-                  <span className="inline-block animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></span>
-                  Test DocuSign bezig...
-                </>
-              ) : (
-                'Test DocuSign Embedded Signing'
-              )}
-            </button>
-            <p className="text-xs text-gray-600 mt-2">
-              API Endpoint: /api/createSigningSession
-            </p>
-          </div>
         </div>
         
         <ProgressSteps steps={STEPS} currentStep={currentStep} />
@@ -168,7 +103,6 @@ const App = () => {
           onNext={handleNext}
           onSubmit={handleSubmit}
           isStepValid={isStepValid(currentStep)}
-          isSubmitting={isSubmitting}
         />
       </div>
     </div>
