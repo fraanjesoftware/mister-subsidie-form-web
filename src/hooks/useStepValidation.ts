@@ -11,7 +11,9 @@ export const useStepValidation = (formData: FormData) => {
         return !!(formData.aantalFte && formData.jaaromzet && formData.balanstotaal);
       case 3:
         return !!formData.deMinimisType;
-      case 4:
+      case 4: 
+      return true;
+      case 5:
         return !!(formData.akkoordMachtiging && formData.akkoordWaarheid && 
                formData.machtigingIndienen && formData.machtigingHandelingen && 
                formData.machtigingBezwaar);

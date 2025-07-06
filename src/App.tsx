@@ -12,13 +12,16 @@ import { DocuSignModal } from './components/DocuSignModal';
 import { STEPS } from './constants/steps';
 import { useFormData, useStepValidation } from './hooks';
 import { prepareFormData } from './utils/prepareFormData';
+import { buildSigningSession } from './utils/buildSigningSession';
+import type { TemplateSigningSession, TemplateSigningSessionResponse } from './types/docusign';
 
 const App = () => {
   const [currentStep, setCurrentStep] = useState(0);
   const [isTestLoading, setIsTestLoading] = useState(false);
-  const [testResponse, setTestResponse] = useState<any>(null);
+  const [testResponse, setTestResponse] = useState<TemplateSigningSessionResponse | null>(null);
   const [showSigningModal, setShowSigningModal] = useState(false);
   const [modalLoading, setModalLoading] = useState(false);
+  const [signingError, setSigningError] = useState<string>('');
   const { formData, handleInputChange, handleNestedInputChange } = useFormData();
   const { isStepValid } = useStepValidation(formData);
 
@@ -38,55 +41,70 @@ const App = () => {
     setIsTestLoading(true);
     setTestResponse(null);
 
-    const testData = {
-      "signer": {
-        "email": "info@fraanjesoftware.com",
-        "name": "Multi Form Tester",
-        "clientUserId": "test-user-123"
-      },
-      "forms": [
+    const testData: TemplateSigningSession = {
+      templateId: "4e941c38-804a-4a38-991c-146639ede747",
+      signers: [
         {
-          "formType": "deMinimis",
-          "formData": {
-            "selectedOption": 1,
-            "generalData": {
-              "companyName": "Multi Test Company B.V.",
-              "kvkNumber": "88888888",
-              "street": "Multistraat",
-              "houseNumber": "999",
-              "city": "Rotterdam",
-              "postalCode": "3000AA",
-              "signerName": "Multi Form Tester",
-              "date": "05-07-25"
-            },
-            "addSignatureAnchors": true
+          email: "info@fraanjesoftware.com",
+          name: "Multi Form Tester",
+          roleName: "Applicant",
+          tabs: {
+            radioGroupTabs: [
+              {
+                groupName: "de-minimis-radio",
+                radios: [
+                  { value: "geen", selected: "false" },
+                  { value: "wel", selected: "true" },
+                  { value: "andere", selected: "false" }
+                ]
+              },
+              {
+                groupName: "onderneming-type",
+                radios: [
+                  { value: "kleine", selected: "false" },
+                  { value: "middel", selected: "true" },
+                  { value: "grote", selected: "false" }
+                ]
+              }
+            ],
+            textTabs: [
+              { tabLabel: "minimis-2.1", value: "5000" },
+              { tabLabel: "bedrijfsnaam", value: "Test Company B.V." },
+              { tabLabel: "naam", value: "Mickey Fraanje" },
+              { tabLabel: "functie", value: "Directeur" },
+              { tabLabel: "email", value: "info@fraanjesoftware.com" },
+              { tabLabel: "voorletters-tekenbevoegde", value: "M." },
+              { tabLabel: "achternaam-tekenbevoegde", value: "Fraanje" },
+              { tabLabel: "functie-tekenbevoegde", value: "Directeur" },
+              { tabLabel: "nace", value: "1234" },
+              { tabLabel: "kvk", value: "12345678" },
+              { tabLabel: "onderneming-adres", value: "Teststraat 123" },
+              { tabLabel: "postcode", value: "1234 AB" },
+              { tabLabel: "plaats", value: "Amsterdam" },
+              { tabLabel: "fte", value: "25" },
+              { tabLabel: "jaaromzet", value: "€5.000.000" },
+              { tabLabel: "balanstotaal", value: "€2.500.000" },
+              { tabLabel: "Date", value: "06-07-2025" }
+            ],
+            listTabs: [
+              { tabLabel: "CompanySize", value: "Klein (< 50 medewerkers)" }
+            ]
           }
         },
         {
-          "formType": "mkb",
-          "formData": {
-            "companyName": "Multi Test Company B.V.",
-            "financialYear": "2024",
-            "employees": 75,
-            "annualTurnover": 12000000,
-            "balanceTotal": 6000000,
-            "signerName": "Multi Form Tester",
-            "signerPosition": "CEO",
-            "dateAndLocation": "Rotterdam, 05-07-2025",
-            "isIndependent": true,
-            "hasLargeCompanyOwnership": false,
-            "hasPartnerCompanies": false,
-            "addSignatureAnchors": true
-          }
+          email: "test@mickeyfraanje.com",
+          name: "Second signer",
+          roleName: "SecondSigner"
         }
       ],
-      "returnUrl": "http://localhost:5173/"
+      returnUrl: "http://localhost:5173/",
+      forEmbedding: true
     };
 
     try {
       const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || 'https://mister-subsidie-form-api-h8fvgydvheenczea.westeurope-01.azurewebsites.net';
       const response = await fetch(
-        `${apiBaseUrl}/api/createEmbeddedSigningSession`,
+        `${apiBaseUrl}/api/createTemplateSigningSession`,
         {
           method: 'POST',
           headers: {
@@ -96,7 +114,7 @@ const App = () => {
         }
       );
 
-      const result = await response.json();
+      const result: TemplateSigningSessionResponse = await response.json();
       setTestResponse(result);
       console.log('DocuSign API Response:', result);
       console.log('Signing URL:', result.signingUrl);
@@ -126,6 +144,55 @@ const App = () => {
   const handleCloseModal = () => {
     setShowSigningModal(false);
     setTestResponse(null);
+  };
+
+  const handleSignDocuments = async () => {
+    setModalLoading(true);
+    setTestResponse(null);
+    setSigningError('');
+
+    // Build signing session data using the type-safe helper
+    const signingData = buildSigningSession(
+      formData,
+      "4e941c38-804a-4a38-991c-146639ede747" // Replace with actual template ID from config/env
+    );
+
+    console.log('Sending to DocuSign API:', JSON.stringify(signingData, null, 2));
+    
+    try {
+      const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || 'https://mister-subsidie-form-api-h8fvgydvheenczea.westeurope-01.azurewebsites.net';
+      const response = await fetch(
+        `${apiBaseUrl}/api/createTemplateSigningSession`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(signingData),
+        }
+      );
+
+      const result = await response.json();
+      setTestResponse(result);
+      console.log('DocuSign API Response:', result);
+      
+      if (result.signingUrl) {
+        // Show the signing modal
+        setShowSigningModal(true);
+        setModalLoading(false);
+      } else if (result.error) {
+        // Show error message
+        console.error('DocuSign error:', result.error, result.validationErrors);
+        const errorMessage = result.validationErrors?.join(', ') || result.message || result.error;
+        setSigningError(`Fout bij ondertekenen: ${errorMessage}`);
+        setModalLoading(false);
+      }
+    } catch (error) {
+      console.error('Error calling DocuSign API:', error);
+      setTestResponse({ error: error instanceof Error ? error.message : 'Unknown error' });
+      setSigningError(`Fout bij verbinding: ${error instanceof Error ? error.message : 'Onbekende fout'}`);
+      setModalLoading(false);
+    }
   };
 
   const handleSubmit = () => {
@@ -173,9 +240,9 @@ const App = () => {
       case 3:
         return <StateAid formData={formData} onInputChange={handleInputChange} />;
       case 4:
-        return <Authorization formData={formData} onInputChange={handleInputChange} />;
-      case 5:
         return <Review formData={formData} />;
+      case 5:
+        return <Authorization formData={formData} onInputChange={handleInputChange} onSign={handleSignDocuments} signingError={signingError} />;
       default:
         return null;
     }
