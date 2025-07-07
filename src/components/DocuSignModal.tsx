@@ -20,11 +20,25 @@ export const DocuSignModal: React.FC<DocuSignModalProps> = ({
 }) => {
   const [signingStatus, setSigningStatus] = useState<'idle' | 'loading' | 'ready' | 'completed' | 'cancelled' | 'error'>('idle');
   const [errorMessage, setErrorMessage] = useState<string>('');
+  const [shouldMountDocuSign, setShouldMountDocuSign] = useState(false);
+
+  // Check if integration key is set
+  const integrationKey = import.meta.env.VITE_DOCUSIGN_INTEGRATION_KEY;
+  
+  useEffect(() => {
+    if (!integrationKey) {
+      console.error('VITE_DOCUSIGN_INTEGRATION_KEY is not set in environment variables');
+      setSigningStatus('error');
+      setErrorMessage('DocuSign integration key is missing. Please set VITE_DOCUSIGN_INTEGRATION_KEY in your .env file.');
+    }
+  }, [integrationKey]);
 
   const signing = useDocuSignEmbedded({
     signingUrl: signingUrl || '',
-    integrationKey: import.meta.env.VITE_DOCUSIGN_INTEGRATION_KEY || '',
+    integrationKey: integrationKey || '',
+    enabled: shouldMountDocuSign && !!signingUrl && !!integrationKey,
     onReady: () => {
+      console.log('DocuSign SDK is ready');
       setSigningStatus('ready');
     },
     onSessionEnd: (event) => {
@@ -52,8 +66,17 @@ export const DocuSignModal: React.FC<DocuSignModalProps> = ({
 
   useEffect(() => {
     if (signingUrl && isOpen) {
+      console.log('Modal opened with signing URL:', signingUrl);
       setSigningStatus('loading');
+      // Delay mounting to ensure DOM is ready
+      setTimeout(() => {
+        setShouldMountDocuSign(true);
+      }, 100);
     }
+    
+    return () => {
+      setShouldMountDocuSign(false);
+    };
   }, [signingUrl, isOpen]);
   if (!isOpen) return null;
 
@@ -131,8 +154,15 @@ export const DocuSignModal: React.FC<DocuSignModalProps> = ({
             )}
             
             {/* DocuSign Container - SDK will mount here */}
-            {signingUrl && !isLoading && signingStatus !== 'completed' && signingStatus !== 'cancelled' && signingStatus !== 'error' && (
-              <div id="docusign-signing-container" className="w-full h-full" />
+            {/* Always render the container when we have a signing URL to avoid race conditions */}
+            {signingUrl && (
+              <div 
+                id="docusign-signing-container" 
+                className="w-full h-full" 
+                style={{ 
+                  display: (signingStatus === 'completed' || signingStatus === 'cancelled' || signingStatus === 'error') ? 'none' : 'block' 
+                }}
+              />
             )}
           </div>
           

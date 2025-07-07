@@ -125,17 +125,32 @@ const App = () => {
       
       if (result.signingUrl) {
         // Check if this is an embedded signing URL
-        const url = new URL(result.signingUrl);
-        const isEmbeddedUrl = url.searchParams.has('slt') || url.pathname.includes('/Signing/');
-        
-        if (!isEmbeddedUrl) {
-          console.warn('The URL does not appear to be configured for embedded signing.');
-          console.warn('Make sure your backend calls EnvelopeViews:createRecipient with frameAncestors.');
+        try {
+          const url = new URL(result.signingUrl);
+          const isEmbeddedUrl = url.searchParams.has('slt') || url.pathname.includes('/Signing/');
+          
+          console.log('URL Analysis:', {
+            fullUrl: result.signingUrl,
+            hasSlT: url.searchParams.has('slt'),
+            pathname: url.pathname,
+            isEmbeddedFormat: isEmbeddedUrl
+          });
+          
+          if (!isEmbeddedUrl) {
+            console.warn('The URL does not appear to be configured for embedded signing.');
+            console.warn('Expected URL to contain "slt" parameter or "/Signing/" in path.');
+            console.warn('Make sure your backend calls EnvelopeViews:createRecipient with frameAncestors and returnUrl.');
+          }
+        } catch (urlError) {
+          console.error('Failed to parse signing URL:', urlError);
         }
         
         // Show the signing modal
         setShowSigningModal(true);
         setModalLoading(false);
+      } else {
+        console.error('No signing URL received from API');
+        setTestResponse({ error: 'No signing URL received', ...result });
       }
     } catch (error) {
       console.error('Error calling DocuSign API:', error);
