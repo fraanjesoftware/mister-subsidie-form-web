@@ -1,4 +1,4 @@
-import { IconBuilding, IconFileCheck, IconCalculator, IconCircleCheck, IconTaxEuro, IconWritingSign,  } from '@tabler/icons-react';
+import { IconBuilding, IconCalculator, IconCircleCheck, IconFileCheck, IconTaxEuro, IconWritingSign } from '@tabler/icons-react';
 import { Step } from '../types';
 
 export const STEPS: Step[] = [

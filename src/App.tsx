@@ -46,23 +46,23 @@ const App = () => {
       signers: [
         {
           email: "info@fraanjesoftware.com",
-          name: "Multi Form Tester",
+          name: "Test Applicant",
           roleName: "Applicant",
           tabs: {
             radioGroupTabs: [
               {
                 groupName: "de-minimis-radio",
                 radios: [
-                  { value: "geen", selected: "false" },
-                  { value: "wel", selected: "true" },
+                  { value: "geen", selected: "true" },
+                  { value: "wel", selected: "false" },
                   { value: "andere", selected: "false" }
                 ]
               },
               {
                 groupName: "onderneming-type",
                 radios: [
-                  { value: "kleine", selected: "false" },
-                  { value: "middel", selected: "true" },
+                  { value: "kleine", selected: "true" },
+                  { value: "middel", selected: "false" },
                   { value: "grote", selected: "false" }
                 ]
               }
@@ -91,11 +91,11 @@ const App = () => {
             ]
           }
         },
-        {
-          email: "test@mickeyfraanje.com",
-          name: "Second signer",
-          roleName: "SecondSigner"
-        }
+        // {
+        //   email: "test@mickeyfraanje.com",
+        //   name: "Second signer",
+        //   roleName: "SecondSigner"
+        // }
       ],
       returnUrl: "http://localhost:5173/",
       forEmbedding: true
