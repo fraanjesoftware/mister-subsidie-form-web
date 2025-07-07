@@ -101,7 +101,7 @@ const App = () => {
           roleName: "SecondSigner"
         }
       ],
-      returnUrl: "http://localhost:5173/",
+      returnUrl: window.location.origin + "/",
       forEmbedding: true
     };
 
