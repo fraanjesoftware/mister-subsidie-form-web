@@ -22,6 +22,7 @@ const App = () => {
   const [showSigningModal, setShowSigningModal] = useState(false);
   const [modalLoading, setModalLoading] = useState(false);
   const [signingError, setSigningError] = useState<string>('');
+  const [signingStatus, setSigningStatus] = useState<'idle' | 'completed' | 'cancelled'>('idle');
   const { formData, handleInputChange, handleNestedInputChange } = useFormData();
   const { isStepValid } = useStepValidation(formData);
 
@@ -68,7 +69,9 @@ const App = () => {
               }
             ],
             textTabs: [
-              { tabLabel: "minimis-2.1", value: "5000" },
+              { tabLabel: "minimis-2.1", value: "" },
+              { tabLabel: "minimis-3.1", value: "5000" },
+              { tabLabel: "minimis-3.2", value: "Test" },
               { tabLabel: "bedrijfsnaam", value: "Test Company B.V." },
               { tabLabel: "naam", value: "Mickey Fraanje" },
               { tabLabel: "functie", value: "Directeur" },
@@ -84,6 +87,7 @@ const App = () => {
               { tabLabel: "fte", value: "25" },
               { tabLabel: "jaaromzet", value: "€5.000.000" },
               { tabLabel: "balanstotaal", value: "€2.500.000" },
+              { tabLabel: "boekjaar", value: "2024" },
               { tabLabel: "Date", value: "06-07-2025" }
             ],
             listTabs: [
@@ -91,11 +95,11 @@ const App = () => {
             ]
           }
         },
-        // {
-        //   email: "test@mickeyfraanje.com",
-        //   name: "Second signer",
-        //   roleName: "SecondSigner"
-        // }
+        {
+          email: "test@mickeyfraanje.com",
+          name: "Second signer",
+          roleName: "SecondSigner"
+        }
       ],
       returnUrl: "http://localhost:5173/",
       forEmbedding: true
@@ -144,6 +148,23 @@ const App = () => {
   const handleCloseModal = () => {
     setShowSigningModal(false);
     setTestResponse(null);
+  };
+
+  const handleSigningComplete = () => {
+    console.log('Signing completed successfully!');
+    setSigningStatus('completed');
+    setSigningError('');
+    // Save to localStorage that signing was completed
+    localStorage.setItem('slimSigningStatus', 'completed');
+    localStorage.setItem('slimSigningDate', new Date().toISOString());
+    // The modal will close automatically after showing success message
+  };
+
+  const handleSigningCancelled = () => {
+    console.log('Signing was cancelled');
+    setSigningStatus('cancelled');
+    setSigningError('Het ondertekenen is geannuleerd. U kunt het opnieuw proberen.');
+    // The modal will close automatically after showing cancelled message
   };
 
   const handleSignDocuments = async () => {
@@ -242,7 +263,7 @@ const App = () => {
       case 4:
         return <Review formData={formData} />;
       case 5:
-        return <Authorization formData={formData} onInputChange={handleInputChange} onSign={handleSignDocuments} signingError={signingError} />;
+        return <Authorization formData={formData} onInputChange={handleInputChange} onSign={handleSignDocuments} signingError={signingError} signingStatus={signingStatus} />;
       default:
         return null;
     }
@@ -306,6 +327,8 @@ const App = () => {
         onClose={handleCloseModal}
         signingUrl={testResponse?.signingUrl}
         isLoading={modalLoading}
+        onSigningComplete={handleSigningComplete}
+        onSigningCancelled={handleSigningCancelled}
       />
     </div>
   );
