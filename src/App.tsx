@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { ProgressSteps, Navigation } from './components/form';
 import { 
   CompanyDetails, 
@@ -25,6 +25,46 @@ const App = () => {
   const [signingStatus, setSigningStatus] = useState<'idle' | 'completed' | 'cancelled'>('idle');
   const { formData, handleInputChange, handleNestedInputChange } = useFormData();
   const { isStepValid } = useStepValidation(formData);
+
+  // Handle DocuSign return
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const docusignCallback = urlParams.get('docusign');
+    const event = urlParams.get('event');
+    
+    if (docusignCallback === 'callback') {
+      // Clear the signing in progress flag
+      sessionStorage.removeItem('docusign_signing_in_progress');
+      
+      // Handle different events
+      if (event === 'signing_complete') {
+        setSigningStatus('completed');
+        // Clean URL
+        window.history.replaceState({}, '', window.location.pathname);
+      } else if (event === 'cancel' || event === 'decline') {
+        setSigningStatus('cancelled');
+        // Clean URL
+        window.history.replaceState({}, '', window.location.pathname);
+      } else {
+        // No event parameter, assume completed (DocuSign default behavior)
+        setSigningStatus('completed');
+        // Clean URL
+        window.history.replaceState({}, '', window.location.pathname);
+      }
+      
+      // Navigate to authorization step (last step)
+      setCurrentStep(STEPS.length - 1);
+    } else {
+      // Check if signing was in progress (page refresh during signing)
+      const signingInProgress = sessionStorage.getItem('docusign_signing_in_progress');
+      if (signingInProgress) {
+        // User refreshed during signing or came back without proper callback
+        sessionStorage.removeItem('docusign_signing_in_progress');
+        setCurrentStep(STEPS.length - 1);
+        setSigningStatus('cancelled');
+      }
+    }
+  }, []);
 
   const handleNext = () => {
     if (currentStep < STEPS.length - 1) {
@@ -101,8 +141,7 @@ const App = () => {
           roleName: "SecondSigner"
         }
       ],
-      returnUrl: window.location.origin + "/",
-      forEmbedding: true
+      returnUrl: window.location.origin + "/?docusign=callback"
     };
 
     try {
