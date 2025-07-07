@@ -26,10 +26,17 @@ export const DocuSignModal: React.FC<DocuSignModalProps> = ({
   const integrationKey = import.meta.env.VITE_DOCUSIGN_INTEGRATION_KEY;
   
   useEffect(() => {
+    // Debug: Log the environment variable status
+    console.log('Environment check:', {
+      integrationKey: integrationKey ? 'Set (hidden)' : 'Not set',
+      env: import.meta.env,
+      mode: import.meta.env.MODE
+    });
+    
     if (!integrationKey) {
       console.error('VITE_DOCUSIGN_INTEGRATION_KEY is not set in environment variables');
       setSigningStatus('error');
-      setErrorMessage('DocuSign integration key is missing. Please set VITE_DOCUSIGN_INTEGRATION_KEY in your .env file.');
+      setErrorMessage('DocuSign integration key is missing. Please check Azure App Settings configuration.');
     }
   }, [integrationKey]);
 
