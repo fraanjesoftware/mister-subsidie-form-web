@@ -86,7 +86,7 @@ export const Review = ({ formData }: ReviewProps) => {
         </Card>
         
         {/* Ondertekening */}
-        <Alert type="warning">
+        {/* <Alert type="warning">
           <div>
             <h4 className="font-semibold text-gray-800 mb-2">Digitale ondertekening</h4>
             <p className="text-sm text-gray-700">
@@ -99,7 +99,7 @@ export const Review = ({ formData }: ReviewProps) => {
               <li>• De verklaring geldt als digitale handtekening op datum: {new Date().toLocaleDateString('nl-NL')}</li>
             </ul>
           </div>
-        </Alert>
+        </Alert> */}
       </div>
     </div>
   );

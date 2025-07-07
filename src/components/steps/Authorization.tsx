@@ -4,9 +4,12 @@ import { Checkbox, Card } from '../ui';
 interface AuthorizationProps {
   formData: FormData;
   onInputChange: (field: keyof FormData, value: any) => void;
+  onSign?: () => void;
+  signingError?: string;
+  signingStatus?: 'idle' | 'completed' | 'cancelled';
 }
 
-export const Authorization = ({ formData, onInputChange }: AuthorizationProps) => {
+export const Authorization = ({ formData, onInputChange, onSign, signingError, signingStatus }: AuthorizationProps) => {
   return (
     <div className="space-y-6">
       <div>
@@ -84,6 +87,64 @@ export const Authorization = ({ formData, onInputChange }: AuthorizationProps) =
           </div>
         </div>
       </div>
+      
+      {/* Signing Button */}
+      {onSign && (
+        <div className="pt-8 border-t">
+          <div className="text-center">
+            <h4 className="font-semibold text-gray-800 mb-3">
+              Klaar om te ondertekenen?
+            </h4>
+            <p className="text-gray-600 mb-6">
+              Controleer alle gegevens en onderteken de aanvraag digitaal via DocuSign.
+            </p>
+            <button
+              onClick={onSign}
+              disabled={!formData.akkoordMachtiging || !formData.akkoordWaarheid || 
+                       !formData.machtigingIndienen || !formData.machtigingHandelingen || 
+                       !formData.machtigingBezwaar}
+              className={`px-8 py-4 text-lg font-semibold rounded-lg transition-all ${
+                formData.akkoordMachtiging && formData.akkoordWaarheid && 
+                formData.machtigingIndienen && formData.machtigingHandelingen && 
+                formData.machtigingBezwaar
+                  ? 'bg-accent hover:bg-accent-dark text-primary-dark shadow-lg hover:shadow-xl transform hover:scale-105'
+                  : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+              }`}
+            >
+              <span className="flex items-center gap-3">
+                <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} 
+                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                Tekenen via DocuSign
+              </span>
+            </button>
+            {(!formData.akkoordMachtiging || !formData.akkoordWaarheid || 
+              !formData.machtigingIndienen || !formData.machtigingHandelingen || 
+              !formData.machtigingBezwaar) && (
+              <p className="text-sm text-red-600 mt-3">
+                Vink alle verklaringen aan om door te gaan met ondertekenen.
+              </p>
+            )}
+            {signingStatus === 'completed' && (
+              <div className="mt-4 p-3 bg-green-50 border border-green-200 rounded-lg">
+                <p className="text-sm text-green-800 flex items-center justify-center gap-2">
+                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} 
+                          d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  Document succesvol ondertekend!
+                </p>
+              </div>
+            )}
+            {signingError && (
+              <div className="mt-4 p-3 bg-red-50 border border-red-200 rounded-lg">
+                <p className="text-sm text-red-800">{signingError}</p>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 };

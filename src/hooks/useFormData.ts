@@ -51,7 +51,21 @@ const initialFormData: FormData = {
 };
 
 export const useFormData = () => {
-  const [formData, setFormData] = useState<FormData>(initialFormData);
+  // Load form data from localStorage on initialization
+  const [formData, setFormData] = useState<FormData>(() => {
+    const savedData = localStorage.getItem('slimFormDataDraft');
+    if (savedData) {
+      try {
+        const parsed = JSON.parse(savedData);
+        // Merge with initial data to handle new fields
+        return { ...initialFormData, ...parsed };
+      } catch (e) {
+        console.error('Error parsing saved form data:', e);
+        return initialFormData;
+      }
+    }
+    return initialFormData;
+  });
 
   // Auto-calculate company type based on inputs
   useEffect(() => {
@@ -84,6 +98,15 @@ export const useFormData = () => {
       bestuurder2: { ...prev.bestuurder2, volledigeNaam: naam2 }
     }));
   }, [formData.bestuurder1.voorletters, formData.bestuurder1.achternaam, formData.bestuurder2.voorletters, formData.bestuurder2.achternaam]);
+
+  // Save form data to localStorage whenever it changes
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      localStorage.setItem('slimFormDataDraft', JSON.stringify(formData));
+    }, 500); // Debounce to avoid too many writes
+    
+    return () => clearTimeout(timeoutId);
+  }, [formData]);
 
   const handleInputChange = (field: keyof FormData, value: any) => {
     setFormData(prev => ({
