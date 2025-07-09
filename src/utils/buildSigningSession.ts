@@ -74,8 +74,15 @@ export const buildSigningSession = (
         )
       ],
       textTabs: [
-        createTextTab('minimis-2.1', formData.deMinimisType === 'wel' ? 
-          formData.deMinimisAmount.replace(/[^\d]/g, '') : '0'),
+        // Only include minimis-2.1 when 'wel' is selected
+        ...(formData.deMinimisType === 'wel' ? [
+          createTextTab('minimis-2.1', formData.deMinimisAmount.replace(/[^\d]/g, '') || '0')
+        ] : []),
+        // Only include minimis-3.1 and 3.2 when 'andere' is selected
+        ...(formData.deMinimisType === 'andere' ? [
+          createTextTab('minimis-3.1', formData.andereStaatssteunAmount?.replace(/[^\d]/g, '') || '0'),
+          createTextTab('minimis-3.2', formData.andereStaatssteunDatum || '')
+        ] : []),
         createTextTab('bedrijfsnaam', formData.bedrijfsnaam),
         createTextTab('naam', primarySignerName),
         createTextTab('functie', formData.bestuurder1.functie),
