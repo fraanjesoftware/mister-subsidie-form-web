@@ -5,17 +5,45 @@ import { Checkbox, Card } from '../ui';
 interface AuthorizationProps {
   formData: FormData;
   onInputChange: (field: keyof FormData, value: any) => void;
-  onSign?: () => void;
+  onSign?: () => Promise<string | null>;
   signingError?: string;
   signingStatus?: 'idle' | 'completed' | 'cancelled';
 }
 
 export const Authorization = ({ formData, onInputChange, onSign, signingError, signingStatus }: AuthorizationProps) => {
   const [isRedirecting, setIsRedirecting] = useState(false);
+  const [signingUrl, setSigningUrl] = useState<string>('');
+  const [showFallback, setShowFallback] = useState(false);
 
-  const handleSign = () => {
+  const handleSign = async () => {
     setIsRedirecting(true);
-    onSign?.();
+    setShowFallback(false);
+    setSigningUrl('');
+    
+    // Call the sign function and wait for the URL
+    const url = await onSign?.();
+    
+    if (url) {
+      console.log('DocuSign URL received:', url);
+      setSigningUrl(url);
+      
+      // Try to redirect using location.replace to ensure no back button issues
+      try {
+        window.location.replace(url);
+      } catch (e) {
+        console.error('Redirect failed:', e);
+        // If redirect fails immediately, show fallback
+        setShowFallback(true);
+      }
+      
+      // If we're still here after 2 seconds, show fallback options
+      setTimeout(() => {
+        setShowFallback(true);
+      }, 2000);
+    } else {
+      // If no URL returned, stop loading
+      setIsRedirecting(false);
+    }
   };
 
   return (
@@ -111,6 +139,54 @@ export const Authorization = ({ formData, onInputChange, onSign, signingError, s
               <div className="flex flex-col items-center">
                 <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-[#C8DA47] mb-3"></div>
                 <p className="text-gray-700 font-medium">Doorsturen naar DocuSign...</p>
+                {showFallback && signingUrl && (
+                  <div className="mt-4 p-4 bg-yellow-50 border border-yellow-200 rounded-lg text-left max-w-md">
+                    <p className="text-sm text-yellow-800 mb-3">
+                      De automatische doorverwijzing lijkt geblokkeerd te zijn door uw browser.
+                    </p>
+                    <div className="space-y-3">
+                      <div className="p-3 bg-orange-50 border border-orange-200 rounded">
+                        <p className="text-xs text-orange-700">
+                          <strong>Let op:</strong> Als de onderstaande link u direct naar de bedankpagina brengt, 
+                          is de ondertekeningssessie mogelijk al gebruikt. Klik dan op "Nieuwe sessie aanmaken" hieronder.
+                        </p>
+                      </div>
+                      
+                      <a
+                        href={signingUrl}
+                        target="_self"
+                        className="inline-block px-4 py-2 bg-[#C8DA47] text-[#03291F] font-bold rounded hover:bg-[#F3F7DA] transition-colors"
+                      >
+                        Klik hier om door te gaan naar DocuSign
+                      </a>
+                      
+                      <button
+                        onClick={() => {
+                          setIsRedirecting(false);
+                          setShowFallback(false);
+                          setSigningUrl('');
+                        }}
+                        className="inline-block px-4 py-2 bg-blue-600 text-white font-bold rounded hover:bg-blue-700 transition-colors"
+                      >
+                        Nieuwe sessie aanmaken
+                      </button>
+                      
+                      <details className="text-xs text-gray-600">
+                        <summary className="cursor-pointer hover:text-gray-800">Technische details</summary>
+                        <div className="mt-2 p-2 bg-gray-50 rounded">
+                          <p className="mb-1">DocuSign URL:</p>
+                          <input
+                            type="text"
+                            readOnly
+                            value={signingUrl}
+                            className="w-full px-2 py-1 text-xs border border-gray-300 rounded bg-white"
+                            onClick={(e) => e.currentTarget.select()}
+                          />
+                        </div>
+                      </details>
+                    </div>
+                  </div>
+                )}
               </div>
             ) : (
               <button

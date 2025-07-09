@@ -60,7 +60,7 @@ const App = () => {
     // The modal will close automatically after showing cancelled message
   };
 
-  const handleSignDocuments = async () => {
+  const handleSignDocuments = async (): Promise<string | null> => {
     setModalLoading(true);
     setTestResponse(null);
     setSigningError('');
@@ -91,21 +91,25 @@ const App = () => {
       console.log('DocuSign API Response:', result);
       
       if (result.signingUrl) {
-        // Redirect directly to DocuSign
-        window.location.href = result.signingUrl;
+        // Return the URL so the Authorization component can handle redirect
+        return result.signingUrl;
       } else if (result.error) {
         // Show error message
         console.error('DocuSign error:', result.error, result.validationErrors);
         const errorMessage = result.validationErrors?.join(', ') || result.message || result.error;
         setSigningError(`Fout bij ondertekenen: ${errorMessage}`);
         setModalLoading(false);
+        return null;
       }
     } catch (error) {
       console.error('Error calling DocuSign API:', error);
       setTestResponse({ error: error instanceof Error ? error.message : 'Unknown error' });
       setSigningError(`Fout bij verbinding: ${error instanceof Error ? error.message : 'Onbekende fout'}`);
       setModalLoading(false);
+      return null;
     }
+    
+    return null;
   };
 
   const handleSubmit = () => {

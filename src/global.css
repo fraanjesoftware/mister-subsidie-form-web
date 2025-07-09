@@ -43,3 +43,18 @@ body {
     --e-global-typography-accent-font-family: "Raleway";
     --e-global-typography-accent-font-weight: 800;
 }
+
+/* Custom checkbox styling */
+input[type="checkbox"] {
+  accent-color: #1E3E35;
+}
+
+input[type="checkbox"]:checked {
+  background-color: #1E3E35;
+  border-color: #1E3E35;
+}
+
+input[type="checkbox"]:focus {
+  outline-color: #1E3E35;
+  box-shadow: 0 0 0 3px rgba(30, 62, 53, 0.1);
+}
