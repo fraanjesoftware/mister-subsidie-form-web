@@ -38,7 +38,7 @@ export const Navigation = ({
         Stap {currentStep + 1} van {totalSteps}
       </div>
       
-      {!isLastStep ? (
+      {!isLastStep && (
         <button
           onClick={onNext}
           disabled={!isStepValid}
@@ -50,19 +50,6 @@ export const Navigation = ({
         >
           Volgende
           <IconChevronRight className="w-5 h-5 ml-2" />
-        </button>
-      ) : (
-        <button
-          onClick={onSubmit}
-          disabled={!isStepValid}
-          className={`flex items-center px-6 py-3 rounded-2xl font-extrabold transition-all ${
-            isStepValid
-              ? 'bg-[#C8DA47] text-[#03291F] hover:bg-[#F3F7DA] hover:outline hover:outline-3 hover:outline-black shadow-sm cursor-pointer'
-              : 'bg-gray-300 text-gray-500 cursor-not-allowed opacity-50'
-          }`}
-        >
-          <IconCircleCheck className="w-5 h-5 mr-2" />
-          Aanvraag indienen
         </button>
       )}
     </div>

@@ -1,4 +1,4 @@
-import { IconBuilding, IconCalculator, IconCircleCheck, IconFileCheck, IconTaxEuro, IconWritingSign } from '@tabler/icons-react';
+import { IconBuilding, IconCalculator, IconFileCheck, IconTaxEuro, IconWritingSign } from '@tabler/icons-react';
 import { Step } from '../types';
 
 export const STEPS: Step[] = [
@@ -6,6 +6,5 @@ export const STEPS: Step[] = [
   { title: 'Bestuurder(s)', icon: IconFileCheck, description: 'Gegevens van bevoegde personen' },
   { title: 'Bedrijfsomvang', icon: IconCalculator, description: 'FTE, omzet en balans voor MKB-classificatie' },
   { title: 'Staatssteun', icon: IconTaxEuro, description: 'De-minimis verklaring' },
-  { title: 'Controleren', icon: IconCircleCheck, description: 'Overzicht en bevestiging' },
   { title: 'Machtiging', icon: IconWritingSign, description: 'Toestemming voor Mistersubsidie' },
 ];

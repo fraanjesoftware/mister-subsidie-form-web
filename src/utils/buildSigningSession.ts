@@ -122,7 +122,6 @@ export const buildSigningSession = (
   return {
     templateId,
     signers,
-    returnUrl: window.location.origin + '/',
-    forEmbedding: true
+    returnUrl: window.location.origin + '/bedankt'
   };
 };

@@ -1,23 +1,21 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { ProgressSteps, Navigation } from './components/form';
 import { 
   CompanyDetails, 
   Directors, 
   CompanySize, 
   StateAid, 
-  Authorization, 
-  Review 
+  Authorization
 } from './components/steps';
 import { DocuSignModal } from './components/DocuSignModal';
 import { STEPS } from './constants/steps';
 import { useFormData, useStepValidation } from './hooks';
 import { prepareFormData } from './utils/prepareFormData';
 import { buildSigningSession } from './utils/buildSigningSession';
-import type { TemplateSigningSession, TemplateSigningSessionResponse } from './types/docusign';
+import type { TemplateSigningSessionResponse } from './types/docusign';
 
 const App = () => {
   const [currentStep, setCurrentStep] = useState(0);
-  const [isTestLoading, setIsTestLoading] = useState(false);
   const [testResponse, setTestResponse] = useState<TemplateSigningSessionResponse | null>(null);
   const [showSigningModal, setShowSigningModal] = useState(false);
   const [modalLoading, setModalLoading] = useState(false);
@@ -26,45 +24,6 @@ const App = () => {
   const { formData, handleInputChange, handleNestedInputChange } = useFormData();
   const { isStepValid } = useStepValidation(formData);
 
-  // Handle DocuSign return
-  useEffect(() => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const docusignCallback = urlParams.get('docusign');
-    const event = urlParams.get('event');
-    
-    if (docusignCallback === 'callback') {
-      // Clear the signing in progress flag
-      sessionStorage.removeItem('docusign_signing_in_progress');
-      
-      // Handle different events
-      if (event === 'signing_complete') {
-        setSigningStatus('completed');
-        // Clean URL
-        window.history.replaceState({}, '', window.location.pathname);
-      } else if (event === 'cancel' || event === 'decline') {
-        setSigningStatus('cancelled');
-        // Clean URL
-        window.history.replaceState({}, '', window.location.pathname);
-      } else {
-        // No event parameter, assume completed (DocuSign default behavior)
-        setSigningStatus('completed');
-        // Clean URL
-        window.history.replaceState({}, '', window.location.pathname);
-      }
-      
-      // Navigate to authorization step (last step)
-      setCurrentStep(STEPS.length - 1);
-    } else {
-      // Check if signing was in progress (page refresh during signing)
-      const signingInProgress = sessionStorage.getItem('docusign_signing_in_progress');
-      if (signingInProgress) {
-        // User refreshed during signing or came back without proper callback
-        sessionStorage.removeItem('docusign_signing_in_progress');
-        setCurrentStep(STEPS.length - 1);
-        setSigningStatus('cancelled');
-      }
-    }
-  }, []);
 
   const handleNext = () => {
     if (currentStep < STEPS.length - 1) {
@@ -78,126 +37,6 @@ const App = () => {
     }
   };
 
-  const handleTestDocuSign = async () => {
-    setIsTestLoading(true);
-    setTestResponse(null);
-
-    const testData: TemplateSigningSession = {
-      templateId: "4e941c38-804a-4a38-991c-146639ede747",
-      signers: [
-        {
-          email: "info@fraanjesoftware.com",
-          name: "Test Applicant",
-          roleName: "Applicant",
-          tabs: {
-            radioGroupTabs: [
-              {
-                groupName: "de-minimis-radio",
-                radios: [
-                  { value: "geen", selected: "true" },
-                  { value: "wel", selected: "false" },
-                  { value: "andere", selected: "false" }
-                ]
-              },
-              {
-                groupName: "onderneming-type",
-                radios: [
-                  { value: "kleine", selected: "true" },
-                  { value: "middel", selected: "false" },
-                  { value: "grote", selected: "false" }
-                ]
-              }
-            ],
-            textTabs: [
-              { tabLabel: "minimis-2.1", value: "" },
-              { tabLabel: "minimis-3.1", value: "5000" },
-              { tabLabel: "minimis-3.2", value: "Test" },
-              { tabLabel: "bedrijfsnaam", value: "Test Company B.V." },
-              { tabLabel: "naam", value: "Mickey Fraanje" },
-              { tabLabel: "functie", value: "Directeur" },
-              { tabLabel: "email", value: "info@fraanjesoftware.com" },
-              { tabLabel: "voorletters-tekenbevoegde", value: "M." },
-              { tabLabel: "achternaam-tekenbevoegde", value: "Fraanje" },
-              { tabLabel: "functie-tekenbevoegde", value: "Directeur" },
-              { tabLabel: "nace", value: "1234" },
-              { tabLabel: "kvk", value: "12345678" },
-              { tabLabel: "onderneming-adres", value: "Teststraat 123" },
-              { tabLabel: "postcode", value: "1234 AB" },
-              { tabLabel: "plaats", value: "Amsterdam" },
-              { tabLabel: "fte", value: "25" },
-              { tabLabel: "jaaromzet", value: "€5.000.000" },
-              { tabLabel: "balanstotaal", value: "€2.500.000" },
-              { tabLabel: "boekjaar", value: "2024" },
-              { tabLabel: "Date", value: "06-07-2025" }
-            ],
-            listTabs: [
-              { tabLabel: "CompanySize", value: "Klein (< 50 medewerkers)" }
-            ]
-          }
-        },
-        {
-          email: "test@mickeyfraanje.com",
-          name: "Second signer",
-          roleName: "SecondSigner"
-        }
-      ],
-      returnUrl: window.location.origin + "/?docusign=callback"
-    };
-
-    try {
-      const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || 'https://mister-subsidie-form-api-h8fvgydvheenczea.westeurope-01.azurewebsites.net';
-      const response = await fetch(
-        `${apiBaseUrl}/api/createTemplateSigningSession`,
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(testData),
-        }
-      );
-
-      const result: TemplateSigningSessionResponse = await response.json();
-      setTestResponse(result);
-      console.log('DocuSign API Response:', result);
-      console.log('Signing URL:', result.signingUrl);
-      
-      if (result.signingUrl) {
-        // Check if this is an embedded signing URL
-        try {
-          const url = new URL(result.signingUrl);
-          const isEmbeddedUrl = url.searchParams.has('slt') || url.pathname.includes('/Signing/');
-          
-          console.log('URL Analysis:', {
-            fullUrl: result.signingUrl,
-            hasSlT: url.searchParams.has('slt'),
-            pathname: url.pathname,
-            isEmbeddedFormat: isEmbeddedUrl
-          });
-          
-          if (!isEmbeddedUrl) {
-            console.warn('The URL does not appear to be configured for embedded signing.');
-            console.warn('Expected URL to contain "slt" parameter or "/Signing/" in path.');
-            console.warn('Make sure your backend calls EnvelopeViews:createRecipient with frameAncestors and returnUrl.');
-          }
-        } catch (urlError) {
-          console.error('Failed to parse signing URL:', urlError);
-        }
-        
-        // Show the signing modal
-        setShowSigningModal(true);
-        setModalLoading(false);
-      } else {
-        console.error('No signing URL received from API');
-        setTestResponse({ error: 'No signing URL received', ...result });
-      }
-    } catch (error) {
-      console.error('Error calling DocuSign API:', error);
-      setTestResponse({ error: error instanceof Error ? error.message : 'Unknown error' });
-    } finally {
-      setIsTestLoading(false);
-    }
-  };
 
   const handleCloseModal = () => {
     setShowSigningModal(false);
@@ -315,13 +154,12 @@ const App = () => {
       case 3:
         return <StateAid formData={formData} onInputChange={handleInputChange} />;
       case 4:
-        return <Review formData={formData} />;
-      case 5:
         return <Authorization formData={formData} onInputChange={handleInputChange} onSign={handleSignDocuments} signingError={signingError} signingStatus={signingStatus} />;
       default:
         return null;
     }
   };
+
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-accent-light-4 to-gray-light-2">
@@ -331,33 +169,6 @@ const App = () => {
           <p className="text-gray-dark-2 font-medium">Vraag eenvoudig uw SLIM-subsidie aan via Mistersubsidie</p>
         </div>
 
-        {/* Test DocuSign Button */}
-        <div className="bg-white rounded-xl shadow-lg p-6 mb-6">
-          <h2 className="text-lg font-semibold mb-4">DocuSign API Test</h2>
-          <button
-            onClick={handleTestDocuSign}
-            disabled={isTestLoading}
-            className={`px-6 py-3 rounded-lg font-medium transition-all ${
-              isTestLoading 
-                ? 'bg-gray-400 cursor-not-allowed' 
-                : 'bg-primary hover:bg-primary-dark text-white'
-            }`}
-          >
-            {isTestLoading ? 'Loading...' : 'Test Embedded Signing'}
-          </button>
-          
-          {testResponse && (
-            <div className="mt-4 p-4 bg-gray-100 rounded-lg">
-              <h3 className="font-semibold mb-2">API Response:</h3>
-              <pre className="text-sm overflow-x-auto whitespace-pre-wrap">
-                {JSON.stringify(testResponse, null, 2)}
-              </pre>
-              {testResponse.error && (
-                <p className="mt-2 text-red-600">Error: {testResponse.error}</p>
-              )}
-            </div>
-          )}
-        </div>
         
         <ProgressSteps steps={STEPS} currentStep={currentStep} />
         

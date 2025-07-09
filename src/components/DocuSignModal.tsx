@@ -17,11 +17,6 @@ export const DocuSignModal: React.FC<DocuSignModalProps> = ({
 }) => {
   useEffect(() => {
     if (signingUrl && isOpen) {
-      // Save current form state before redirecting
-      const currentPath = window.location.pathname;
-      sessionStorage.setItem('docusign_return_path', currentPath);
-      sessionStorage.setItem('docusign_signing_in_progress', 'true');
-      
       // Redirect to DocuSign
       window.location.href = signingUrl;
     }

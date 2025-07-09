@@ -103,21 +103,19 @@ export const Authorization = ({ formData, onInputChange, onSign, signingError, s
               disabled={!formData.akkoordMachtiging || !formData.akkoordWaarheid || 
                        !formData.machtigingIndienen || !formData.machtigingHandelingen || 
                        !formData.machtigingBezwaar}
-              className={`px-8 py-4 text-lg font-semibold rounded-lg transition-all ${
+              className={`flex items-center px-6 py-3 rounded-2xl font-extrabold transition-all ${
                 formData.akkoordMachtiging && formData.akkoordWaarheid && 
                 formData.machtigingIndienen && formData.machtigingHandelingen && 
                 formData.machtigingBezwaar
-                  ? 'bg-accent hover:bg-accent-dark text-primary-dark shadow-lg hover:shadow-xl transform hover:scale-105'
-                  : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                  ? 'bg-[#C8DA47] text-[#03291F] hover:bg-[#F3F7DA] hover:outline hover:outline-3 hover:outline-black shadow-sm cursor-pointer'
+                  : 'bg-gray-300 text-gray-500 cursor-not-allowed opacity-50'
               }`}
             >
-              <span className="flex items-center gap-3">
-                <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} 
-                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                Tekenen via DocuSign
-              </span>
+              <svg className="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} 
+                      d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              Tekenen via DocuSign
             </button>
             {(!formData.akkoordMachtiging || !formData.akkoordWaarheid || 
               !formData.machtigingIndienen || !formData.machtigingHandelingen || 
