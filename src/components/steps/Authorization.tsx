@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { FormData } from '../../types';
 import { Checkbox, Card } from '../ui';
 
@@ -10,6 +11,13 @@ interface AuthorizationProps {
 }
 
 export const Authorization = ({ formData, onInputChange, onSign, signingError, signingStatus }: AuthorizationProps) => {
+  const [isRedirecting, setIsRedirecting] = useState(false);
+
+  const handleSign = () => {
+    setIsRedirecting(true);
+    onSign?.();
+  };
+
   return (
     <div className="space-y-6">
       <div>
@@ -98,25 +106,33 @@ export const Authorization = ({ formData, onInputChange, onSign, signingError, s
             <p className="text-gray-600 mb-6">
               Controleer alle gegevens en onderteken de aanvraag digitaal via DocuSign.
             </p>
-            <button
-              onClick={onSign}
-              disabled={!formData.akkoordMachtiging || !formData.akkoordWaarheid || 
-                       !formData.machtigingIndienen || !formData.machtigingHandelingen || 
-                       !formData.machtigingBezwaar}
-              className={`flex items-center px-6 py-3 rounded-2xl font-extrabold transition-all ${
-                formData.akkoordMachtiging && formData.akkoordWaarheid && 
-                formData.machtigingIndienen && formData.machtigingHandelingen && 
-                formData.machtigingBezwaar
-                  ? 'bg-[#C8DA47] text-[#03291F] hover:bg-[#F3F7DA] hover:outline hover:outline-3 hover:outline-black shadow-sm cursor-pointer'
-                  : 'bg-gray-300 text-gray-500 cursor-not-allowed opacity-50'
-              }`}
-            >
-              <svg className="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} 
-                      d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-              Tekenen via DocuSign
-            </button>
+            
+            {isRedirecting ? (
+              <div className="flex flex-col items-center">
+                <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-[#C8DA47] mb-3"></div>
+                <p className="text-gray-700 font-medium">Doorsturen naar DocuSign...</p>
+              </div>
+            ) : (
+              <button
+                onClick={handleSign}
+                disabled={!formData.akkoordMachtiging || !formData.akkoordWaarheid || 
+                         !formData.machtigingIndienen || !formData.machtigingHandelingen || 
+                         !formData.machtigingBezwaar}
+                className={`inline-flex items-center px-6 py-3 rounded-2xl font-extrabold transition-all ${
+                  formData.akkoordMachtiging && formData.akkoordWaarheid && 
+                  formData.machtigingIndienen && formData.machtigingHandelingen && 
+                  formData.machtigingBezwaar
+                    ? 'bg-[#C8DA47] text-[#03291F] hover:bg-[#F3F7DA] hover:outline hover:outline-3 hover:outline-black shadow-sm cursor-pointer'
+                    : 'bg-gray-300 text-gray-500 cursor-not-allowed opacity-50'
+                }`}
+              >
+                <svg className="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} 
+                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                Tekenen via DocuSign
+              </button>
+            )}
             {(!formData.akkoordMachtiging || !formData.akkoordWaarheid || 
               !formData.machtigingIndienen || !formData.machtigingHandelingen || 
               !formData.machtigingBezwaar) && (

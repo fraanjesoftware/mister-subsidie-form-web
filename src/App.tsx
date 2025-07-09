@@ -91,9 +91,8 @@ const App = () => {
       console.log('DocuSign API Response:', result);
       
       if (result.signingUrl) {
-        // Show the signing modal
-        setShowSigningModal(true);
-        setModalLoading(false);
+        // Redirect directly to DocuSign
+        window.location.href = result.signingUrl;
       } else if (result.error) {
         // Show error message
         console.error('DocuSign error:', result.error, result.validationErrors);
@@ -164,10 +163,10 @@ const App = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-accent-light-4 to-gray-light-2">
       <div className="max-w-4xl mx-auto px-4 py-8">
-        <div className="text-center mb-8">
+        {/* <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-primary mb-2">SLIM Subsidie Aanvraag</h1>
           <p className="text-gray-dark-2 font-medium">Vraag eenvoudig uw SLIM-subsidie aan via Mistersubsidie</p>
-        </div>
+        </div> */}
 
         
         <ProgressSteps steps={STEPS} currentStep={currentStep} />
