@@ -21,6 +21,8 @@ export const CompanyDetails = ({ formData, onInputChange }: CompanyDetailsProps)
             value={formData.bedrijfsnaam}
             onChange={(e) => onInputChange('bedrijfsnaam', e.target.value)}
             placeholder="Uw bedrijfsnaam"
+            autoComplete="organization"
+            name="company"
           />
         </div>
         
@@ -38,6 +40,8 @@ export const CompanyDetails = ({ formData, onInputChange }: CompanyDetailsProps)
           value={formData.email}
           onChange={(e) => onInputChange('email', e.target.value)}
           placeholder="info@uwbedrijf.nl"
+          autoComplete="email"
+          name="email"
         />
         
         <div className="md:col-span-2">
@@ -46,6 +50,8 @@ export const CompanyDetails = ({ formData, onInputChange }: CompanyDetailsProps)
             value={formData.adres}
             onChange={(e) => onInputChange('adres', e.target.value)}
             placeholder="Straatnaam 123"
+            autoComplete="street-address"
+            name="address"
           />
         </div>
         
@@ -54,6 +60,8 @@ export const CompanyDetails = ({ formData, onInputChange }: CompanyDetailsProps)
           value={formData.postcode}
           onChange={(e) => onInputChange('postcode', e.target.value)}
           placeholder="1234 AB"
+          autoComplete="postal-code"
+          name="postal-code"
         />
         
         <Input
@@ -61,6 +69,8 @@ export const CompanyDetails = ({ formData, onInputChange }: CompanyDetailsProps)
           value={formData.plaats}
           onChange={(e) => onInputChange('plaats', e.target.value)}
           placeholder="Amsterdam"
+          autoComplete="address-level2"
+          name="city"
         />
         
         <Input
