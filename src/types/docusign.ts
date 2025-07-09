@@ -49,6 +49,8 @@ export interface TemplateSigningSession {
 // Helper type for creating type-safe tab labels
 export type TextTabLabel = 
   | 'minimis-2.1'
+  | 'minimis-3.1'
+  | 'minimis-3.2'
   | 'bedrijfsnaam'
   | 'naam'
   | 'functie'
@@ -56,6 +58,9 @@ export type TextTabLabel =
   | 'voorletters-tekenbevoegde'
   | 'achternaam-tekenbevoegde'
   | 'functie-tekenbevoegde'
+  | 'voorletters-tekenbevoegde-2'
+  | 'achternaam-tekenbevoegde-2'
+  | 'functie-tekenbevoegde-2'
   | 'nace'
   | 'kvk'
   | 'onderneming-adres'
@@ -64,7 +69,8 @@ export type TextTabLabel =
   | 'fte'
   | 'jaaromzet'
   | 'balanstotaal'
-  | 'Date';
+  | 'boekjaar'
+  | 'datum';
 
 export type RadioGroupName = 
   | 'de-minimis-radio'

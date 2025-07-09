@@ -15,12 +15,14 @@ const initialFormData: FormData = {
     voorletters: '',
     achternaam: '',
     functie: 'Directeur',
+    email: '',
     volledigeNaam: ''
   },
   bestuurder2: {
     voorletters: '',
     achternaam: '',
     functie: '',
+    email: '',
     volledigeNaam: '',
     nodig: false
   },

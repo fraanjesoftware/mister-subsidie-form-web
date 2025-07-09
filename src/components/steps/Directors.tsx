@@ -37,13 +37,20 @@ export const Directors = ({ formData, onNestedInputChange }: DirectorsProps) => 
               onChange={(e) => onNestedInputChange('bestuurder1', 'achternaam', e.target.value)}
               placeholder="Jansen"
             />
-            <div className="md:col-span-2">
-              <Input
-                label="Functie"
-                value={formData.bestuurder1.functie}
-                onChange={(e) => onNestedInputChange('bestuurder1', 'functie', e.target.value)}
-              />
-            </div>
+            <Input
+              label="Functie"
+              value={formData.bestuurder1.functie}
+              onChange={(e) => onNestedInputChange('bestuurder1', 'functie', e.target.value)}
+              placeholder="Directeur"
+            />
+            <Input
+              type="email"
+              label="E-mailadres *"
+              value={formData.bestuurder1.email}
+              onChange={(e) => onNestedInputChange('bestuurder1', 'email', e.target.value)}
+              placeholder="bestuurder@uwbedrijf.nl"
+              autoComplete="email"
+            />
           </div>
         </Card>
         
@@ -70,13 +77,20 @@ export const Directors = ({ formData, onNestedInputChange }: DirectorsProps) => 
                 onChange={(e) => onNestedInputChange('bestuurder2', 'achternaam', e.target.value)}
                 placeholder="Pietersen"
               />
-              <div className="md:col-span-2">
-                <Input
-                  label="Functie"
-                  value={formData.bestuurder2.functie}
-                  onChange={(e) => onNestedInputChange('bestuurder2', 'functie', e.target.value)}
-                />
-              </div>
+              <Input
+                label="Functie"
+                value={formData.bestuurder2.functie}
+                onChange={(e) => onNestedInputChange('bestuurder2', 'functie', e.target.value)}
+                placeholder="Directeur"
+              />
+              <Input
+                type="email"
+                label="E-mailadres *"
+                value={formData.bestuurder2.email}
+                onChange={(e) => onNestedInputChange('bestuurder2', 'email', e.target.value)}
+                placeholder="bestuurder2@uwbedrijf.nl"
+                autoComplete="email"
+              />
             </div>
           </Card>
         )}

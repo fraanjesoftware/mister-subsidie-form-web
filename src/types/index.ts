@@ -2,6 +2,7 @@ export interface Bestuurder {
   voorletters: string;
   achternaam: string;
   functie: string;
+  email: string;
   volledigeNaam: string;
   nodig?: boolean;
 }

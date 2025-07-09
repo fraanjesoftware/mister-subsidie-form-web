@@ -57,7 +57,7 @@ export const buildSigningSession = (
                           `${formData.bestuurder1.voorletters} ${formData.bestuurder1.achternaam}`.trim();
   
   const primarySigner: Signer = {
-    email: formData.email,
+    email: formData.bestuurder1.email || formData.email,
     name: primarySignerName,
     roleName: 'Applicant',
     tabs: {
@@ -86,10 +86,13 @@ export const buildSigningSession = (
         createTextTab('bedrijfsnaam', formData.bedrijfsnaam),
         createTextTab('naam', primarySignerName),
         createTextTab('functie', formData.bestuurder1.functie),
-        createTextTab('email', formData.email),
+        createTextTab('email', formData.bestuurder1.email || formData.email),
         createTextTab('voorletters-tekenbevoegde', formData.bestuurder1.voorletters),
         createTextTab('achternaam-tekenbevoegde', formData.bestuurder1.achternaam),
         createTextTab('functie-tekenbevoegde', formData.bestuurder1.functie),
+        createTextTab('voorletters-tekenbevoegde-2', formData.bestuurder2.voorletters),
+        createTextTab('achternaam-tekenbevoegde-2', formData.bestuurder2.achternaam),
+        createTextTab('functie-tekenbevoegde-2', formData.bestuurder2.functie),
         createTextTab('nace', formData.naceClassificatie || ''),
         createTextTab('kvk', formData.kvkNummer),
         createTextTab('onderneming-adres', formData.adres),
@@ -98,7 +101,9 @@ export const buildSigningSession = (
         createTextTab('fte', formData.aantalFte),
         createTextTab('jaaromzet', formatCurrency(formData.jaaromzet)),
         createTextTab('balanstotaal', formatCurrency(formData.balanstotaal)),
-        createTextTab('Date', formatDate())
+        createTextTab('boekjaar', `${formData.laatsteBoekjaar}`),
+        createTextTab('datum', formatDate()),
+        
       ],
       listTabs: [
         {
@@ -117,10 +122,14 @@ export const buildSigningSession = (
                               `${formData.bestuurder2.voorletters} ${formData.bestuurder2.achternaam}`.trim();
     
     const secondarySigner: Signer = {
-      email: formData.email, // Could be a separate email field if available
+      email: formData.bestuurder2.email || formData.email,
       name: secondarySignerName,
-      roleName: 'SecondSigner'
-      // Note: No tabs for secondary signer based on the example
+      roleName: 'SecondSigner',
+      tabs: {
+        textTabs: [
+          
+        ]
+      }
     };
     
     signers.push(secondarySigner);
