@@ -7,18 +7,18 @@ import {
   StateAid, 
   Authorization
 } from './components/steps';
-import { DocuSignModal } from './components/DocuSignModal';
+import { EndPage } from './pages/EndPage';
+// import { DocuSignModal } from './components/DocuSignModal';  // Not needed for SignWell
 import { STEPS } from './constants/steps';
 import { useFormData, useStepValidation } from './hooks';
 import { prepareFormData } from './utils/prepareFormData';
 import { buildSigningSession } from './utils/buildSigningSession';
-import type { TemplateSigningSessionResponse } from './types/docusign';
 
 const App = () => {
   const [currentStep, setCurrentStep] = useState(0);
-  const [testResponse, setTestResponse] = useState<TemplateSigningSessionResponse | null>(null);
-  const [showSigningModal, setShowSigningModal] = useState(false);
-  const [modalLoading, setModalLoading] = useState(false);
+  // const [testResponse, setTestResponse] = useState<TemplateSigningSessionResponse | null>(null);  // Not needed for SignWell
+  // const [showSigningModal, setShowSigningModal] = useState(false);  // Not needed for SignWell
+  const [signLoading, setSignLoading] = useState(false);
   const [signingError, setSigningError] = useState<string>('');
   const [signingStatus, setSigningStatus] = useState<'idle' | 'completed' | 'cancelled'>('idle');
   const { formData, handleInputChange, handleNestedInputChange } = useFormData();
@@ -38,31 +38,15 @@ const App = () => {
   };
 
 
-  const handleCloseModal = () => {
-    setShowSigningModal(false);
-    setTestResponse(null);
-  };
+  // const handleCloseModal = () => {  // Not needed for SignWell
+  //   setShowSigningModal(false);
+  //   setTestResponse(null);
+  // };
 
-  const handleSigningComplete = () => {
-    console.log('Signing completed successfully!');
-    setSigningStatus('completed');
-    setSigningError('');
-    // Save to localStorage that signing was completed
-    localStorage.setItem('slimSigningStatus', 'completed');
-    localStorage.setItem('slimSigningDate', new Date().toISOString());
-    // The modal will close automatically after showing success message
-  };
+  // SignWell will handle the signing process via email
 
-  const handleSigningCancelled = () => {
-    console.log('Signing was cancelled');
-    setSigningStatus('cancelled');
-    setSigningError('Het ondertekenen is geannuleerd. U kunt het opnieuw proberen.');
-    // The modal will close automatically after showing cancelled message
-  };
-
-  const handleSignDocuments = async (): Promise<string | null> => {
-    setModalLoading(true);
-    setTestResponse(null);
+  const handleSignDocuments = async (): Promise<boolean> => {
+    setSignLoading(true);
     setSigningError('');
 
     // Build signing session data using the type-safe helper
@@ -71,12 +55,12 @@ const App = () => {
       "4e941c38-804a-4a38-991c-146639ede747" // Replace with actual template ID from config/env
     );
 
-    console.log('Sending to DocuSign API:', JSON.stringify(signingData, null, 2));
+    console.log('Sending to SignWell API:', JSON.stringify(signingData, null, 2));
     
     try {
       const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || 'https://mister-subsidie-form-api-h8fvgydvheenczea.westeurope-01.azurewebsites.net';
       const response = await fetch(
-        `${apiBaseUrl}/api/createTemplateSigningSession`,
+        `${apiBaseUrl}/api/createSignWellTemplateSession`,
         {
           method: 'POST',
           headers: {
@@ -87,29 +71,32 @@ const App = () => {
       );
 
       const result = await response.json();
-      setTestResponse(result);
-      console.log('DocuSign API Response:', result);
+      console.log('SignWell API Response:', result);
       
-      if (result.signingUrl) {
-        // Return the URL so the Authorization component can handle redirect
-        return result.signingUrl;
+      if (result.success || result.documentId) {
+        // SignWell will send an email to the user
+        setSigningStatus('completed');
+        // Navigate to success page
+        setCurrentStep(STEPS.length); // This will trigger navigation to EndPage
+        return true;
       } else if (result.error) {
         // Show error message
-        console.error('DocuSign error:', result.error, result.validationErrors);
+        console.error('SignWell error:', result.error, result.validationErrors);
         const errorMessage = result.validationErrors?.join(', ') || result.message || result.error;
         setSigningError(`Fout bij ondertekenen: ${errorMessage}`);
-        setModalLoading(false);
-        return null;
+        setSignLoading(false);
+        return false;
       }
     } catch (error) {
-      console.error('Error calling DocuSign API:', error);
-      setTestResponse({ error: error instanceof Error ? error.message : 'Unknown error' });
+      console.error('Error calling SignWell API:', error);
       setSigningError(`Fout bij verbinding: ${error instanceof Error ? error.message : 'Onbekende fout'}`);
-      setModalLoading(false);
-      return null;
+      setSignLoading(false);
+      return false;
+    } finally {
+      setSignLoading(false);
     }
     
-    return null;
+    return false;
   };
 
   const handleSubmit = () => {
@@ -157,7 +144,9 @@ const App = () => {
       case 3:
         return <StateAid formData={formData} onInputChange={handleInputChange} />;
       case 4:
-        return <Authorization formData={formData} onInputChange={handleInputChange} onSign={handleSignDocuments} signingError={signingError} signingStatus={signingStatus} />;
+        return <Authorization formData={formData} onInputChange={handleInputChange} onSign={handleSignDocuments} signingError={signingError} signingStatus={signingStatus} isLoading={signLoading} />;
+      case 5:
+        return <EndPage />;
       default:
         return null;
     }
@@ -189,15 +178,7 @@ const App = () => {
         />
       </div>
       
-      {/* DocuSign Modal */}
-      <DocuSignModal 
-        isOpen={showSigningModal}
-        onClose={handleCloseModal}
-        signingUrl={testResponse?.signingUrl}
-        isLoading={modalLoading}
-        onSigningComplete={handleSigningComplete}
-        onSigningCancelled={handleSigningCancelled}
-      />
+      {/* DocuSign Modal removed - SignWell sends email instead */}
     </div>
   );
 };

@@ -6,6 +6,7 @@ import {
   createRadioGroup 
 } from '../types/docusign';
 
+// Build signing session data for SignWell API
 export const buildSigningSession = (
   formData: FormData,
   templateId: string

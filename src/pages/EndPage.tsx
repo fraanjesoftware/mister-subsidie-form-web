@@ -7,7 +7,7 @@ export const EndPage: React.FC = () => {
     localStorage.removeItem('slimFormDataDraft');
     localStorage.removeItem('slimSigningStatus');
     localStorage.removeItem('slimSigningDate');
-    sessionStorage.removeItem('docusign_signing_in_progress');
+    sessionStorage.removeItem('signwell_signing_in_progress');
   }, []);
 
   return (
@@ -21,11 +21,11 @@ export const EndPage: React.FC = () => {
           </div>
 
           <h1 className="text-2xl font-bold text-gray-900 mb-4">
-            Bedankt voor uw aanvraag!
+            Check uw mailbox om het formulier te ondertekenen
           </h1>
           
           <p className="text-gray-700 mb-6">
-            U ontvangt binnen 3-5 werkdagen een reactie.
+            Het document wordt binnen enkele momenten naar uw opgegeven e-mail adres gestuurd. Open deze mail om het formulier digitaal te ondertekenen.
           </p>
 
           <a
