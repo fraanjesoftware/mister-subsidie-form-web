@@ -7,6 +7,8 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
 }
 
 export const Input = ({ label, error, hint, className = '', ...props }: InputProps) => {
+  const isReadOnly = props.readOnly || props.disabled;
+  
   return (
     <div>
       <label className="block text-sm font-medium text-gray-dark-1 mb-2">
@@ -16,6 +18,8 @@ export const Input = ({ label, error, hint, className = '', ...props }: InputPro
       <input
         className={`w-full px-4 py-2 font-medium border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#C8DA47] focus:border-[#C8DA47] ${
           error ? 'border-red-500' : ''
+        } ${
+          isReadOnly ? 'bg-gray-100 cursor-not-allowed text-gray-600' : ''
         } ${className}`}
         {...props}
       />

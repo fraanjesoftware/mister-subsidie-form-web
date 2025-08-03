@@ -42,6 +42,7 @@ export const Directors = ({ formData, onNestedInputChange }: DirectorsProps) => 
               value={formData.bestuurder1.functie}
               onChange={(e) => onNestedInputChange('bestuurder1', 'functie', e.target.value)}
               placeholder="Directeur"
+              readOnly
             />
             <Input
               type="email"
