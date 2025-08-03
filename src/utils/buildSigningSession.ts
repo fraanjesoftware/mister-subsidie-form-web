@@ -33,6 +33,13 @@ export const buildSigningSession = (
     }).replace(/\//g, '-');
   };
   
+  // Format date from YYYY-MM-DD to dd/mm/yyyy
+  const formatDateInput = (dateString: string): string => {
+    if (!dateString) return '';
+    const [year, month, day] = dateString.split('-');
+    return `${day}/${month}/${year}`;
+  };
+  
   // Determine company size value
   const getCompanySizeValue = (): string => {
     switch (formData.ondernemingType) {
@@ -82,7 +89,7 @@ export const buildSigningSession = (
         // Only include minimis-3.1 and 3.2 when 'andere' is selected
         ...(formData.deMinimisType === 'andere' ? [
           createTextTab('minimis-3.1', formData.andereStaatssteunAmount?.replace(/[^\d]/g, '') || '0'),
-          createTextTab('minimis-3.2', formData.andereStaatssteunDatum || '')
+          createTextTab('minimis-3.2', formatDateInput(formData.andereStaatssteunDatum || ''))
         ] : []),
         createTextTab('bedrijfsnaam', formData.bedrijfsnaam),
         createTextTab('naam', primarySignerName),
