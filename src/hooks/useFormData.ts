@@ -119,15 +119,6 @@ export const useFormData = () => {
     }));
   }, [formData.bestuurder1.voorletters, formData.bestuurder1.achternaam, formData.bestuurder2.voorletters, formData.bestuurder2.achternaam]);
 
-  // Prefill bestuurder1 email with company email if empty
-  useEffect(() => {
-    if (formData.email && !formData.bestuurder1.email) {
-      setFormData(prev => ({
-        ...prev,
-        bestuurder1: { ...prev.bestuurder1, email: formData.email }
-      }));
-    }
-  }, [formData.email]);
 
   // Save form data to localStorage whenever it changes
   useEffect(() => {

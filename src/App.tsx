@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { ProgressSteps, Navigation } from './components/form';
 import { 
   CompanyDetails, 
@@ -7,7 +8,6 @@ import {
   StateAid, 
   Authorization
 } from './components/steps';
-import { EndPage } from './pages/EndPage';
 // import { DocuSignModal } from './components/DocuSignModal';  // Not needed for SignWell
 import { STEPS } from './constants/steps';
 import { useFormData, useStepValidation } from './hooks';
@@ -15,6 +15,7 @@ import { prepareFormData } from './utils/prepareFormData';
 import { buildSigningSession } from './utils/buildSigningSession';
 
 const App = () => {
+  const navigate = useNavigate();
   const [currentStep, setCurrentStep] = useState(0);
   // const [testResponse, setTestResponse] = useState<TemplateSigningSessionResponse | null>(null);  // Not needed for SignWell
   // const [showSigningModal, setShowSigningModal] = useState(false);  // Not needed for SignWell
@@ -27,6 +28,10 @@ const App = () => {
 
   const handleNext = () => {
     if (currentStep < STEPS.length - 1) {
+      // Sync email when moving from CompanyDetails to Directors
+      if (currentStep === 0 && formData.email && !formData.bestuurder1.email) {
+        handleNestedInputChange('bestuurder1', 'email', formData.email);
+      }
       setCurrentStep(currentStep + 1);
     }
   };
@@ -78,7 +83,7 @@ const App = () => {
         // SignWell will send an email to the user
         setSigningStatus('completed');
         // Navigate to success page
-        setCurrentStep(STEPS.length); // This will trigger navigation to EndPage
+        navigate('/bedankt');
         return true;
       } else if (result.error) {
         // Show error message
@@ -146,8 +151,6 @@ const App = () => {
         return <StateAid formData={formData} onInputChange={handleInputChange} />;
       case 4:
         return <Authorization formData={formData} onInputChange={handleInputChange} onSign={handleSignDocuments} signingError={signingError} signingStatus={signingStatus} isLoading={signLoading} />;
-      case 5:
-        return <EndPage />;
       default:
         return null;
     }

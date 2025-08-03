@@ -23,7 +23,7 @@ export const EndPage: React.FC<EndPageProps> = ({ onStartNew }) => {
           </h1>
           
           <p className="text-lg text-gray-700 mb-8">
-            Uw SLIM-subsidie aanvraag is succesvol ingediend en ondertekend.
+            Uw SLIM-subsidie aanvraag is succesvol ingediend.
           </p>
 
           {/* What Happens Next */}
