@@ -59,8 +59,9 @@ const App = () => {
     
     try {
       const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || 'https://mister-subsidie-form-api-h8fvgydvheenczea.westeurope-01.azurewebsites.net';
+      const apiFunctionCode = import.meta.env.VITE_FUNCTION_CODE || 'DDipjiIMeEVPtIY8Kx3C7hz4ME6us6EeDwddhRdoUhYKAzFuODcd5Q=='
       const response = await fetch(
-        `${apiBaseUrl}/api/createSignWellTemplateSession`,
+        `${apiBaseUrl}/api/createSignWellTemplateSession?code=${apiFunctionCode}`,
         {
           method: 'POST',
           headers: {

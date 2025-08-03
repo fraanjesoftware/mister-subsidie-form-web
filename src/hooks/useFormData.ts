@@ -76,11 +76,29 @@ export const useFormData = () => {
     const balans = parseInt(formData.balanstotaal) || 0;
     
     let type: FormData['ondernemingType'] = '';
-    if (fte < 50 && (omzet <= 10000000 || balans <= 10000000)) {
-      type = 'klein';
-    } else if (fte < 250 && (omzet <= 50000000 || balans <= 43000000)) {
+    
+    // Groot bedrijf: jaaromzet > 50M EN balanstotaal > 43M
+    if (omzet > 50000000 && balans > 43000000) {
+      type = 'groot';
+    }
+    // Groot bedrijf: 250 of meer werknemers
+    else if (fte >= 250) {
+      type = 'groot';
+    }
+    // Middelgroot: FTE < 50 maar jaaromzet EN balanstotaal > 10M
+    else if (fte < 50 && omzet > 10000000 && balans > 10000000) {
       type = 'middelgroot';
-    } else if (fte > 0 || omzet > 0 || balans > 0) {
+    }
+    // Klein bedrijf: < 50 FTE en (omzet ≤ 10M of balans ≤ 10M)
+    else if (fte < 50 && (omzet <= 10000000 || balans <= 10000000)) {
+      type = 'klein';
+    }
+    // Middelgroot: < 250 FTE en (omzet ≤ 50M of balans ≤ 43M)
+    else if (fte < 250 && (omzet <= 50000000 || balans <= 43000000)) {
+      type = 'middelgroot';
+    }
+    // Default to groot if any values are filled
+    else if (fte > 0 || omzet > 0 || balans > 0) {
       type = 'groot';
     }
     
@@ -100,6 +118,16 @@ export const useFormData = () => {
       bestuurder2: { ...prev.bestuurder2, volledigeNaam: naam2 }
     }));
   }, [formData.bestuurder1.voorletters, formData.bestuurder1.achternaam, formData.bestuurder2.voorletters, formData.bestuurder2.achternaam]);
+
+  // Prefill bestuurder1 email with company email if empty
+  useEffect(() => {
+    if (formData.email && !formData.bestuurder1.email) {
+      setFormData(prev => ({
+        ...prev,
+        bestuurder1: { ...prev.bestuurder1, email: formData.email }
+      }));
+    }
+  }, [formData.email]);
 
   // Save form data to localStorage whenever it changes
   useEffect(() => {
