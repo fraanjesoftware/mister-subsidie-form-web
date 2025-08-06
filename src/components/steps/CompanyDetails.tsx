@@ -1,5 +1,6 @@
 import { FormData } from '../../types';
 import { Input } from '../ui';
+import { validators } from '../../utils/validation';
 
 interface CompanyDetailsProps {
   formData: FormData;
@@ -23,15 +24,17 @@ export const CompanyDetails = ({ formData, onInputChange }: CompanyDetailsProps)
             placeholder="Uw bedrijfsnaam"
             autoComplete="organization"
             name="company"
+            validationRules={[validators.required(), validators.minLength(2)]}
           />
         </div>
         
         <Input
           label="KvK-nummer *"
           value={formData.kvkNummer}
-          onChange={(e) => onInputChange('kvkNummer', e.target.value)}
+          onChange={(e) => onInputChange('kvkNummer', e.target.value.replace(/\D/g, ''))}
           placeholder="12345678"
           maxLength={8}
+          validationRules={[validators.required(), validators.kvkNumber()]}
         />
         
         <Input
@@ -42,6 +45,7 @@ export const CompanyDetails = ({ formData, onInputChange }: CompanyDetailsProps)
           placeholder="info@uwbedrijf.nl"
           autoComplete="email"
           name="email"
+          validationRules={[validators.required(), validators.email()]}
         />
         
         <div className="md:col-span-2">
@@ -58,10 +62,12 @@ export const CompanyDetails = ({ formData, onInputChange }: CompanyDetailsProps)
         <Input
           label="Postcode"
           value={formData.postcode}
-          onChange={(e) => onInputChange('postcode', e.target.value)}
+          onChange={(e) => onInputChange('postcode', e.target.value.toUpperCase())}
           placeholder="1234 AB"
           autoComplete="postal-code"
           name="postal-code"
+          maxLength={7}
+          validationRules={[validators.dutchPostcode()]}
         />
         
         <Input
@@ -77,9 +83,10 @@ export const CompanyDetails = ({ formData, onInputChange }: CompanyDetailsProps)
           label="NACE-classificatie"
           hint="Eerste 4 cijfers van uw SBI-code"
           value={formData.naceClassificatie}
-          onChange={(e) => onInputChange('naceClassificatie', e.target.value)}
+          onChange={(e) => onInputChange('naceClassificatie', e.target.value.replace(/\D/g, ''))}
           placeholder="0000"
           maxLength={4}
+          validationRules={[validators.naceCode()]}
         />
       </div>
     </div>

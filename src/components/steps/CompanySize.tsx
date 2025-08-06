@@ -1,6 +1,7 @@
 import { FormData } from '../../types';
 import { Input, Alert, Card } from '../ui';
-import { Calculator, Users, Euro, FileText, Info } from 'lucide-react';
+import { Calculator, Users, Euro, FileText } from 'lucide-react';
+import { validators } from '../../utils/validation';
 
 interface CompanySizeProps {
   formData: FormData;
@@ -123,6 +124,7 @@ export const CompanySize = ({ formData, onInputChange }: CompanySizeProps) => {
             placeholder="0"
             min="0"
             step="1"
+            validationRules={[validators.required(), validators.positiveInteger(), validators.maxValue(999999)]}
           />
           <p className="text-xs text-gray-500 mt-1">
             Gemiddeld aantal werknemers in fulltime equivalenten
@@ -142,6 +144,7 @@ export const CompanySize = ({ formData, onInputChange }: CompanySizeProps) => {
             placeholder={`${new Date().getFullYear() - 1}`}
             min="2020"
             max={new Date().getFullYear()}
+            validationRules={[validators.required(), validators.yearRange(2020, new Date().getFullYear())]}
           />
           <p className="text-xs text-gray-500 mt-1">
             Het jaar waarop de cijfers betrekking hebben
@@ -154,23 +157,20 @@ export const CompanySize = ({ formData, onInputChange }: CompanySizeProps) => {
             <h4 className="font-medium text-gray-700">Jaaromzet</h4>
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Jaaromzet (€) *
-            </label>
             <div className="relative">
-              <span className="absolute left-3 top-2.5 text-gray-500">€</span>
-              <input
+              <span className="absolute left-3 top-10 text-gray-500 z-10">€</span>
+              <Input
                 type="text"
-                className="w-full pl-8 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#C8DA47] focus:border-[#C8DA47]"
+                label="Jaaromzet (€) *"
+                className="pl-8"
                 value={formatCurrency(formData.jaaromzet)}
                 onChange={(e) => handleCurrencyChange('jaaromzet', e.target.value)}
                 placeholder="0"
                 inputMode="numeric"
+                validationRules={[validators.required(), validators.minValue(0), validators.maxValue(10000000000, 'Maximaal €10 miljard')]}
+                hint="Netto-omzet uit het laatst afgesloten boekjaar"
               />
             </div>
-            <p className="text-xs text-gray-500 mt-1">
-              Netto-omzet uit het laatst afgesloten boekjaar
-            </p>
           </div>
         </Card>
         
@@ -180,23 +180,20 @@ export const CompanySize = ({ formData, onInputChange }: CompanySizeProps) => {
             <h4 className="font-medium text-gray-700">Balanstotaal</h4>
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Balanstotaal (€) *
-            </label>
             <div className="relative">
-              <span className="absolute left-3 top-2.5 text-gray-500">€</span>
-              <input
+              <span className="absolute left-3 top-10 text-gray-500 z-10">€</span>
+              <Input
                 type="text"
-                className="w-full pl-8 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#C8DA47] focus:border-[#C8DA47]"
+                label="Balanstotaal (€) *"
+                className="pl-8"
                 value={formatCurrency(formData.balanstotaal)}
                 onChange={(e) => handleCurrencyChange('balanstotaal', e.target.value)}
                 placeholder="0"
                 inputMode="numeric"
+                validationRules={[validators.required(), validators.minValue(0), validators.maxValue(10000000000, 'Maximaal €10 miljard')]}
+                hint="Totaal van alle activa op de balans"
               />
             </div>
-            <p className="text-xs text-gray-500 mt-1">
-              Totaal van alle activa op de balans
-            </p>
           </div>
         </Card>
       </div>

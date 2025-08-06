@@ -5,7 +5,7 @@ import './global.css'
 import App from './App.jsx'
 import { EndPage } from './pages/EndPage'
 
-createRoot(document.getElementById('root')).render(
+createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <BrowserRouter>
       <Routes>

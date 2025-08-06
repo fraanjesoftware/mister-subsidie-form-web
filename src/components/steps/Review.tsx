@@ -1,5 +1,5 @@
 import { FormData } from '../../types';
-import { Card, Alert } from '../ui';
+import { Card } from '../ui';
 
 interface ReviewProps {
   formData: FormData;

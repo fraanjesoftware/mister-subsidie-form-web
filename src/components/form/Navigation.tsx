@@ -1,11 +1,11 @@
-import { IconChevronLeft, IconChevronRight, IconCircleCheck } from '@tabler/icons-react';
+import { IconChevronLeft, IconChevronRight } from '@tabler/icons-react';
 
 interface NavigationProps {
   currentStep: number;
   totalSteps: number;
   onPrev: () => void;
   onNext: () => void;
-  onSubmit: () => void;
+  onSubmit?: () => void;
   isStepValid: boolean;
 }
 
@@ -14,7 +14,6 @@ export const Navigation = ({
   totalSteps, 
   onPrev, 
   onNext, 
-  onSubmit, 
   isStepValid 
 }: NavigationProps) => {
   const isLastStep = currentStep === totalSteps - 1;

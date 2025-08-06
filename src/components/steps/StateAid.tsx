@@ -1,5 +1,6 @@
 import { FormData } from '../../types';
 import { Input, Alert, RadioGroup } from '../ui';
+import { validators } from '../../utils/validation';
 
 interface StateAidProps {
   formData: FormData;
@@ -19,23 +20,20 @@ export const StateAid = ({ formData, onInputChange }: StateAidProps) => {
       description: 'In de afgelopen 36 maanden heeft mijn onderneming de-minimissteun ontvangen, maar het totaal blijft onder de €300.000 drempel.',
       content: (
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Totaalbedrag ontvangen de-minimissteun
-          </label>
           <div className="relative">
-            <span className="absolute left-3 top-2.5 text-gray-500">€</span>
-            <input
+            <span className="absolute left-3 top-10 text-gray-500 z-10">€</span>
+            <Input
               type="number"
-              className="w-full pl-8 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+              label="Totaalbedrag ontvangen de-minimissteun"
+              className="pl-8"
               value={formData.deMinimisAmount}
               onChange={(e) => onInputChange('deMinimisAmount', e.target.value)}
               placeholder="0"
               max="299999"
+              validationRules={[validators.required(), validators.maxValue(299999, 'Bedrag mag maximaal €299.999 zijn')]}
+              hint="Maximaal €299.999 (de drempel is €300.000)"
             />
           </div>
-          <p className="text-xs text-gray-500 mt-1">
-            Maximaal €299.999 (de drempel is €300.000)
-          </p>
         </div>
       )
     },
@@ -46,17 +44,16 @@ export const StateAid = ({ formData, onInputChange }: StateAidProps) => {
       content: (
         <div className="space-y-3">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Totaalbedrag andere staatssteun
-            </label>
             <div className="relative">
-              <span className="absolute left-3 top-2.5 text-gray-500">€</span>
-              <input
+              <span className="absolute left-3 top-10 text-gray-500 z-10">€</span>
+              <Input
                 type="number"
-                className="w-full pl-8 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                label="Totaalbedrag andere staatssteun"
+                className="pl-8"
                 value={formData.andereStaatssteunAmount}
                 onChange={(e) => onInputChange('andereStaatssteunAmount', e.target.value)}
                 placeholder="0"
+                validationRules={[validators.required(), validators.minValue(0)]}
               />
             </div>
           </div>
@@ -65,6 +62,7 @@ export const StateAid = ({ formData, onInputChange }: StateAidProps) => {
             label="Datum besluit Europese Commissie"
             value={formData.andereStaatssteunDatum}
             onChange={(e) => onInputChange('andereStaatssteunDatum', e.target.value)}
+            validationRules={[validators.dateInPast()]}
           />
         </div>
       )

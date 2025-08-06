@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { FormData } from '../../types';
 import { Checkbox, Card } from '../ui';
 

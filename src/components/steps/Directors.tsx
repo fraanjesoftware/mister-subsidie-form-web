@@ -1,5 +1,6 @@
 import { FormData, Bestuurder } from '../../types';
 import { Input, Card, Alert, Checkbox } from '../ui';
+import { validators } from '../../utils/validation';
 
 interface DirectorsProps {
   formData: FormData;
@@ -28,21 +29,22 @@ export const Directors = ({ formData, onNestedInputChange }: DirectorsProps) => 
             <Input
               label="Voorletter(s) *"
               value={formData.bestuurder1.voorletters}
-              onChange={(e) => onNestedInputChange('bestuurder1', 'voorletters', e.target.value)}
+              onChange={(e) => onNestedInputChange('bestuurder1', 'voorletters', e.target.value.toUpperCase())}
               placeholder="J."
+              validationRules={[validators.required(), validators.initials()]}
             />
             <Input
               label="Achternaam *"
               value={formData.bestuurder1.achternaam}
               onChange={(e) => onNestedInputChange('bestuurder1', 'achternaam', e.target.value)}
               placeholder="Jansen"
+              validationRules={[validators.required(), validators.minLength(2), validators.lettersOnly()]}
             />
             <Input
               label="Functie"
               value={formData.bestuurder1.functie}
               onChange={(e) => onNestedInputChange('bestuurder1', 'functie', e.target.value)}
               placeholder="Directeur"
-              readOnly
             />
             <Input
               type="email"
@@ -51,6 +53,7 @@ export const Directors = ({ formData, onNestedInputChange }: DirectorsProps) => 
               onChange={(e) => onNestedInputChange('bestuurder1', 'email', e.target.value)}
               placeholder="bestuurder@uwbedrijf.nl"
               autoComplete="email"
+              validationRules={[validators.required(), validators.email()]}
             />
           </div>
         </Card>
@@ -67,16 +70,18 @@ export const Directors = ({ formData, onNestedInputChange }: DirectorsProps) => 
             <h4 className="font-semibold text-gray-700 mb-4">Bestuurder 2</h4>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <Input
-                label="Voorletter(s)"
+                label="Voorletter(s) *"
                 value={formData.bestuurder2.voorletters}
-                onChange={(e) => onNestedInputChange('bestuurder2', 'voorletters', e.target.value)}
+                onChange={(e) => onNestedInputChange('bestuurder2', 'voorletters', e.target.value.toUpperCase())}
                 placeholder="M."
+                validationRules={[validators.required(), validators.initials()]}
               />
               <Input
-                label="Achternaam"
+                label="Achternaam *"
                 value={formData.bestuurder2.achternaam}
                 onChange={(e) => onNestedInputChange('bestuurder2', 'achternaam', e.target.value)}
                 placeholder="Pietersen"
+                validationRules={[validators.required(), validators.minLength(2), validators.lettersOnly()]}
               />
               <Input
                 label="Functie"
@@ -91,6 +96,7 @@ export const Directors = ({ formData, onNestedInputChange }: DirectorsProps) => 
                 onChange={(e) => onNestedInputChange('bestuurder2', 'email', e.target.value)}
                 placeholder="bestuurder2@uwbedrijf.nl"
                 autoComplete="email"
+                validationRules={[validators.required(), validators.email()]}
               />
             </div>
           </Card>

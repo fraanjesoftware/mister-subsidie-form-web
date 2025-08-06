@@ -1,0 +1,279 @@
+export type ValidationRule = {
+  validate: (value: any) => boolean;
+  message: string;
+};
+
+export type ValidationResult = {
+  isValid: boolean;
+  error?: string;
+};
+
+// Reusable validation functions
+export const validators = {
+  required: (message = 'Dit veld is verplicht'): ValidationRule => ({
+    validate: (value) => {
+      if (typeof value === 'string') return value.trim().length > 0;
+      if (typeof value === 'number') return !isNaN(value);
+      return value != null;
+    },
+    message
+  }),
+
+  email: (message = 'Voer een geldig e-mailadres in'): ValidationRule => ({
+    validate: (value) => {
+      if (!value) return true; // Let required handle empty values
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      return emailRegex.test(value);
+    },
+    message
+  }),
+
+  kvkNumber: (message = 'KvK-nummer moet 8 cijfers zijn'): ValidationRule => ({
+    validate: (value) => {
+      if (!value) return true;
+      const cleaned = value.replace(/\D/g, '');
+      return cleaned.length === 8;
+    },
+    message
+  }),
+
+  dutchPostcode: (message = 'Postcode moet in formaat 1234 AB zijn'): ValidationRule => ({
+    validate: (value) => {
+      if (!value) return true;
+      const postcodeRegex = /^[1-9]\d{3}\s?[A-Z]{2}$/i;
+      return postcodeRegex.test(value.replace(/\s/g, ' ').trim());
+    },
+    message
+  }),
+
+  naceCode: (message = 'NACE-code moet 4 cijfers zijn'): ValidationRule => ({
+    validate: (value) => {
+      if (!value) return true;
+      const cleaned = value.replace(/\D/g, '');
+      return cleaned.length === 4;
+    },
+    message
+  }),
+
+  initials: (message = 'Gebruik alleen letters en punten (bijv. J.M.)'): ValidationRule => ({
+    validate: (value) => {
+      if (!value) return true;
+      const initialsRegex = /^[A-Z](\.[A-Z])*\.?$/i;
+      return initialsRegex.test(value);
+    },
+    message
+  }),
+
+  lettersOnly: (message = 'Gebruik alleen letters'): ValidationRule => ({
+    validate: (value) => {
+      if (!value) return true;
+      const lettersRegex = /^[a-zA-ZÀ-ÿĀ-žÇçÑñ\s\-']+$/;
+      return lettersRegex.test(value);
+    },
+    message
+  }),
+
+  minLength: (min: number, message?: string): ValidationRule => ({
+    validate: (value) => {
+      if (!value) return true;
+      return value.length >= min;
+    },
+    message: message || `Minimaal ${min} karakters vereist`
+  }),
+
+  maxLength: (max: number, message?: string): ValidationRule => ({
+    validate: (value) => {
+      if (!value) return true;
+      return value.length <= max;
+    },
+    message: message || `Maximaal ${max} karakters toegestaan`
+  }),
+
+  minValue: (min: number, message?: string): ValidationRule => ({
+    validate: (value) => {
+      if (value === '' || value == null) return true;
+      const num = typeof value === 'string' ? parseFloat(value) : value;
+      return !isNaN(num) && num >= min;
+    },
+    message: message || `Waarde moet minimaal ${min} zijn`
+  }),
+
+  maxValue: (max: number, message?: string): ValidationRule => ({
+    validate: (value) => {
+      if (value === '' || value == null) return true;
+      const num = typeof value === 'string' ? parseFloat(value) : value;
+      return !isNaN(num) && num <= max;
+    },
+    message: message || `Waarde mag maximaal ${max} zijn`
+  }),
+
+  yearRange: (min: number, max: number, message?: string): ValidationRule => ({
+    validate: (value) => {
+      if (!value) return true;
+      const year = parseInt(value);
+      return !isNaN(year) && year >= min && year <= max;
+    },
+    message: message || `Jaar moet tussen ${min} en ${max} liggen`
+  }),
+
+  positiveInteger: (message = 'Voer een positief geheel getal in'): ValidationRule => ({
+    validate: (value) => {
+      if (!value) return true;
+      const num = parseInt(value);
+      return !isNaN(num) && num > 0 && num.toString() === value.toString();
+    },
+    message
+  }),
+
+  dateInPast: (message = 'Datum moet in het verleden liggen'): ValidationRule => ({
+    validate: (value) => {
+      if (!value) return true;
+      const date = new Date(value);
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      return date < today;
+    },
+    message
+  })
+};
+
+// Validate a value against multiple rules
+export const validate = (value: any, rules: ValidationRule[]): ValidationResult => {
+  for (const rule of rules) {
+    if (!rule.validate(value)) {
+      return { isValid: false, error: rule.message };
+    }
+  }
+  return { isValid: true };
+};
+
+// Field-specific validation configurations
+export const fieldValidations = {
+  // Company Details
+  bedrijfsnaam: [validators.required(), validators.minLength(2)],
+  kvkNummer: [validators.required(), validators.kvkNumber()],
+  email: [validators.required(), validators.email()],
+  postcode: [validators.dutchPostcode()],
+  naceClassificatie: [validators.naceCode()],
+  
+  // Directors
+  voorletters: [validators.required(), validators.initials()],
+  achternaam: [validators.required(), validators.minLength(2), validators.lettersOnly()],
+  directeurEmail: [validators.required(), validators.email()],
+  
+  // Company Size
+  aantalFte: [validators.required(), validators.positiveInteger(), validators.maxValue(999999)],
+  laatsteBoekjaar: [
+    validators.required(),
+    validators.yearRange(2020, new Date().getFullYear())
+  ],
+  jaaromzet: [validators.required(), validators.minValue(0), validators.maxValue(10000000000)],
+  balanstotaal: [validators.required(), validators.minValue(0), validators.maxValue(10000000000)],
+  
+  // State Aid
+  deMinimisAmount: [validators.maxValue(299999, 'Bedrag mag maximaal €299.999 zijn')],
+  andereStaatssteunDatum: [validators.dateInPast()]
+};
+
+// Validate entire form step
+export const validateStep = (stepName: string, formData: any): Record<string, string> => {
+  const errors: Record<string, string> = {};
+  
+  switch (stepName) {
+    case 'companyDetails':
+      const companyFields = ['bedrijfsnaam', 'kvkNummer', 'email'];
+      companyFields.forEach(field => {
+        if (fieldValidations[field as keyof typeof fieldValidations]) {
+          const result = validate(formData[field], fieldValidations[field as keyof typeof fieldValidations]);
+          if (!result.isValid && result.error) {
+            errors[field] = result.error;
+          }
+        }
+      });
+      
+      if (formData.postcode) {
+        const postcodeResult = validate(formData.postcode, [validators.dutchPostcode()]);
+        if (!postcodeResult.isValid && postcodeResult.error) {
+          errors.postcode = postcodeResult.error;
+        }
+      }
+      
+      if (formData.naceClassificatie) {
+        const naceResult = validate(formData.naceClassificatie, [validators.naceCode()]);
+        if (!naceResult.isValid && naceResult.error) {
+          errors.naceClassificatie = naceResult.error;
+        }
+      }
+      break;
+      
+    case 'directors':
+      // Validate bestuurder1 (always required)
+      ['voorletters', 'achternaam', 'email'].forEach(field => {
+        const value = formData.bestuurder1?.[field];
+        const validationRules = field === 'email' 
+          ? fieldValidations.directeurEmail 
+          : fieldValidations[field as keyof typeof fieldValidations];
+        
+        if (validationRules) {
+          const result = validate(value, validationRules);
+          if (!result.isValid && result.error) {
+            errors[`bestuurder1.${field}`] = result.error;
+          }
+        }
+      });
+      
+      // Validate bestuurder2 if enabled
+      if (formData.bestuurder2?.nodig) {
+        ['voorletters', 'achternaam', 'email'].forEach(field => {
+          const value = formData.bestuurder2?.[field];
+          const validationRules = field === 'email' 
+            ? fieldValidations.directeurEmail 
+            : fieldValidations[field as keyof typeof fieldValidations];
+          
+          if (validationRules) {
+            const result = validate(value, validationRules);
+            if (!result.isValid && result.error) {
+              errors[`bestuurder2.${field}`] = result.error;
+            }
+          }
+        });
+      }
+      break;
+      
+    case 'companySize':
+      ['aantalFte', 'laatsteBoekjaar', 'jaaromzet', 'balanstotaal'].forEach(field => {
+        const validationRules = fieldValidations[field as keyof typeof fieldValidations];
+        if (validationRules) {
+          const result = validate(formData[field], validationRules);
+          if (!result.isValid && result.error) {
+            errors[field] = result.error;
+          }
+        }
+      });
+      break;
+      
+    case 'stateAid':
+      if (formData.deMinimisType === 'wel' && formData.deMinimisAmount) {
+        const result = validate(formData.deMinimisAmount, fieldValidations.deMinimisAmount);
+        if (!result.isValid && result.error) {
+          errors.deMinimisAmount = result.error;
+        }
+      }
+      
+      if (formData.deMinimisType === 'andere') {
+        if (!formData.andereStaatssteunAmount) {
+          errors.andereStaatssteunAmount = 'Dit veld is verplicht';
+        }
+        
+        if (formData.andereStaatssteunDatum) {
+          const result = validate(formData.andereStaatssteunDatum, fieldValidations.andereStaatssteunDatum);
+          if (!result.isValid && result.error) {
+            errors.andereStaatssteunDatum = result.error;
+          }
+        }
+      }
+      break;
+  }
+  
+  return errors;
+};
