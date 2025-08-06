@@ -157,19 +157,22 @@ export const CompanySize = ({ formData, onInputChange }: CompanySizeProps) => {
             <h4 className="font-medium text-gray-700">Jaaromzet</h4>
           </div>
           <div>
-            <div className="relative">
-              <span className="absolute left-3 top-10 text-gray-500 z-10">€</span>
-              <Input
-                type="text"
-                label="Jaaromzet (€) *"
-                className="pl-8"
-                value={formatCurrency(formData.jaaromzet)}
-                onChange={(e) => handleCurrencyChange('jaaromzet', e.target.value)}
-                placeholder="0"
-                inputMode="numeric"
-                validationRules={[validators.required(), validators.minValue(0), validators.maxValue(10000000000, 'Maximaal €10 miljard')]}
-                hint="Netto-omzet uit het laatst afgesloten boekjaar"
-              />
+            <div>
+              <label className="block text-sm font-medium text-gray-dark-1 mb-2">
+                Jaaromzet (€) *
+                <span className="text-xs text-gray-medium font-medium block">Netto-omzet uit het laatst afgesloten boekjaar</span>
+              </label>
+              <div className="relative">
+                <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 pointer-events-none">€</span>
+                <input
+                  type="text"
+                  className="w-full pl-8 pr-4 py-2 font-medium border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#C8DA47] focus:border-[#C8DA47]"
+                  value={formatCurrency(formData.jaaromzet)}
+                  onChange={(e) => handleCurrencyChange('jaaromzet', e.target.value)}
+                  placeholder="0"
+                  inputMode="numeric"
+                />
+              </div>
             </div>
           </div>
         </Card>
@@ -180,19 +183,22 @@ export const CompanySize = ({ formData, onInputChange }: CompanySizeProps) => {
             <h4 className="font-medium text-gray-700">Balanstotaal</h4>
           </div>
           <div>
-            <div className="relative">
-              <span className="absolute left-3 top-10 text-gray-500 z-10">€</span>
-              <Input
-                type="text"
-                label="Balanstotaal (€) *"
-                className="pl-8"
-                value={formatCurrency(formData.balanstotaal)}
-                onChange={(e) => handleCurrencyChange('balanstotaal', e.target.value)}
-                placeholder="0"
-                inputMode="numeric"
-                validationRules={[validators.required(), validators.minValue(0), validators.maxValue(10000000000, 'Maximaal €10 miljard')]}
-                hint="Totaal van alle activa op de balans"
-              />
+            <div>
+              <label className="block text-sm font-medium text-gray-dark-1 mb-2">
+                Balanstotaal (€) *
+                <span className="text-xs text-gray-medium font-medium block">Totaal van alle activa op de balans</span>
+              </label>
+              <div className="relative">
+                <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 pointer-events-none">€</span>
+                <input
+                  type="text"
+                  className="w-full pl-8 pr-4 py-2 font-medium border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#C8DA47] focus:border-[#C8DA47]"
+                  value={formatCurrency(formData.balanstotaal)}
+                  onChange={(e) => handleCurrencyChange('balanstotaal', e.target.value)}
+                  placeholder="0"
+                  inputMode="numeric"
+                />
+              </div>
             </div>
           </div>
         </Card>

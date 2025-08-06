@@ -20,19 +20,24 @@ export const StateAid = ({ formData, onInputChange }: StateAidProps) => {
       description: 'In de afgelopen 36 maanden heeft mijn onderneming de-minimissteun ontvangen, maar het totaal blijft onder de €300.000 drempel.',
       content: (
         <div>
-          <div className="relative">
-            <span className="absolute left-3 top-10 text-gray-500 z-10">€</span>
-            <Input
-              type="number"
-              label="Totaalbedrag ontvangen de-minimissteun"
-              className="pl-8"
-              value={formData.deMinimisAmount}
-              onChange={(e) => onInputChange('deMinimisAmount', e.target.value)}
-              placeholder="0"
-              max="299999"
-              validationRules={[validators.required(), validators.maxValue(299999, 'Bedrag mag maximaal €299.999 zijn')]}
-              hint="Maximaal €299.999 (de drempel is €300.000)"
-            />
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Totaalbedrag ontvangen de-minimissteun
+            </label>
+            <div className="relative">
+              <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 pointer-events-none">€</span>
+              <input
+                type="number"
+                className="w-full pl-8 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                value={formData.deMinimisAmount}
+                onChange={(e) => onInputChange('deMinimisAmount', e.target.value)}
+                placeholder="0"
+                max="299999"
+              />
+            </div>
+            <p className="text-xs text-gray-500 mt-1">
+              Maximaal €299.999 (de drempel is €300.000)
+            </p>
           </div>
         </div>
       )
@@ -44,16 +49,17 @@ export const StateAid = ({ formData, onInputChange }: StateAidProps) => {
       content: (
         <div className="space-y-3">
           <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Totaalbedrag andere staatssteun
+            </label>
             <div className="relative">
-              <span className="absolute left-3 top-10 text-gray-500 z-10">€</span>
-              <Input
+              <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 pointer-events-none">€</span>
+              <input
                 type="number"
-                label="Totaalbedrag andere staatssteun"
-                className="pl-8"
+                className="w-full pl-8 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                 value={formData.andereStaatssteunAmount}
                 onChange={(e) => onInputChange('andereStaatssteunAmount', e.target.value)}
                 placeholder="0"
-                validationRules={[validators.required(), validators.minValue(0)]}
               />
             </div>
           </div>
