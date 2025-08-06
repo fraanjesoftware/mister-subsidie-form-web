@@ -60,7 +60,6 @@ const App = () => {
       "4e941c38-804a-4a38-991c-146639ede747" // Replace with actual template ID from config/env
     );
 
-    console.log('Sending to SignWell API:', JSON.stringify(signingData, null, 2));
     
     try {
       const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || 'https://mister-subsidie-form-api-h8fvgydvheenczea.westeurope-01.azurewebsites.net';
@@ -77,7 +76,6 @@ const App = () => {
       );
 
       const result = await response.json();
-      console.log('SignWell API Response:', result);
       
       if (result.success || result.documentId) {
         // SignWell will send an email to the user
@@ -107,7 +105,6 @@ const App = () => {
 
   const handleSubmit = () => {
     const allData = prepareFormData(formData);
-    console.log('Formulieren data:', allData);
     
     // Save to localStorage
     localStorage.setItem('slimFormData', JSON.stringify(allData));
