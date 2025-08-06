@@ -101,7 +101,7 @@ export const CompanySize = ({ formData, onInputChange }: CompanySizeProps) => {
       <Alert type="info">
         <div className="flex items-start">
           <div>
-            <p className="font-medium text-blue-900">Waarom hebben we deze informatie nodig?</p>
+            <p className="font-medium text-blue-800">Waarom hebben we deze informatie nodig?</p>
             <p className="text-sm text-blue-800 mt-1">
               De grootte van uw onderneming bepaalt de hoogte van de subsidie en de voorwaarden. 
               Gebruik de cijfers uit uw laatst goedgekeurde jaarrekening.

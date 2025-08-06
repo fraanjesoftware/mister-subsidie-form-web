@@ -42,6 +42,13 @@ const App = () => {
     }
   };
 
+  const handleStepClick = (stepIndex: number) => {
+    // Only allow navigation to previous steps (already completed)
+    if (stepIndex < currentStep) {
+      setCurrentStep(stepIndex);
+    }
+  };
+
 
   // const handleCloseModal = () => {  // Not needed for SignWell
   //   setShowSigningModal(false);
@@ -163,7 +170,11 @@ const App = () => {
         </div> */}
 
         
-        <ProgressSteps steps={STEPS} currentStep={currentStep} />
+        <ProgressSteps 
+          steps={STEPS} 
+          currentStep={currentStep} 
+          onStepClick={handleStepClick}
+        />
         
         <div className="bg-white rounded-xl shadow-lg p-8 mb-6">
           {renderStep()}

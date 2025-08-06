@@ -88,6 +88,7 @@ export const Authorization = ({ formData, onInputChange, onSign, signingError, s
             
             <Checkbox
               checked={formData.machtigingBezwaar}
+              
               onChange={(e) => onInputChange('machtigingBezwaar', e.target.checked)}
               label="Het uitvoeren van alle benodigde rechtshandelingen in geval van een eventueel te voeren bezwaar- en beroepsprocedure."
             />

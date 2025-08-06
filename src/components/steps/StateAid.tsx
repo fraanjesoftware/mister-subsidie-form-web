@@ -83,7 +83,7 @@ export const StateAid = ({ formData, onInputChange }: StateAidProps) => {
       </div>
       
       <Alert type="info">
-        <p>
+        <p className='text-blue-800'>
           De-minimissteun is een vorm van staatssteun tot maximaal €300.000 over een periode van 3 jaar. 
           U moet aangeven of uw onderneming dergelijke steun heeft ontvangen.
         </p>

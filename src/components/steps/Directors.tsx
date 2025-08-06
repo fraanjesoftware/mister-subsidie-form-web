@@ -16,7 +16,7 @@ export const Directors = ({ formData, onNestedInputChange }: DirectorsProps) => 
       </div>
       
       <Alert type="info">
-        <p>
+        <p className='text-blue-800'>
           <strong>Let op:</strong> Een bestuurder die zelfstandig bevoegd is (conform KvK) mag alleen tekenen. 
           Bij gezamenlijke bevoegdheid moeten minimaal twee bestuurders tekenen.
         </p>
