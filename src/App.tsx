@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ProgressSteps, Navigation, TenantHeader } from './components/form';
+import { ProgressSteps, Navigation, TenantHeader, TenantFooter } from './components/form';
 import { 
   CompanyDetails, 
   Directors, 
@@ -159,7 +159,7 @@ const App = () => {
           isStepValid={isStepValid(currentStep)}
         />
       </div>
-      
+      <TenantFooter />
     </div>
   );
 };
