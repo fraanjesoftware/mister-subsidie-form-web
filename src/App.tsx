@@ -138,28 +138,34 @@ const App = () => {
 
 
   return (
-    <div className="min-h-screen bg-[var(--color-background)]">
-      <TenantHeader />
-      <div className="max-w-4xl mx-auto px-4 py-8">
-        <ProgressSteps 
-          steps={STEPS} 
-          currentStep={currentStep} 
-          onStepClick={handleStepClick}
-        />
+    <div className="flex min-h-screen flex-col bg-[var(--color-background)]">
+      <div className="flex-shrink-0">
+        <TenantHeader />
+      </div>
+      <main className="flex-1">
+        <div className="max-w-4xl mx-auto px-4 py-8">
+          <ProgressSteps 
+            steps={STEPS} 
+            currentStep={currentStep} 
+            onStepClick={handleStepClick}
+          />
         
         <div className="bg-white rounded-xl shadow-lg p-8 mb-6">
           {renderStep()}
         </div>
         
-        <Navigation
-          currentStep={currentStep}
-          totalSteps={STEPS.length}
-          onPrev={handlePrev}
-          onNext={handleNext}
-          isStepValid={isStepValid(currentStep)}
-        />
+          <Navigation
+            currentStep={currentStep}
+            totalSteps={STEPS.length}
+            onPrev={handlePrev}
+            onNext={handleNext}
+            isStepValid={isStepValid(currentStep)}
+          />
+        </div>
+      </main>
+      <div className="flex-shrink-0">
+        <TenantFooter />
       </div>
-      <TenantFooter />
     </div>
   );
 };
