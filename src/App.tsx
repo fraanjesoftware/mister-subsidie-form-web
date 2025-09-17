@@ -14,6 +14,7 @@ import { useFormData, useStepValidation } from './hooks';
 import { prepareFormData } from './utils/prepareFormData';
 import { buildSigningSession } from './utils/buildSigningSession';
 import { useTenant } from './context/TenantProvider';
+import { getApiBaseUrl, getFunctionCode, getSignWellTemplateId } from './config/api';
 
 const App = () => {
   const navigate = useNavigate();
@@ -80,7 +81,7 @@ const App = () => {
     // Build signing session data using the type-safe helper
     const signingData = buildSigningSession(
       formData,
-      "4e941c38-804a-4a38-991c-146639ede747" // Replace with actual template ID from config/env
+      getSignWellTemplateId()
     );
 
     const payload = {
@@ -91,8 +92,8 @@ const App = () => {
 
     
     try {
-      const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || 'https://mister-subsidie-form-api-h8fvgydvheenczea.westeurope-01.azurewebsites.net';
-      const apiFunctionCode = import.meta.env.VITE_FUNCTION_CODE || 'DDipjiIMeEVPtIY8Kx3C7hz4ME6us6EeDwddhRdoUhYKAzFuODcd5Q=='
+      const apiBaseUrl = getApiBaseUrl();
+      const apiFunctionCode = getFunctionCode();
       const response = await fetch(
         `${apiBaseUrl}/api/createSignWellTemplateSession?code=${apiFunctionCode}`,
         {
@@ -133,7 +134,7 @@ const App = () => {
   };
 
   const handleSubmit = () => {
-    const allData = prepareFormData(formData);
+    const allData = prepareFormData(formData, tenantInfo.authorization);
     
     // Save to localStorage
     localStorage.setItem('slimFormData', JSON.stringify(allData));

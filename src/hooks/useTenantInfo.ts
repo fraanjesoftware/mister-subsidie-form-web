@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { DEFAULT_AUTHORIZATION_CONFIG, type AuthorizationConfig } from '../config/authorization';
+import { getApiBaseUrl, getOptionalFunctionCode } from '../config/api';
 
 export type TenantId = 'default' | 'mistersubsidie' | 'ignite';
 
@@ -28,14 +29,7 @@ export interface UseTenantInfoResult {
   meta: TenantInfoMeta | null;
 }
 
-const DEFAULT_API_BASE_URL = 'https://mister-subsidie-form-api-h8fvgydvheenczea.westeurope-01.azurewebsites.net';
-
 const KNOWN_TENANTS: TenantId[] = ['default', 'mistersubsidie', 'ignite'];
-
-const sanitizeFunctionCode = (value?: string): string => {
-  if (!value) return '';
-  return value.replace(/^"|"$/g, '');
-};
 
 const coerceTenantId = (candidate?: string | null): TenantId => {
   if (!candidate) return 'default';
@@ -133,8 +127,8 @@ export const useTenantInfo = (): UseTenantInfoResult => {
       setError(null);
 
       try {
-        const apiBaseUrl = (import.meta.env.VITE_API_BASE_URL as string | undefined) || DEFAULT_API_BASE_URL;
-        const apiFunctionCode = sanitizeFunctionCode(import.meta.env.VITE_FUNCTION_CODE as string | undefined);
+        const apiBaseUrl = getApiBaseUrl();
+        const apiFunctionCode = getOptionalFunctionCode();
 
         const endpoint = new URL(`${apiBaseUrl.replace(/\/$/, '')}/api/getAuthorizedRepresentativeInfo`);
 

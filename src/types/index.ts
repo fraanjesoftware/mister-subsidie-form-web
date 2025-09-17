@@ -45,7 +45,15 @@ export interface FormData {
   datum: string;
 }
 
+export type StepKey =
+  | 'companyDetails'
+  | 'directors'
+  | 'companySize'
+  | 'stateAid'
+  | 'authorization';
+
 export interface Step {
+  key: StepKey;
   title: string;
   icon: React.ComponentType<{ className?: string }>;
   description: string;

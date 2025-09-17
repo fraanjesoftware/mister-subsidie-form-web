@@ -1,6 +1,12 @@
 import { FormData } from '../types';
+import { DEFAULT_AUTHORIZATION_CONFIG, type AuthorizationConfig } from '../config/authorization';
 
-export const prepareFormData = (formData: FormData) => {
+export const prepareFormData = (
+  formData: FormData,
+  authorization: AuthorizationConfig = DEFAULT_AUTHORIZATION_CONFIG
+) => {
+  const resolvedAuthorization = authorization ?? DEFAULT_AUTHORIZATION_CONFIG;
+
   const structuredData = {
     machtiging: {
       aanvrager: {
@@ -9,11 +15,11 @@ export const prepareFormData = (formData: FormData) => {
         kvkNummer: formData.kvkNummer
       },
       gemachtigde: {
-        naamOrganisatie: 'Tim Otte/NOT-Company bv h.o.d.n. Mistersubsidie',
-        email: 'Tim@mistersubsidie.nl',
-        volledigeNaam: 'Tim Otte',
-        telefoon: '0611241360',
-        kvkNummer: '24353031'
+        naamOrganisatie: resolvedAuthorization.organisatie,
+        email: resolvedAuthorization.email,
+        volledigeNaam: resolvedAuthorization.contactpersoon,
+        telefoon: resolvedAuthorization.telefoon,
+        kvkNummer: resolvedAuthorization.kvkNummer
       },
       machtigingToestemming: {
         bevoegd: formData.akkoordMachtiging,
@@ -77,11 +83,11 @@ export const prepareFormData = (formData: FormData) => {
     "mach_naam_onderneming": formData.bedrijfsnaam,
     "mach_email": formData.email,
     "mach_kvk": formData.kvkNummer,
-    "mach_gem_naam": "Tim Otte/NOT-Company bv h.o.d.n. Mistersubsidie",
-    "mach_gem_email": "Tim@mistersubsidie.nl",
-    "mach_gem_persoon": "Tim Otte",
-    "mach_gem_telefoon": "0611241360",
-    "mach_gem_kvk": "24353031",
+    "mach_gem_naam": resolvedAuthorization.organisatie,
+    "mach_gem_email": resolvedAuthorization.email,
+    "mach_gem_persoon": resolvedAuthorization.contactpersoon,
+    "mach_gem_telefoon": resolvedAuthorization.telefoon,
+    "mach_gem_kvk": resolvedAuthorization.kvkNummer,
     "mach_check_bevoegd": formData.akkoordMachtiging,
     "mach_check_waarheid": formData.akkoordWaarheid,
     "mach_check_indienen": formData.machtigingIndienen,

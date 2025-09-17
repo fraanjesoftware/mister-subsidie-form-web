@@ -1,15 +1,23 @@
 import { useState, useCallback } from 'react';
 import { validateStep } from '../utils/validation';
 import { FormData } from '../types';
+import { STEP_KEYS } from '../constants/steps';
 
 export const useValidation = () => {
   const [validationErrors, setValidationErrors] = useState<Record<string, string>>({});
   const [showErrors, setShowErrors] = useState(false);
 
   const validateCurrentStep = useCallback((stepIndex: number, formData: FormData): boolean => {
-    const stepNames = ['companyDetails', 'directors', 'companySize', 'stateAid', 'authorization'];
-    const errors = validateStep(stepNames[stepIndex], formData);
-    
+    const stepKey = STEP_KEYS[stepIndex];
+
+    if (!stepKey) {
+      setValidationErrors({});
+      setShowErrors(false);
+      return true;
+    }
+
+    const errors = validateStep(stepKey, formData);
+
     setValidationErrors(errors);
     
     if (Object.keys(errors).length > 0) {

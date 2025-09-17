@@ -5,6 +5,8 @@ import {
   createTextTab,
   createRadioGroup
 } from '../types/sign';
+import { formatCurrency, sanitizeNumericInput } from './numberFormat';
+import { getCompanySizeLabel, getCompanyRadioValue } from './companyClassification';
 
 // Build signing session data for SignWell API
 export const buildSigningSession = (
@@ -12,17 +14,6 @@ export const buildSigningSession = (
   templateId: string
 ): TemplateSigningSession => {
   const signers: Signer[] = [];
-  
-  // Format currency values
-  const formatCurrency = (value: string): string => {
-    const num = parseInt(value.replace(/[^\d]/g, '')) || 0;
-    return new Intl.NumberFormat('nl-NL', { 
-      style: 'currency', 
-      currency: 'EUR',
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0
-    }).format(num);
-  };
   
   // Format date
   const formatDate = (): string => {
@@ -38,26 +29,6 @@ export const buildSigningSession = (
     if (!dateString) return '';
     const [year, month, day] = dateString.split('-');
     return `${day}/${month}/${year}`;
-  };
-  
-  // Determine company size value
-  const getCompanySizeValue = (): string => {
-    switch (formData.ondernemingType) {
-      case 'klein': return 'Klein (< 50 medewerkers)';
-      case 'middelgroot': return 'Middelgroot (50-250 medewerkers)';
-      case 'groot': return 'Groot (> 250 medewerkers)';
-      default: return 'Klein (< 50 medewerkers)';
-    }
-  };
-  
-  // Map company type to radio values
-  const getOndernemingRadioValue = (): string => {
-    switch (formData.ondernemingType) {
-      case 'klein': return 'kleine';
-      case 'middelgroot': return 'middel';
-      case 'groot': return 'grote';
-      default: return 'kleine';
-    }
   };
   
   // Primary signer
@@ -77,18 +48,18 @@ export const buildSigningSession = (
         ),
         createRadioGroup(
           'onderneming-type',
-          getOndernemingRadioValue(),
+          getCompanyRadioValue(formData.ondernemingType),
           ['kleine', 'middel', 'grote']
         )
       ],
       textTabs: [
         // Only include minimis-2.1 when 'wel' is selected
         ...(formData.deMinimisType === 'wel' ? [
-          createTextTab('minimis-2.1', formData.deMinimisAmount.replace(/[^\d]/g, '') || '0')
+          createTextTab('minimis-2.1', sanitizeNumericInput(formData.deMinimisAmount) || '0')
         ] : []),
         // Only include minimis-3.1 and 3.2 when 'andere' is selected
         ...(formData.deMinimisType === 'andere' ? [
-          createTextTab('minimis-3.1', formData.andereStaatssteunAmount?.replace(/[^\d]/g, '') || '0'),
+          createTextTab('minimis-3.1', sanitizeNumericInput(formData.andereStaatssteunAmount) || '0'),
           createTextTab('minimis-3.2', formatDateInput(formData.andereStaatssteunDatum || ''))
         ] : []),
         createTextTab('bedrijfsnaam', formData.bedrijfsnaam),
@@ -107,8 +78,8 @@ export const buildSigningSession = (
         createTextTab('postcode', formData.postcode),
         createTextTab('plaats', formData.plaats),
         createTextTab('fte', formData.aantalFte),
-        createTextTab('jaaromzet', formatCurrency(formData.jaaromzet)),
-        createTextTab('balanstotaal', formatCurrency(formData.balanstotaal)),
+        createTextTab('jaaromzet', formatCurrency(formData.jaaromzet, { withSymbol: true })),
+        createTextTab('balanstotaal', formatCurrency(formData.balanstotaal, { withSymbol: true })),
         createTextTab('boekjaar', `${formData.laatsteBoekjaar}`),
         createTextTab('datum', formatDate()),
         
@@ -116,7 +87,7 @@ export const buildSigningSession = (
       listTabs: [
         {
           tabLabel: 'CompanySize',
-          value: getCompanySizeValue()
+          value: getCompanySizeLabel(formData.ondernemingType)
         }
       ]
     }

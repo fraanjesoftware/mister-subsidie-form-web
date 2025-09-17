@@ -2,6 +2,8 @@ import { FormData } from '../../types';
 import { Input, Alert, Card } from '../ui';
 import { Calculator, Users, Euro, FileText } from 'lucide-react';
 import { validators } from '../../utils/validation';
+import { formatCurrency, sanitizeNumericInput } from '../../utils/numberFormat';
+import { getCompanyClassification } from '../../utils/companyClassification';
 
 interface CompanySizeProps {
   formData: FormData;
@@ -9,88 +11,17 @@ interface CompanySizeProps {
 }
 
 export const CompanySize = ({ formData, onInputChange }: CompanySizeProps) => {
-  // Format currency input
-  const formatCurrency = (value: string): string => {
-    // Remove all non-numeric characters
-    const numericValue = value.replace(/\D/g, '');
-    
-    // Convert to number and format
-    if (numericValue === '') return '';
-    const num = parseInt(numericValue);
-    return new Intl.NumberFormat('nl-NL').format(num);
-  };
-  
   // Handle currency input change
   const handleCurrencyChange = (field: 'jaaromzet' | 'balanstotaal', value: string) => {
     // Store only numeric value
-    const numericValue = value.replace(/\D/g, '');
+    const numericValue = sanitizeNumericInput(value);
     onInputChange(field, numericValue);
   };
   
-  // Get classification details
-  const getClassificationDetails = () => {
-    const fte = parseInt(formData.aantalFte) || 0;
-    const omzet = parseInt(formData.jaaromzet) || 0;
-    const balans = parseInt(formData.balanstotaal) || 0;
-    
-    // Groot bedrijf: jaaromzet > 50M EN balanstotaal > 43M
-    if (omzet > 50000000 && balans > 43000000) {
-      return {
-        type: 'groot',
-        label: 'Grote onderneming',
-        color: 'purple',
-        criteria: 'Jaaromzet > €50 miljoen EN balanstotaal > €43 miljoen'
-      };
-    }
-    // Groot bedrijf: 250 of meer werknemers
-    else if (fte >= 250) {
-      return {
-        type: 'groot',
-        label: 'Grote onderneming',
-        color: 'purple',
-        criteria: '250 of meer werknemers'
-      };
-    }
-    // Middelgroot: FTE < 50 maar jaaromzet EN balanstotaal > 10M
-    else if (fte < 50 && omzet > 10000000 && balans > 10000000) {
-      return {
-        type: 'middelgroot',
-        label: 'Middelgrote onderneming',
-        color: 'blue',
-        criteria: 'Minder dan 50 werknemers maar jaaromzet EN balanstotaal > €10 miljoen'
-      };
-    }
-    // Klein bedrijf: < 50 FTE en (omzet ≤ 10M of balans ≤ 10M)
-    else if (fte < 50 && (omzet <= 10000000 || balans <= 10000000)) {
-      return {
-        type: 'klein',
-        label: 'Kleine onderneming',
-        color: 'green',
-        criteria: 'Minder dan 50 werknemers EN jaaromzet of balanstotaal ≤ €10 miljoen'
-      };
-    }
-    // Middelgroot: < 250 FTE en (omzet ≤ 50M of balans ≤ 43M)
-    else if (fte < 250 && (omzet <= 50000000 || balans <= 43000000)) {
-      return {
-        type: 'middelgroot',
-        label: 'Middelgrote onderneming',
-        color: 'blue',
-        criteria: 'Minder dan 250 werknemers EN jaaromzet ≤ €50 miljoen OF balanstotaal ≤ €43 miljoen'
-      };
-    }
-    // Default to groot if any values are filled
-    else if (fte > 0 || omzet > 0 || balans > 0) {
-      return {
-        type: 'groot',
-        label: 'Grote onderneming',
-        color: 'purple',
-        criteria: 'Overige ondernemingen'
-      };
-    }
-    return null;
-  };
-  
-  const classification = getClassificationDetails();
+  const fte = parseInt(formData.aantalFte) || 0;
+  const omzet = parseInt(formData.jaaromzet) || 0;
+  const balans = parseInt(formData.balanstotaal) || 0;
+  const classification = getCompanyClassification(fte, omzet, balans);
   return (
     <div className="space-y-6">
       <div>

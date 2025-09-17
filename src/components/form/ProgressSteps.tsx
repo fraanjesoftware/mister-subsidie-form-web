@@ -14,7 +14,7 @@ export const ProgressSteps = ({ steps, currentStep, onStepClick }: ProgressSteps
         {steps.map((step, index) => {
           const Icon = step.icon;
           return (
-            <div key={index} className="flex items-center">
+            <div key={step.key} className="flex items-center">
               <div
                 className={`flex flex-col items-center ${
                   index <= currentStep ? 'text-[var(--color-accent)]' : 'text-gray-400'

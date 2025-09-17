@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { FormData, Bestuurder } from '../types';
+import { getCompanyType } from '../utils/companyClassification';
 
 const initialFormData: FormData = {
   // Algemene bedrijfsgegevens
@@ -74,34 +75,9 @@ export const useFormData = () => {
     const fte = parseInt(formData.aantalFte) || 0;
     const omzet = parseInt(formData.jaaromzet) || 0;
     const balans = parseInt(formData.balanstotaal) || 0;
-    
-    let type: FormData['ondernemingType'] = '';
-    
-    // Groot bedrijf: jaaromzet > 50M EN balanstotaal > 43M
-    if (omzet > 50000000 && balans > 43000000) {
-      type = 'groot';
-    }
-    // Groot bedrijf: 250 of meer werknemers
-    else if (fte >= 250) {
-      type = 'groot';
-    }
-    // Middelgroot: FTE < 50 maar jaaromzet EN balanstotaal > 10M
-    else if (fte < 50 && omzet > 10000000 && balans > 10000000) {
-      type = 'middelgroot';
-    }
-    // Klein bedrijf: < 50 FTE en (omzet ≤ 10M of balans ≤ 10M)
-    else if (fte < 50 && (omzet <= 10000000 || balans <= 10000000)) {
-      type = 'klein';
-    }
-    // Middelgroot: < 250 FTE en (omzet ≤ 50M of balans ≤ 43M)
-    else if (fte < 250 && (omzet <= 50000000 || balans <= 43000000)) {
-      type = 'middelgroot';
-    }
-    // Default to groot if any values are filled
-    else if (fte > 0 || omzet > 0 || balans > 0) {
-      type = 'groot';
-    }
-    
+
+    const type = getCompanyType(fte, omzet, balans);
+
     if (type !== formData.ondernemingType) {
       setFormData(prev => ({ ...prev, ondernemingType: type }));
     }
