@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { IconCircleCheck } from '@tabler/icons-react';
+import { AppLayout } from '../components/layout';
 
 export const EndPage: React.FC = () => {
   useEffect(() => {
@@ -11,31 +12,33 @@ export const EndPage: React.FC = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-[var(--color-background)] flex items-center justify-center px-4">
-      <div className="max-w-md w-full">
-        <div className="bg-white rounded-xl shadow-lg p-8 text-center">
-          <div className="mb-6">
-            <div className="inline-flex items-center justify-center w-20 h-20 bg-[var(--color-accent-light-5)] rounded-full">
-              <IconCircleCheck className="w-12 h-12 text-[var(--color-accent)]" />
+    <AppLayout>
+      <div className="flex min-h-full items-center justify-center px-4 py-16">
+        <div className="w-full max-w-md">
+          <div className="rounded-xl bg-white p-8 text-center shadow-lg">
+            <div className="mb-6">
+              <div className="inline-flex h-20 w-20 items-center justify-center rounded-full bg-[var(--color-accent-light-5)]">
+                <IconCircleCheck className="h-12 w-12 text-[var(--color-accent)]" />
+              </div>
             </div>
+
+            <h1 className="mb-4 text-2xl font-bold text-gray-900">
+              Check uw mailbox om het formulier te ondertekenen
+            </h1>
+
+            <p className="mb-6 text-gray-700">
+              Het document wordt binnen enkele momenten naar uw opgegeven e-mail adres gestuurd. Open deze mail om het formulier digitaal te ondertekenen.
+            </p>
+
+            <a
+              href="/"
+              className="inline-block rounded-lg bg-[var(--color-primary)] px-6 py-3 font-medium text-white transition-colors hover:bg-[var(--color-primary-dark)]"
+            >
+              Nieuwe aanvraag
+            </a>
           </div>
-
-          <h1 className="text-2xl font-bold text-gray-900 mb-4">
-            Check uw mailbox om het formulier te ondertekenen
-          </h1>
-          
-          <p className="text-gray-700 mb-6">
-            Het document wordt binnen enkele momenten naar uw opgegeven e-mail adres gestuurd. Open deze mail om het formulier digitaal te ondertekenen.
-          </p>
-
-          <a
-            href="/"
-            className="inline-block px-6 py-3 bg-[var(--color-primary)] hover:bg-[var(--color-primary-dark)] text-white font-medium rounded-lg transition-colors"
-          >
-            Nieuwe aanvraag
-          </a>
         </div>
       </div>
-    </div>
+    </AppLayout>
   );
 };
