@@ -9,10 +9,10 @@ export const Checkbox = ({ label, className = '', ...props }: CheckboxProps) => 
     <label className="flex items-start cursor-pointer">
       <input
         type="checkbox"
-        className={`mt-0.5 mr-3 flex-shrink-0 w-5 h-5 text-[#C8DA47] rounded focus:ring-2 focus:ring-[#C8DA47] border-gray-300 checked:bg-[#C8DA47] checked:border-[#C8DA47] ${className}`}
+        className={`mt-0.5 mr-3 flex-shrink-0 w-5 h-5 text-[var(--color-accent)] rounded focus:ring-2 focus:ring-[var(--color-accent)] border-gray-300 checked:bg-[var(--color-accent)] checked:border-[var(--color-accent)] ${className}`}
         {...props}
       />
-      <span className="text-sm text-gray-dark-1 font-medium leading-5">{label}</span>
+      <span className="text-sm text-[var(--color-gray-dark-1)] font-medium leading-5">{label}</span>
     </label>
   );
 };

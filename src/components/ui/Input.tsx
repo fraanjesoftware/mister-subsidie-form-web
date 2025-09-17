@@ -59,12 +59,12 @@ export const Input = ({
   
   return (
     <div>
-      <label className="block text-sm font-medium text-gray-dark-1 mb-2">
+      <label className="block text-sm font-medium text-[var(--color-gray-dark-1)] mb-2">
         {label}
-        {hint && <span className="text-xs text-gray-medium font-medium block">{hint}</span>}
+        {hint && <span className="text-xs text-[var(--color-gray-medium)] font-medium block">{hint}</span>}
       </label>
       <input
-        className={`w-full px-4 py-2 font-medium border rounded-lg focus:ring-2 focus:ring-[#C8DA47] focus:border-[#C8DA47] ${
+        className={`w-full px-4 py-2 font-medium border rounded-lg focus:ring-2 focus:ring-[var(--color-accent)] focus:border-[var(--color-accent)] ${
           error ? 'border-red-500 focus:ring-red-500 focus:border-red-500' : 'border-gray-300'
         } ${
           isReadOnly ? 'bg-gray-100 cursor-not-allowed text-gray-600' : ''

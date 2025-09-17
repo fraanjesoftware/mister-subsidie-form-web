@@ -158,15 +158,15 @@ export const CompanySize = ({ formData, onInputChange }: CompanySizeProps) => {
           </div>
           <div>
             <div>
-              <label className="block text-sm font-medium text-gray-dark-1 mb-2">
+              <label className="block text-sm font-medium text-[var(--color-gray-dark-1)] mb-2">
                 Jaaromzet (€) *
-                <span className="text-xs text-gray-medium font-medium block">Netto-omzet uit het laatst afgesloten boekjaar</span>
+                <span className="text-xs text-[var(--color-gray-medium)] font-medium block">Netto-omzet uit het laatst afgesloten boekjaar</span>
               </label>
               <div className="relative">
                 <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 pointer-events-none">€</span>
                 <input
                   type="text"
-                  className="w-full pl-8 pr-4 py-2 font-medium border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#C8DA47] focus:border-[#C8DA47]"
+                  className="w-full pl-8 pr-4 py-2 font-medium border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--color-accent)] focus:border-[var(--color-accent)]"
                   value={formatCurrency(formData.jaaromzet)}
                   onChange={(e) => handleCurrencyChange('jaaromzet', e.target.value)}
                   placeholder="0"
@@ -184,15 +184,15 @@ export const CompanySize = ({ formData, onInputChange }: CompanySizeProps) => {
           </div>
           <div>
             <div>
-              <label className="block text-sm font-medium text-gray-dark-1 mb-2">
+              <label className="block text-sm font-medium text-[var(--color-gray-dark-1)] mb-2">
                 Balanstotaal (€) *
-                <span className="text-xs text-gray-medium font-medium block">Totaal van alle activa op de balans</span>
+                <span className="text-xs text-[var(--color-gray-medium)] font-medium block">Totaal van alle activa op de balans</span>
               </label>
               <div className="relative">
                 <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 pointer-events-none">€</span>
                 <input
                   type="text"
-                  className="w-full pl-8 pr-4 py-2 font-medium border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#C8DA47] focus:border-[#C8DA47]"
+                  className="w-full pl-8 pr-4 py-2 font-medium border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--color-accent)] focus:border-[var(--color-accent)]"
                   value={formatCurrency(formData.balanstotaal)}
                   onChange={(e) => handleCurrencyChange('balanstotaal', e.target.value)}
                   placeholder="0"

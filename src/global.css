@@ -1,60 +1,53 @@
-@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@500;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Raleway:wght@500;700;800&display=swap');
 @import "tailwindcss";
 
-body {
-  font-family: 'Raleway', sans-serif;
-  font-weight: 500;
-  color: #1D1E1D;
-  background-color: #FAF8F6;
-}
-
 :root {
-    --e-global-color-accent: #C7DA46;
-    --e-global-color-primary: #03291F;
-    --e-global-color-secondary: #C7DA46;
-    --e-global-color-text: #1D1E1D;
-    --e-global-color-15cc862: #D2E06C;
-    --e-global-color-9c67582: #DEE790;
-    --e-global-color-78b31fe: #E8EFB5;
-    --e-global-color-e2c70a0: #F3F7DA;
-    --e-global-color-8e41f82: #03291F;
-    --e-global-color-3e427bd: #1E3E35;
-    --e-global-color-e7cab51: #455E57;
-    --e-global-color-4562ce5: #455E57;
-    --e-global-color-6655f78: #829490;
-    --e-global-color-3bc5e83: #CED5D2;
-    --e-global-color-23775c2: #393E3A;
-    --e-global-color-e31ae5b: #5B5E5B;
-    --e-global-color-cf584a1: #919392;
-    --e-global-color-55a7c57: #D3D4D3;
-    --e-global-color-5b18cd8: #FAF8F6;
-    --e-global-color-4d44528: #E9E6E4;
-    --e-global-color-5bedc29: #CFCBCA;
-    --e-global-color-8a037f3: #C2BFBD;
-    --e-global-color-00ee15a: #ACA9A7;
-    --e-global-color-8316a6b: #F3F7DA38;
-    --e-global-color-d938428: #455E570A;
-    --e-global-typography-primary-font-family: "Raleway";
-    --e-global-typography-primary-font-weight: 700;
-    --e-global-typography-secondary-font-family: "Raleway";
-    --e-global-typography-secondary-font-weight: 500;
-    --e-global-typography-text-font-family: "Raleway";
-    --e-global-typography-text-font-weight: 500;
-    --e-global-typography-accent-font-family: "Raleway";
-    --e-global-typography-accent-font-weight: 800;
+  --color-accent: #C8DA47;
+  --color-accent-light-1: #D2E06C;
+  --color-accent-light-2: #DEE790;
+  --color-accent-light-3: #E8EFB5;
+  --color-accent-light-4: #F3F7DA;
+  --color-primary: #03291F;
+  --color-secondary: #C7DA46;
+  --color-text: #1D1E1D;
+  --color-background: #FAF8F6;
+  --color-primary-dark: #03291F;
+  --color-primary-medium-1: #1E3E35;
+  --color-primary-medium-2: #455E57;
+  --color-primary-light-1: #829490;
+  --color-primary-light-2: #CED5D2;
+  --color-gray-light-1: #D3D4D3;
+  --color-gray-light-2: #FAF8F6;
+  --color-gray-light-3: #E9E6E4;
+  --color-gray-light-4: #CFCBCA;
+  --color-gray-light-5: #C2BFBD;
+  --color-gray-light-6: #ACA9A7;
+  --color-gray-dark-1: #393E3A;
+  --color-gray-dark-2: #5B5E5B;
+  --color-gray-medium: #919392;
+  --color-accent-transparent: #F3F7DA38;
+  --color-primary-transparent: #455E570A;
+  --font-sans: Raleway, sans-serif;
+  --font-heading: Raleway, sans-serif;
 }
 
-/* Custom checkbox styling */
+body {
+  font-family: var(--font-sans);
+  font-weight: 500;
+  color: var(--color-text);
+  background-color: var(--color-background);
+}
+
 input[type="checkbox"] {
-  accent-color: #1E3E35;
+  accent-color: var(--color-primary-medium-1);
 }
 
 input[type="checkbox"]:checked {
-  background-color: #1E3E35;
-  border-color: #1E3E35;
+  background-color: var(--color-primary-medium-1);
+  border-color: var(--color-primary-medium-1);
 }
 
 input[type="checkbox"]:focus {
-  outline-color: #1E3E35;
-  box-shadow: 0 0 0 3px rgba(30, 62, 53, 0.1);
+  outline-color: var(--color-primary-medium-1);
+  box-shadow: 0 0 0 3px var(--color-primary-transparent);
 }

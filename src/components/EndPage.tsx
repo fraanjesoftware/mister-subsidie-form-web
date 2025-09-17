@@ -7,7 +7,7 @@ interface EndPageProps {
 
 export const EndPage: React.FC<EndPageProps> = ({ onStartNew }) => {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-accent-light-4 to-gray-light-2 flex items-center justify-center px-4">
+    <div className="min-h-screen bg-gradient-to-br from-[var(--color-accent-light-4)] to-[var(--color-gray-light-2)] flex items-center justify-center px-4">
       <div className="max-w-2xl w-full">
         <div className="bg-white rounded-xl shadow-lg p-8 text-center">
           {/* Success Icon */}
@@ -29,21 +29,21 @@ export const EndPage: React.FC<EndPageProps> = ({ onStartNew }) => {
           {/* What Happens Next */}
           <div className="bg-gray-50 rounded-lg p-6 mb-8 text-left">
             <h2 className="text-xl font-semibold text-gray-900 mb-4 flex items-center">
-              <IconClock className="w-6 h-6 mr-2 text-primary" />
+              <IconClock className="w-6 h-6 mr-2 text-[var(--color-primary)]" />
               Wat gebeurt er nu?
             </h2>
             
             <ul className="space-y-3 text-gray-700">
               <li className="flex items-start">
-                <span className="text-primary font-bold mr-2">•</span>
+                <span className="text-[var(--color-primary)] font-bold mr-2">•</span>
                 <span>Wij verwerken uw aanvraag en controleren alle gegevens</span>
               </li>
               <li className="flex items-start">
-                <span className="text-primary font-bold mr-2">•</span>
+                <span className="text-[var(--color-primary)] font-bold mr-2">•</span>
                 <span>U ontvangt binnen <strong>3-5 werkdagen</strong> een bevestiging per e-mail</span>
               </li>
               <li className="flex items-start">
-                <span className="text-primary font-bold mr-2">•</span>
+                <span className="text-[var(--color-primary)] font-bold mr-2">•</span>
                 <span>Bij goedkeuring starten wij direct met de uitvoering van uw subsidietraject</span>
               </li>
             </ul>
@@ -66,7 +66,7 @@ export const EndPage: React.FC<EndPageProps> = ({ onStartNew }) => {
           {/* New Application Button */}
           <button
             onClick={onStartNew}
-            className="px-6 py-3 bg-primary hover:bg-primary-dark text-white font-medium rounded-lg transition-colors"
+            className="px-6 py-3 bg-[var(--color-primary)] hover:bg-[var(--color-primary-dark)] text-white font-medium rounded-lg transition-colors"
           >
             Nieuwe aanvraag starten
           </button>

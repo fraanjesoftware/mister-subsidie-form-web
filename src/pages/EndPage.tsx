@@ -11,7 +11,7 @@ export const EndPage: React.FC = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-accent-light-4 to-gray-light-2 flex items-center justify-center px-4">
+    <div className="min-h-screen bg-gradient-to-br from-[var(--color-accent-light-4)] to-[var(--color-gray-light-2)] flex items-center justify-center px-4">
       <div className="max-w-md w-full">
         <div className="bg-white rounded-xl shadow-lg p-8 text-center">
           <div className="mb-6">
@@ -30,7 +30,7 @@ export const EndPage: React.FC = () => {
 
           <a
             href="/"
-            className="inline-block px-6 py-3 bg-primary hover:bg-primary-dark text-white font-medium rounded-lg transition-colors"
+            className="inline-block px-6 py-3 bg-[var(--color-primary)] hover:bg-[var(--color-primary-dark)] text-white font-medium rounded-lg transition-colors"
           >
             Nieuwe aanvraag
           </a>

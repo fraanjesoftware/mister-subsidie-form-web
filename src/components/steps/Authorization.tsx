@@ -132,7 +132,7 @@ export const Authorization = ({ formData, onInputChange, onSign, signingError, s
             
             {isLoading ? (
               <div className="flex flex-col items-center">
-                <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-[#C8DA47] mb-3"></div>
+                <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-[var(--color-accent)] mb-3"></div>
                 <p className="text-gray-700 font-medium">Aanvraag wordt verwerkt...</p>
                 <p className="text-sm text-gray-600 mt-2">U ontvangt een e-mail met instructies voor het ondertekenen.</p>
               </div>
@@ -146,7 +146,7 @@ export const Authorization = ({ formData, onInputChange, onSign, signingError, s
                   formData.akkoordMachtiging && formData.akkoordWaarheid && 
                   formData.machtigingIndienen && formData.machtigingHandelingen && 
                   formData.machtigingBezwaar
-                    ? 'bg-[#C8DA47] text-[#03291F] hover:bg-[#F3F7DA] hover:outline hover:outline-3 hover:outline-black shadow-sm cursor-pointer'
+                    ? 'bg-[var(--color-accent)] text-[var(--color-primary)] hover:bg-[var(--color-accent-light-4)] hover:outline hover:outline-3 hover:outline-black shadow-sm cursor-pointer'
                     : 'bg-gray-300 text-gray-500 cursor-not-allowed opacity-50'
                 }`}
               >

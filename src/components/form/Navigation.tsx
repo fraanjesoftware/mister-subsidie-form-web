@@ -33,7 +33,7 @@ export const Navigation = ({
         Vorige
       </button>
       
-      <div className="text-sm text-gray-medium font-medium">
+      <div className="text-sm text-[var(--color-gray-medium)] font-medium">
         Stap {currentStep + 1} van {totalSteps}
       </div>
       
@@ -43,7 +43,7 @@ export const Navigation = ({
           disabled={!isStepValid}
           className={`flex items-center px-6 py-3 rounded-2xl font-extrabold transition-all ${
             isStepValid
-              ? 'bg-[#C8DA47] text-[#03291F] hover:bg-[#F3F7DA] hover:outline hover:outline-3 hover:outline-black shadow-sm cursor-pointer'
+              ? 'bg-[var(--color-accent)] text-[var(--color-primary)] hover:bg-[var(--color-accent-light-4)] hover:outline hover:outline-3 hover:outline-black shadow-sm cursor-pointer'
               : 'bg-gray-300 text-gray-500 cursor-not-allowed opacity-50'
           }`}
         >

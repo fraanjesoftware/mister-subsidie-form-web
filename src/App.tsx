@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ProgressSteps, Navigation } from './components/form';
 import { 
@@ -13,6 +13,7 @@ import { STEPS } from './constants/steps';
 import { useFormData, useStepValidation, useTenantInfo } from './hooks';
 import { prepareFormData } from './utils/prepareFormData';
 import { buildSigningSession } from './utils/buildSigningSession';
+import { applyTenantTheme } from './theme/tenants';
 
 const App = () => {
   const navigate = useNavigate();
@@ -25,6 +26,10 @@ const App = () => {
   const { formData, handleInputChange, handleNestedInputChange } = useFormData();
   const { isStepValid } = useStepValidation(formData);
   const tenantInfo = useTenantInfo();
+
+  useEffect(() => {
+    applyTenantTheme(tenantInfo.tenantId);
+  }, [tenantInfo.tenantId]);
 
 
   const handleNext = () => {
@@ -193,11 +198,11 @@ const App = () => {
 
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-accent-light-4 to-gray-light-2">
+    <div className="min-h-screen bg-gradient-to-br from-[var(--color-accent-light-4)] to-[var(--color-gray-light-2)]">
       <div className="max-w-4xl mx-auto px-4 py-8">
         {/* <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-primary mb-2">SLIM Subsidie Aanvraag</h1>
-          <p className="text-gray-dark-2 font-medium">Vraag eenvoudig uw SLIM-subsidie aan via Mistersubsidie</p>
+          <h1 className="text-3xl font-bold text-[var(--color-primary)] mb-2">SLIM Subsidie Aanvraag</h1>
+          <p className="text-[var(--color-gray-dark-2)] font-medium">Vraag eenvoudig uw SLIM-subsidie aan via Mistersubsidie</p>
         </div> */}
 
         

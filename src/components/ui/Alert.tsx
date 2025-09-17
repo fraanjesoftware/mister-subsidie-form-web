@@ -7,13 +7,13 @@ interface AlertProps {
 
 export const Alert = ({ type, children }: AlertProps) => {
   const styles = {
-    info: 'bg-accent-light-4 text-primary-medium-1',
+    info: 'bg-[var(--color-accent-light-4)] text-[var(--color-primary-medium-1)]',
     warning: 'bg-yellow-50 text-yellow-800',
     error: 'bg-red-50 text-red-800'
   };
 
   const iconColors = {
-    info: 'text-accent',
+    info: 'text-[var(--color-accent)]',
     warning: 'text-yellow-600',
     error: 'text-red-600'
   };
