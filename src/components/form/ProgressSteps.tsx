@@ -30,11 +30,11 @@ export const ProgressSteps = ({ steps, currentStep, onStepClick }: ProgressSteps
                 <div className={`w-12 h-12 rounded-full flex items-center justify-center mb-2 transition-all ${
                   index < currentStep ? 'bg-[var(--color-accent)] text-[var(--color-primary)] hover:ring-2 hover:ring-[var(--color-accent-light-2)]' :
                   index === currentStep ? 'bg-[var(--color-accent)] text-[var(--color-primary)] ring-4 ring-[var(--color-accent-light-2)]' :
-                  'bg-gray-200'
+                  'bg-[var(--color-gray-light-3)]'
                 }`}>
                   {index < currentStep ? <IconCircleCheck className="w-6 h-6" /> : <Icon className="w-6 h-6" />}
                 </div>
-                <span className={`text-xs font-medium text-center text-black hidden sm:block ${
+                <span className={`text-xs font-medium text-center text-[var(--color-step-text)] hidden sm:block ${
                   onStepClick && index < currentStep ? 'hover:text-[var(--color-accent)]' : ''
                 }`}>{step.title}</span>
               </div>

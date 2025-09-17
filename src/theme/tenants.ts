@@ -6,9 +6,11 @@ interface TenantThemeColors {
   accentLight2: string;
   accentLight3: string;
   accentLight4: string;
+  accentLight5: string;
   primary: string;
   secondary: string;
   text: string;
+  stepText: string;
   background: string;
   primaryDark: string;
   primaryMedium1: string;
@@ -48,9 +50,11 @@ const DEFAULT_THEME: TenantTheme = {
     accentLight2: '#DEE790',
     accentLight3: '#E8EFB5',
     accentLight4: '#F3F7DA',
+    accentLight5: '#F3F7DA',
     primary: '#03291F',
     secondary: '#C7DA46',
     text: '#1D1E1D',
+    stepText: '#1D1E1D',
     background: '#FAF8F6',
     primaryDark: '#03291F',
     primaryMedium1: '#1E3E35',
@@ -82,13 +86,15 @@ const IGNITE_THEME: TenantTheme = {
   colors: {
     accent: '#0AEBBF',
     accentLight1: '#EBFFF7',
-    accentLight2: '#EBEBF7',
-    accentLight3: '#00B5E3',
+    accentLight2: '#0AEBBF',
+    accentLight3: '#763bbe54',
     accentLight4: '#EBEBF7',
+    accentLight5: '#EBFFF7',
     primary: '#1E063D',
     secondary: '#0AEBBF',
     text: '#000000',
-    background: '#EBEBF7',
+    stepText: "#0AEBBF",
+    background: '#351F51',
     primaryDark: '#120329',
     primaryMedium1: '#32105F',
     primaryMedium2: '#4A1F8C',
@@ -96,7 +102,7 @@ const IGNITE_THEME: TenantTheme = {
     primaryLight2: '#C4ACE7',
     grayLight1: '#D9CEF6',
     grayLight2: '#F5F2FF',
-    grayLight3: '#EBEBF7',
+    grayLight3: '#b5aedf4b',
     grayLight4: '#E2E0F5',
     grayLight5: '#CCC6EA',
     grayLight6: '#B5AEDF',

@@ -11,12 +11,12 @@ export const EndPage: React.FC = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[var(--color-accent-light-4)] to-[var(--color-gray-light-2)] flex items-center justify-center px-4">
+    <div className="min-h-screen bg-[var(--color-background)] flex items-center justify-center px-4">
       <div className="max-w-md w-full">
         <div className="bg-white rounded-xl shadow-lg p-8 text-center">
           <div className="mb-6">
-            <div className="inline-flex items-center justify-center w-20 h-20 bg-green-100 rounded-full">
-              <IconCircleCheck className="w-12 h-12 text-green-600" />
+            <div className="inline-flex items-center justify-center w-20 h-20 bg-[var(--color-accent-light-5)] rounded-full">
+              <IconCircleCheck className="w-12 h-12 text-[var(--color-accent)]" />
             </div>
           </div>
 
