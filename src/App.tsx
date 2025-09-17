@@ -15,6 +15,7 @@ import { prepareFormData } from './utils/prepareFormData';
 import { buildSigningSession } from './utils/buildSigningSession';
 import { useTenant } from './context/TenantProvider';
 import { getApiBaseUrl, getFunctionCode, getSignWellTemplateId } from './config/api';
+import { isLocalEnvironment } from './utils/environment';
 
 const App = () => {
   const navigate = useNavigate();
@@ -57,22 +58,6 @@ const App = () => {
   //   setShowSigningModal(false);
   //   setTestResponse(null);
   // };
-
-  // SignWell will handle the signing process via email
-
-  const isLocalEnvironment = () => {
-    if (typeof window === 'undefined') {
-      return false;
-    }
-    const hostname = window.location.hostname;
-    return (
-      hostname === 'localhost' ||
-      hostname === '127.0.0.1' ||
-      hostname.startsWith('127.') ||
-      hostname === '[::1]' ||
-      hostname.endsWith('.local')
-    );
-  };
 
   const handleSignDocuments = async (): Promise<boolean> => {
     setSignLoading(true);

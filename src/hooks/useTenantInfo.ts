@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { DEFAULT_AUTHORIZATION_CONFIG, type AuthorizationConfig } from '../config/authorization';
 import { getApiBaseUrl, getOptionalFunctionCode } from '../config/api';
+import { isLocalHostname } from '../utils/environment';
 
 export type TenantId = 'default' | 'mistersubsidie' | 'ignite';
 
@@ -35,16 +36,6 @@ const coerceTenantId = (candidate?: string | null): TenantId => {
   if (!candidate) return 'default';
   const normalized = candidate.trim().toLowerCase();
   return (KNOWN_TENANTS as string[]).includes(normalized) ? (normalized as TenantId) : 'default';
-};
-
-const isLocalHostname = (hostname: string): boolean => {
-  return (
-    hostname === 'localhost' ||
-    hostname === '127.0.0.1' ||
-    hostname.startsWith('127.') ||
-    hostname === '[::1]' ||
-    hostname.endsWith('.local')
-  );
 };
 
 const isTenantOverrideAllowed = (hostname: string): boolean => {

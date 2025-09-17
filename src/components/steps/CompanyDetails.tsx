@@ -1,6 +1,7 @@
 import { FormData } from '../../types';
 import { Input } from '../ui';
 import { validators } from '../../utils/validation';
+import { StepIntro } from './StepIntro';
 
 interface CompanyDetailsProps {
   formData: FormData;
@@ -10,11 +11,11 @@ interface CompanyDetailsProps {
 export const CompanyDetails = ({ formData, onInputChange }: CompanyDetailsProps) => {
   return (
     <div className="space-y-6">
-      <div>
-        <h3 className="text-xl font-semibold text-[var(--color-title-text)] mb-2">Bedrijfsgegevens</h3>
-        <p className="text-gray-600 mb-6">Vul de algemene gegevens van uw onderneming in.</p>
-      </div>
-      
+      <StepIntro
+        title="Bedrijfsgegevens"
+        description="Vul de algemene gegevens van uw onderneming in."
+      />
+
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="md:col-span-2">
           <Input

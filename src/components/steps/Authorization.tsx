@@ -1,6 +1,7 @@
 import { FormData } from '../../types';
 import { Checkbox, Card } from '../ui';
 import type { UseTenantInfoResult } from '../../hooks/useTenantInfo';
+import { StepIntro } from './StepIntro';
 
 interface AuthorizationProps {
   formData: FormData;
@@ -23,14 +24,15 @@ export const Authorization = ({ formData, onInputChange, onSign, signingError, s
 
   return (
     <div className="space-y-6">
-      <div>
-        <h3 className="text-xl font-semibold text-[var(--color-title-text)] mb-2">Machtiging</h3>
-        <p className="text-gray-600 mb-6">
-          Geef {organizationName} toestemming om namens uw onderneming 
-          de SLIM-subsidie aan te vragen.
-        </p>
-      </div>
-      
+      <StepIntro
+        title="Machtiging"
+        description={
+          <>
+            Geef {organizationName} toestemming om namens uw onderneming de SLIM-subsidie aan te vragen.
+          </>
+        }
+      />
+
       <Card>
         <h4 className="font-semibold text-gray-700 mb-4">Gemachtigde organisatie</h4>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">

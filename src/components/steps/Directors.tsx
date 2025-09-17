@@ -1,6 +1,7 @@
 import { FormData, Bestuurder } from '../../types';
 import { Input, Card, Alert, Checkbox } from '../ui';
 import { validators } from '../../utils/validation';
+import { StepIntro } from './StepIntro';
 
 interface DirectorsProps {
   formData: FormData;
@@ -10,11 +11,11 @@ interface DirectorsProps {
 export const Directors = ({ formData, onNestedInputChange }: DirectorsProps) => {
   return (
     <div className="space-y-6">
-      <div>
-        <h3 className="text-xl font-semibold text-[var(--color-title-text)] mb-2">Bestuurder(s)</h3>
-        <p className="text-gray-600 mb-6">Gegevens van de bevoegde personen die de aanvraag ondertekenen.</p>
-      </div>
-      
+      <StepIntro
+        title="Bestuurder(s)"
+        description="Gegevens van de bevoegde personen die de aanvraag ondertekenen."
+      />
+
       <Alert type="info">
         <p className='text-blue-800'>
           <strong>Let op:</strong> Een bestuurder die zelfstandig bevoegd is (conform KvK) mag alleen tekenen. 

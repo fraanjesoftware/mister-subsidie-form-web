@@ -4,6 +4,7 @@ import { Calculator, Users, Euro, FileText } from 'lucide-react';
 import { validators } from '../../utils/validation';
 import { formatCurrency, sanitizeNumericInput } from '../../utils/numberFormat';
 import { getCompanyClassification } from '../../utils/companyClassification';
+import { StepIntro } from './StepIntro';
 
 interface CompanySizeProps {
   formData: FormData;
@@ -24,11 +25,11 @@ export const CompanySize = ({ formData, onInputChange }: CompanySizeProps) => {
   const classification = getCompanyClassification(fte, omzet, balans);
   return (
     <div className="space-y-6">
-      <div>
-        <h3 className="text-xl font-semibold text-[var(--color-title-text)] mb-2">Bedrijfsomvang</h3>
-        <p className="text-gray-600 mb-6">Vul de gegevens van het laatst afgesloten boekjaar in. Deze bepalen de classificatie van uw onderneming.</p>
-      </div>
-      
+      <StepIntro
+        title="Bedrijfsomvang"
+        description="Vul de gegevens van het laatst afgesloten boekjaar in. Deze bepalen de classificatie van uw onderneming."
+      />
+
       <Alert type="info">
         <div className="flex items-start">
           <div>

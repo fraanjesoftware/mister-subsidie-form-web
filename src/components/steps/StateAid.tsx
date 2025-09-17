@@ -1,6 +1,7 @@
 import { FormData } from '../../types';
 import { Input, Alert, RadioGroup } from '../ui';
 import { validators } from '../../utils/validation';
+import { StepIntro } from './StepIntro';
 
 interface StateAidProps {
   formData: FormData;
@@ -77,11 +78,11 @@ export const StateAid = ({ formData, onInputChange }: StateAidProps) => {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h3 className="text-xl font-semibold text-[var(--color-title-text)] mb-2">De-minimisverklaring</h3>
-        <p className="text-gray-600 mb-6">Verklaring over ontvangen staatssteun in de afgelopen 36 maanden.</p>
-      </div>
-      
+      <StepIntro
+        title="De-minimisverklaring"
+        description="Verklaring over ontvangen staatssteun in de afgelopen 36 maanden."
+      />
+
       <Alert type="info">
         <p className='text-blue-800'>
           De-minimissteun is een vorm van staatssteun tot maximaal €300.000 over een periode van 3 jaar. 

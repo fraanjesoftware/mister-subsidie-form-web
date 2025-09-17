@@ -1,5 +1,6 @@
 import { FormData } from '../../types';
 import { Card } from '../ui';
+import { StepIntro } from './StepIntro';
 
 interface ReviewProps {
   formData: FormData;
@@ -8,13 +9,11 @@ interface ReviewProps {
 export const Review = ({ formData }: ReviewProps) => {
   return (
     <div className="space-y-6">
-      <div>
-        <h3 className="text-xl font-semibold text-[var(--color-title-text)] mb-2">Controleer uw gegevens</h3>
-        <p className="text-gray-600 mb-6">
-          Controleer alle ingevoerde gegevens voordat u de aanvraag indient.
-        </p>
-      </div>
-      
+      <StepIntro
+        title="Controleer uw gegevens"
+        description="Controleer alle ingevoerde gegevens voordat u de aanvraag indient."
+      />
+
       <div className="space-y-6">
         {/* Bedrijfsgegevens */}
         <Card>
