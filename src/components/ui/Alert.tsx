@@ -6,14 +6,14 @@ interface AlertProps {
 }
 
 export const Alert = ({ type, children }: AlertProps) => {
-  const styles = {
-    info: 'bg-[var(--color-accent-light-4)] text-[var(--color-primary-medium-1)]',
+  const styles: Record<AlertProps['type'], string> = {
+    info: 'bg-[var(--color-alert-info-background)] text-[var(--color-alert-info-text)]',
     warning: 'bg-yellow-50 text-yellow-800',
     error: 'bg-red-50 text-red-800'
   };
 
-  const iconColors = {
-    info: 'text-[var(--color-accent)]',
+  const iconColors: Record<AlertProps['type'], string> = {
+    info: 'text-[var(--color-alert-info-icon)]',
     warning: 'text-yellow-600',
     error: 'text-red-600'
   };

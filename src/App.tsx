@@ -198,7 +198,7 @@ const App = () => {
 
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[var(--color-accent-light-4)] to-[var(--color-gray-light-2)]">
+    <div className="min-h-screen bg-[var(--color-background)]">
       <div className="max-w-4xl mx-auto px-4 py-8">
         {/* <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-[var(--color-primary)] mb-2">SLIM Subsidie Aanvraag</h1>

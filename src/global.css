@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Raleway:wght@500;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@500;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap');
 @import "tailwindcss";
 
 :root {
@@ -27,6 +27,9 @@
   --color-gray-medium: #919392;
   --color-accent-transparent: #F3F7DA38;
   --color-primary-transparent: #455E570A;
+  --color-alert-info-background: #FFFFFF;
+  --color-alert-info-text: #1E3E35;
+  --color-alert-info-icon: #1E3E35;
   --font-sans: Raleway, sans-serif;
   --font-heading: Raleway, sans-serif;
 }

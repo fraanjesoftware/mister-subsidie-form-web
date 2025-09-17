@@ -26,6 +26,9 @@ interface TenantThemeColors {
   grayMedium: string;
   accentTransparent: string;
   primaryTransparent: string;
+  alertInfoBackground: string;
+  alertInfoText: string;
+  alertInfoIcon: string;
 }
 
 interface TenantThemeFonts {
@@ -65,6 +68,9 @@ const DEFAULT_THEME: TenantTheme = {
     grayMedium: '#919392',
     accentTransparent: '#F3F7DA38',
     primaryTransparent: '#455E570A',
+    alertInfoBackground: '#FFFFFF',
+    alertInfoText: '#1E3E35',
+    alertInfoIcon: '#1E3E35',
   },
   fonts: {
     sans: 'Raleway, sans-serif',
@@ -74,35 +80,38 @@ const DEFAULT_THEME: TenantTheme = {
 
 const IGNITE_THEME: TenantTheme = {
   colors: {
-    accent: '#FF7A00',
-    accentLight1: '#FF9E42',
-    accentLight2: '#FFB870',
-    accentLight3: '#FFD1A3',
-    accentLight4: '#FFE8CF',
-    primary: '#1F2933',
-    secondary: '#FF7A00',
-    text: '#1F2933',
-    background: '#FFF8F2',
-    primaryDark: '#151C24',
-    primaryMedium1: '#27323C',
-    primaryMedium2: '#3B4651',
-    primaryLight1: '#6B7783',
-    primaryLight2: '#CBD2D9',
-    grayLight1: '#D3D7DC',
-    grayLight2: '#F8FAFB',
-    grayLight3: '#ECEFF2',
-    grayLight4: '#E2E6EB',
-    grayLight5: '#D5DAE0',
-    grayLight6: '#C0C7CF',
-    grayDark1: '#3D4751',
-    grayDark2: '#4E5863',
-    grayMedium: '#7A828D',
-    accentTransparent: '#FF7A0026',
-    primaryTransparent: '#1F293314',
+    accent: '#FFFFFF',
+    accentLight1: '#EBFFF7',
+    accentLight2: '#EBEBF7',
+    accentLight3: '#00B5E3',
+    accentLight4: '#EBEBF7',
+    primary: '#1E063D',
+    secondary: '#0AEBBF',
+    text: '#753BBD',
+    background: '#EBEBF7',
+    primaryDark: '#120329',
+    primaryMedium1: '#32105F',
+    primaryMedium2: '#4A1F8C',
+    primaryLight1: '#8A64C9',
+    primaryLight2: '#C4ACE7',
+    grayLight1: '#D9CEF6',
+    grayLight2: '#F5F2FF',
+    grayLight3: '#EBEBF7',
+    grayLight4: '#E2E0F5',
+    grayLight5: '#CCC6EA',
+    grayLight6: '#B5AEDF',
+    grayDark1: '#5E3FB0',
+    grayDark2: '#753BBD',
+    grayMedium: '#9A7ED2',
+    accentTransparent: 'rgba(10, 235, 191, 0.16)',
+    primaryTransparent: 'rgba(30, 6, 61, 0.1)',
+    alertInfoBackground: '#FFFFFF',
+    alertInfoText: '#32105F',
+    alertInfoIcon: '#0AEBBF',
   },
   fonts: {
-    sans: 'Poppins, sans-serif',
-    heading: 'Poppins, sans-serif',
+    sans: '"Space Grotesk", sans-serif',
+    heading: '"Space Grotesk", sans-serif',
   },
 };
 
