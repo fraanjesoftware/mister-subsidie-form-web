@@ -5,12 +5,12 @@ const LOGO_BY_TENANT = {
   default: {
     src: '/Mistersubsidie logo.png',
     alt: 'Mistersubsidie',
-    className: 'h-[14px] w-auto sm:h-4'
+    className: 'h-[12px] w-auto sm:h-[15px]'
   },
   mistersubsidie: {
     src: '/Mistersubsidie logo.png',
     alt: 'Mistersubsidie',
-    className: 'h-[14px] w-auto sm:h-4'
+    className: 'h-[12px] w-auto sm:h-[15px]'
   },
   ignite: {
     src: '/Ignite-Group-Primary-Logo-Mint.svg',
