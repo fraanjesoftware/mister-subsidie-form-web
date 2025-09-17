@@ -5,7 +5,6 @@ interface NavigationProps {
   totalSteps: number;
   onPrev: () => void;
   onNext: () => void;
-  onSubmit?: () => void;
   isStepValid: boolean;
 }
 

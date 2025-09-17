@@ -10,7 +10,6 @@ import {
 } from './components/steps';
 import { STEPS } from './constants/steps';
 import { useFormData, useStepValidation } from './hooks';
-import { prepareFormData } from './utils/prepareFormData';
 import { buildSigningSession } from './utils/buildSigningSession';
 import { useTenant } from './context/TenantProvider';
 import { getApiBaseUrl, getFunctionCode, getSignWellTemplateId } from './config/api';
@@ -110,39 +109,6 @@ const App = () => {
     return false;
   };
 
-  const handleSubmit = () => {
-    const allData = prepareFormData(formData, tenantInfo.authorization);
-    
-    // Save to localStorage
-    localStorage.setItem('slimFormData', JSON.stringify(allData));
-    
-    // Download structured data as JSON
-    const structuredDataStr = JSON.stringify(allData.structured, null, 2);
-    const structuredDataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(structuredDataStr);
-    const structuredFileName = `slim-aanvraag-structured-${formData.bedrijfsnaam.replace(/\s+/g, '-').toLowerCase()}-${new Date().toISOString().split('T')[0]}.json`;
-    
-    // Download PDF field mapping as JSON
-    const pdfDataStr = JSON.stringify(allData.pdfFields, null, 2);
-    const pdfDataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(pdfDataStr);
-    const pdfFileName = `slim-aanvraag-pdf-fields-${formData.bedrijfsnaam.replace(/\s+/g, '-').toLowerCase()}-${new Date().toISOString().split('T')[0]}.json`;
-    
-    // Create download for structured data
-    const link1 = document.createElement('a');
-    link1.setAttribute('href', structuredDataUri);
-    link1.setAttribute('download', structuredFileName);
-    link1.click();
-    
-    // Create download for PDF field mapping (with small delay)
-    setTimeout(() => {
-      const link2 = document.createElement('a');
-      link2.setAttribute('href', pdfDataUri);
-      link2.setAttribute('download', pdfFileName);
-      link2.click();
-    }, 500);
-    
-    alert('Uw aanvraag is succesvol verwerkt! Er zijn 2 bestanden gedownload:\n\n1. Gestructureerde data (voor archivering)\n2. PDF veld mapping (voor automatisch invullen van PDFs)');
-  };
-
   const renderStep = () => {
     switch (currentStep) {
       case 0:
@@ -195,7 +161,6 @@ const App = () => {
           totalSteps={STEPS.length}
           onPrev={handlePrev}
           onNext={handleNext}
-          onSubmit={handleSubmit}
           isStepValid={isStepValid(currentStep)}
         />
       </div>
