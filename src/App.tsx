@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ProgressSteps, Navigation } from './components/form';
+import { ProgressSteps, Navigation, TenantHeader } from './components/form';
 import { 
   CompanyDetails, 
   Directors, 
@@ -139,13 +139,8 @@ const App = () => {
 
   return (
     <div className="min-h-screen bg-[var(--color-background)]">
+      <TenantHeader />
       <div className="max-w-4xl mx-auto px-4 py-8">
-        {/* <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-[var(--color-primary)] mb-2">SLIM Subsidie Aanvraag</h1>
-          <p className="text-[var(--color-gray-dark-2)] font-medium">Vraag eenvoudig uw SLIM-subsidie aan via Mistersubsidie</p>
-        </div> */}
-
-        
         <ProgressSteps 
           steps={STEPS} 
           currentStep={currentStep} 
