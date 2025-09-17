@@ -11,7 +11,7 @@ export const CompanyDetails = ({ formData, onInputChange }: CompanyDetailsProps)
   return (
     <div className="space-y-6">
       <div>
-        <h3 className="text-xl font-semibold text-gray-800 mb-2">Bedrijfsgegevens</h3>
+        <h3 className="text-xl font-semibold text-[var(--color-title-text)] mb-2">Bedrijfsgegevens</h3>
         <p className="text-gray-600 mb-6">Vul de algemene gegevens van uw onderneming in.</p>
       </div>
       

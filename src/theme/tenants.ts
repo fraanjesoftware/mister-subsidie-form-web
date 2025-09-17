@@ -17,6 +17,7 @@ interface TenantThemeColors {
   primaryMedium2: string;
   primaryLight1: string;
   primaryLight2: string;
+  titleText: string;
   grayLight1: string;
   grayLight2: string;
   grayLight3: string;
@@ -54,6 +55,7 @@ const DEFAULT_THEME: TenantTheme = {
     primary: '#03291F',
     secondary: '#C7DA46',
     text: '#1D1E1D',
+    titleText: '#1D1E1D',
     stepText: '#1D1E1D',
     background: '#FAF8F6',
     primaryDark: '#03291F',
@@ -93,6 +95,7 @@ const IGNITE_THEME: TenantTheme = {
     primary: '#1E063D',
     secondary: '#0AEBBF',
     text: '#000000',
+    titleText: '#5F40B0',
     stepText: "#0AEBBF",
     background: '#351F51',
     primaryDark: '#120329',

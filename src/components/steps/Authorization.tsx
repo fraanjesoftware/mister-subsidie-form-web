@@ -24,7 +24,7 @@ export const Authorization = ({ formData, onInputChange, onSign, signingError, s
   return (
     <div className="space-y-6">
       <div>
-        <h3 className="text-xl font-semibold text-gray-800 mb-2">Machtiging Mistersubsidie</h3>
+        <h3 className="text-xl font-semibold text-[var(--color-title-text)] mb-2">Machtiging Mistersubsidie</h3>
         <p className="text-gray-600 mb-6">
           Geef {organizationName} toestemming om namens uw onderneming 
           de SLIM-subsidie aan te vragen.
@@ -123,7 +123,7 @@ export const Authorization = ({ formData, onInputChange, onSign, signingError, s
       {onSign && (
         <div className="pt-8 border-t">
           <div className="text-center">
-            <h4 className="font-semibold text-gray-800 mb-3">
+            <h4 className="font-semibold text-[var(--color-title-text)] mb-3">
               Klaar om te ondertekenen?
             </h4>
             <p className="text-gray-600 mb-6">

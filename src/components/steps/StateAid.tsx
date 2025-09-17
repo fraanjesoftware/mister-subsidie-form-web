@@ -78,7 +78,7 @@ export const StateAid = ({ formData, onInputChange }: StateAidProps) => {
   return (
     <div className="space-y-6">
       <div>
-        <h3 className="text-xl font-semibold text-gray-800 mb-2">De-minimisverklaring</h3>
+        <h3 className="text-xl font-semibold text-[var(--color-title-text)] mb-2">De-minimisverklaring</h3>
         <p className="text-gray-600 mb-6">Verklaring over ontvangen staatssteun in de afgelopen 36 maanden.</p>
       </div>
       

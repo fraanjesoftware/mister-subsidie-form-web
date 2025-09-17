@@ -9,7 +9,7 @@ export const Review = ({ formData }: ReviewProps) => {
   return (
     <div className="space-y-6">
       <div>
-        <h3 className="text-xl font-semibold text-gray-800 mb-2">Controleer uw gegevens</h3>
+        <h3 className="text-xl font-semibold text-[var(--color-title-text)] mb-2">Controleer uw gegevens</h3>
         <p className="text-gray-600 mb-6">
           Controleer alle ingevoerde gegevens voordat u de aanvraag indient.
         </p>
@@ -88,7 +88,7 @@ export const Review = ({ formData }: ReviewProps) => {
         {/* Ondertekening */}
         {/* <Alert type="warning">
           <div>
-            <h4 className="font-semibold text-gray-800 mb-2">Digitale ondertekening</h4>
+            <h4 className="font-semibold text-[var(--color-title-text)] mb-2">Digitale ondertekening</h4>
             <p className="text-sm text-gray-700">
               Door op "Aanvraag indienen" te klikken, verklaart u dat:
             </p>

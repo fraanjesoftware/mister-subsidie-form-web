@@ -94,7 +94,7 @@ export const CompanySize = ({ formData, onInputChange }: CompanySizeProps) => {
   return (
     <div className="space-y-6">
       <div>
-        <h3 className="text-xl font-semibold text-gray-800 mb-2">Bedrijfsomvang</h3>
+        <h3 className="text-xl font-semibold text-[var(--color-title-text)] mb-2">Bedrijfsomvang</h3>
         <p className="text-gray-600 mb-6">Vul de gegevens van het laatst afgesloten boekjaar in. Deze bepalen de classificatie van uw onderneming.</p>
       </div>
       
