@@ -1,4 +1,4 @@
-// DocuSign Template Signing Session Types
+// Signing session types shared with the SignWell integration
 
 export interface RadioOption {
   value: string;

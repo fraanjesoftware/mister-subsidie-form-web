@@ -8,7 +8,6 @@ import {
   StateAid, 
   Authorization
 } from './components/steps';
-// import { DocuSignModal } from './components/DocuSignModal';  // Not needed for SignWell
 import { STEPS } from './constants/steps';
 import { useFormData, useStepValidation } from './hooks';
 import { prepareFormData } from './utils/prepareFormData';
@@ -20,8 +19,6 @@ import { isLocalEnvironment } from './utils/environment';
 const App = () => {
   const navigate = useNavigate();
   const [currentStep, setCurrentStep] = useState(0);
-  // const [testResponse, setTestResponse] = useState<TemplateSigningSessionResponse | null>(null);  // Not needed for SignWell
-  // const [showSigningModal, setShowSigningModal] = useState(false);  // Not needed for SignWell
   const [signLoading, setSignLoading] = useState(false);
   const [signingError, setSigningError] = useState<string>('');
   const [signingStatus, setSigningStatus] = useState<'idle' | 'completed' | 'cancelled'>('idle');
@@ -53,11 +50,6 @@ const App = () => {
     }
   };
 
-
-  // const handleCloseModal = () => {  // Not needed for SignWell
-  //   setShowSigningModal(false);
-  //   setTestResponse(null);
-  // };
 
   const handleSignDocuments = async (): Promise<boolean> => {
     setSignLoading(true);
@@ -208,7 +200,6 @@ const App = () => {
         />
       </div>
       
-      {/* DocuSign Modal removed - SignWell sends email instead */}
     </div>
   );
 };
