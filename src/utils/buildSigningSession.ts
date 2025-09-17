@@ -1,10 +1,10 @@
 import { FormData } from '../types';
-import { 
-  TemplateSigningSession, 
-  Signer, 
-  createTextTab, 
-  createRadioGroup 
-} from '../types/docusign';
+import {
+  TemplateSigningSession,
+  Signer,
+  createTextTab,
+  createRadioGroup
+} from '../types/sign';
 
 // Build signing session data for SignWell API
 export const buildSigningSession = (

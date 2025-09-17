@@ -1,6 +1,6 @@
 import { FormData } from '../../types';
 import { Checkbox, Card } from '../ui';
-import { useAuthorizationInfo } from '../../hooks';
+import type { UseTenantInfoResult } from '../../hooks/useTenantInfo';
 
 interface AuthorizationProps {
   formData: FormData;
@@ -9,10 +9,11 @@ interface AuthorizationProps {
   signingError?: string;
   signingStatus?: 'idle' | 'completed' | 'cancelled';
   isLoading?: boolean;
+  tenantInfo: UseTenantInfoResult;
 }
 
-export const Authorization = ({ formData, onInputChange, onSign, signingError, signingStatus, isLoading }: AuthorizationProps) => {
-  const { authorization, status: authorizationStatus, error: authorizationError, meta: authorizationMeta, tenantId } = useAuthorizationInfo();
+export const Authorization = ({ formData, onInputChange, onSign, signingError, signingStatus, isLoading, tenantInfo }: AuthorizationProps) => {
+  const { authorization, status: authorizationStatus, error: authorizationError, meta: authorizationMeta, tenantId } = tenantInfo;
   const organizationName = authorization.organisatie;
 
   const handleSign = async () => {
@@ -63,6 +64,13 @@ export const Authorization = ({ formData, onInputChange, onSign, signingError, s
       {authorizationError && (
         <p className="text-sm text-orange-600">
           Kon gemachtigde gegevens niet laden. Standaardgegevens worden getoond.
+        </p>
+      )}
+
+      {authorizationStatus === 'success' && authorizationMeta && (
+        <p className="text-xs text-gray-400">
+          Tenant: {authorizationMeta.tenantId} (aangevraagd: {tenantId})
+          {authorizationMeta.resolvedFromDefault ? ' - Standaardconfiguratie gebruikt' : ''}
         </p>
       )}
 

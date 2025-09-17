@@ -10,7 +10,7 @@ import {
 } from './components/steps';
 // import { DocuSignModal } from './components/DocuSignModal';  // Not needed for SignWell
 import { STEPS } from './constants/steps';
-import { useFormData, useStepValidation } from './hooks';
+import { useFormData, useStepValidation, useTenantInfo } from './hooks';
 import { prepareFormData } from './utils/prepareFormData';
 import { buildSigningSession } from './utils/buildSigningSession';
 
@@ -24,6 +24,7 @@ const App = () => {
   const [signingStatus, setSigningStatus] = useState<'idle' | 'completed' | 'cancelled'>('idle');
   const { formData, handleInputChange, handleNestedInputChange } = useFormData();
   const { isStepValid } = useStepValidation(formData);
+  const tenantInfo = useTenantInfo();
 
 
   const handleNext = () => {
@@ -57,6 +58,20 @@ const App = () => {
 
   // SignWell will handle the signing process via email
 
+  const isLocalEnvironment = () => {
+    if (typeof window === 'undefined') {
+      return false;
+    }
+    const hostname = window.location.hostname;
+    return (
+      hostname === 'localhost' ||
+      hostname === '127.0.0.1' ||
+      hostname.startsWith('127.') ||
+      hostname === '[::1]' ||
+      hostname.endsWith('.local')
+    );
+  };
+
   const handleSignDocuments = async (): Promise<boolean> => {
     setSignLoading(true);
     setSigningError('');
@@ -66,6 +81,12 @@ const App = () => {
       formData,
       "4e941c38-804a-4a38-991c-146639ede747" // Replace with actual template ID from config/env
     );
+
+    const payload = {
+      ...signingData,
+      tenantId: tenantInfo.tenantId,
+      test: isLocalEnvironment(),
+    };
 
     
     try {
@@ -78,7 +99,7 @@ const App = () => {
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify(signingData),
+          body: JSON.stringify(payload),
         }
       );
 
@@ -154,7 +175,17 @@ const App = () => {
       case 3:
         return <StateAid formData={formData} onInputChange={handleInputChange} />;
       case 4:
-        return <Authorization formData={formData} onInputChange={handleInputChange} onSign={handleSignDocuments} signingError={signingError} signingStatus={signingStatus} isLoading={signLoading} />;
+        return (
+          <Authorization 
+            formData={formData} 
+            onInputChange={handleInputChange} 
+            onSign={handleSignDocuments} 
+            signingError={signingError} 
+            signingStatus={signingStatus} 
+            isLoading={signLoading}
+            tenantInfo={tenantInfo}
+          />
+        );
       default:
         return null;
     }

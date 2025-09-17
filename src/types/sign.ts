@@ -44,6 +44,9 @@ export interface TemplateSigningSession {
   signers: Signer[];
   returnUrl: string;
   forEmbedding?: boolean;
+  tenantId?: string;
+  test?: boolean;
+  testMode?: boolean;
 }
 
 // Helper type for creating type-safe tab labels

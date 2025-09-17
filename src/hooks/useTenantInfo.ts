@@ -1,31 +1,31 @@
 import { useEffect, useMemo, useState } from 'react';
 import { DEFAULT_AUTHORIZATION_CONFIG, type AuthorizationConfig } from '../config/authorization';
 
-type TenantId = 'default' | 'mistersubsidie' | 'ignite';
+export type TenantId = 'default' | 'mistersubsidie' | 'ignite';
 
-interface AuthorizationInfoMeta {
+export interface TenantInfoMeta {
   requestedId: string | null;
   tenantId: string;
   resolvedFromDefault: boolean;
 }
 
-type AuthorizationFetchStatus = 'idle' | 'loading' | 'success' | 'error';
+export type TenantInfoStatus = 'idle' | 'loading' | 'success' | 'error';
 
-interface AuthorizedRepresentativeResponse {
+interface TenantInfoResponse {
   gemachtigde?: string;
   gemachtigde_email?: string;
   gemachtigde_naam?: string;
   gemachtigde_telefoon?: string;
   gemachtigde_kvk?: string;
-  meta?: AuthorizationInfoMeta;
+  meta?: TenantInfoMeta;
 }
 
-interface UseAuthorizationInfoResult {
+export interface UseTenantInfoResult {
   tenantId: TenantId;
   authorization: AuthorizationConfig;
-  status: AuthorizationFetchStatus;
+  status: TenantInfoStatus;
   error: string | null;
-  meta: AuthorizationInfoMeta | null;
+  meta: TenantInfoMeta | null;
 }
 
 const DEFAULT_API_BASE_URL = 'https://mister-subsidie-form-api-h8fvgydvheenczea.westeurope-01.azurewebsites.net';
@@ -86,7 +86,7 @@ const determineTenantId = (): TenantId => {
   return 'default';
 };
 
-const mapResponseToAuthorization = (response: AuthorizedRepresentativeResponse): AuthorizationConfig => ({
+const mapResponseToAuthorization = (response: TenantInfoResponse): AuthorizationConfig => ({
   organisatie: response.gemachtigde ?? DEFAULT_AUTHORIZATION_CONFIG.organisatie,
   kvkNummer: response.gemachtigde_kvk ?? DEFAULT_AUTHORIZATION_CONFIG.kvkNummer,
   contactpersoon: response.gemachtigde_naam ?? DEFAULT_AUTHORIZATION_CONFIG.contactpersoon,
@@ -94,11 +94,11 @@ const mapResponseToAuthorization = (response: AuthorizedRepresentativeResponse):
   telefoon: response.gemachtigde_telefoon ?? DEFAULT_AUTHORIZATION_CONFIG.telefoon,
 });
 
-export const useAuthorizationInfo = (): UseAuthorizationInfoResult => {
+export const useTenantInfo = (): UseTenantInfoResult => {
   const [authorization, setAuthorization] = useState<AuthorizationConfig>(DEFAULT_AUTHORIZATION_CONFIG);
-  const [status, setStatus] = useState<AuthorizationFetchStatus>('idle');
+  const [status, setStatus] = useState<TenantInfoStatus>('idle');
   const [error, setError] = useState<string | null>(null);
-  const [meta, setMeta] = useState<AuthorizationInfoMeta | null>(null);
+  const [meta, setMeta] = useState<TenantInfoMeta | null>(null);
 
   const tenantId = useMemo(determineTenantId, []);
 
@@ -131,7 +131,7 @@ export const useAuthorizationInfo = (): UseAuthorizationInfoResult => {
           throw new Error(`Request failed with status ${response.status}`);
         }
 
-        const data = (await response.json()) as AuthorizedRepresentativeResponse;
+        const data = (await response.json()) as TenantInfoResponse;
 
         if (!isMounted) {
           return;
