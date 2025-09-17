@@ -5,6 +5,7 @@ interface ImportMetaEnv {
   readonly VITE_API_BASE_URL: string
   readonly VITE_FUNCTION_CODE?: string
   readonly VITE_TENANT_ID?: string
+  readonly VITE_ALLOW_TENANT_OVERRIDE?: string
   readonly VITE_AUTH_ORGANISATIE: string
   readonly VITE_AUTH_KVK_NUMMER: string
   readonly VITE_AUTH_CONTACTPERSOON: string

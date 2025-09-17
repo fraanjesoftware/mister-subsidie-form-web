@@ -43,25 +43,48 @@ const coerceTenantId = (candidate?: string | null): TenantId => {
   return (KNOWN_TENANTS as string[]).includes(normalized) ? (normalized as TenantId) : 'default';
 };
 
+const isLocalHostname = (hostname: string): boolean => {
+  return (
+    hostname === 'localhost' ||
+    hostname === '127.0.0.1' ||
+    hostname.startsWith('127.') ||
+    hostname === '[::1]' ||
+    hostname.endsWith('.local')
+  );
+};
+
+const isTenantOverrideAllowed = (hostname: string): boolean => {
+  if (import.meta.env.DEV) {
+    return true;
+  }
+
+  if ((import.meta.env.VITE_ALLOW_TENANT_OVERRIDE ?? '').toLowerCase() === 'true') {
+    return true;
+  }
+
+  return isLocalHostname(hostname);
+};
+
 const determineTenantId = (): TenantId => {
   if (typeof window === 'undefined') {
     return 'default';
   }
 
-  const searchParams = new URLSearchParams(window.location.search);
-  const queryTenant = searchParams.get('tenant');
-  if (queryTenant) {
-    return coerceTenantId(queryTenant);
-  }
+  const hostname = window.location.hostname.toLowerCase();
 
   const envTenant = coerceTenantId(import.meta.env.VITE_TENANT_ID);
   if (envTenant !== 'default') {
     return envTenant;
   }
 
-  const hostname = window.location.hostname.toLowerCase();
+  if (isTenantOverrideAllowed(hostname)) {
+    const queryTenant = new URLSearchParams(window.location.search).get('tenant');
+    if (queryTenant) {
+      return coerceTenantId(queryTenant);
+    }
+  }
 
-  if (!hostname || hostname === 'localhost' || hostname.startsWith('127.') || hostname === '[::1]') {
+  if (!hostname || isLocalHostname(hostname)) {
     return 'default';
   }
 

@@ -1,12 +1,33 @@
-# React + Vite
+# Mister Subsidie Form Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+React + Vite application for collecting SLIM-subsidy intake data and creating SignWell signing sessions.
 
-Currently, two official plugins are available:
+## Getting Started
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+```bash
+npm install
+npm run dev
+```
 
-## Expanding the ESLint configuration
+## Environment Variables
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+Copy `.env.example` to `.env` and adjust as needed. Key settings:
+
+- `VITE_API_BASE_URL` – Azure Functions base URL.
+- `VITE_FUNCTION_CODE` – Function key required by protected endpoints.
+- `VITE_ALLOW_TENANT_OVERRIDE` – Set to `true` locally when you want to force a different tenant via `?tenant=...`. Defaults to `false` in examples so production builds ignore the override.
+- `VITE_TENANT_ID` – Optional hard override for tenant id. When set, URL/hostname detection is skipped.
+- `VITE_AUTH_*` – Fallback authorization contact details if the API cannot be reached.
+
+## Tenant Detection
+
+Tenant configuration is loaded once during app bootstrap through `useTenantInfo`.
+
+Precedence rules:
+1. `VITE_TENANT_ID`
+2. `?tenant=` query string (only in dev/local or when `VITE_ALLOW_TENANT_OVERRIDE=true`)
+3. Hostname/subdomain heuristics (`mistersubsidie`, `ignite`, or default)
+
+The resolved tenant id is sent with authorization info requests and the SignWell signing payload so the backend can select the correct tenant configuration.
+
+If the API call fails, the app falls back to the default authorization contact data defined in the environment variables.
