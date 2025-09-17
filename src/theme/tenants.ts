@@ -80,14 +80,14 @@ const DEFAULT_THEME: TenantTheme = {
 
 const IGNITE_THEME: TenantTheme = {
   colors: {
-    accent: '#FFFFFF',
+    accent: '#0AEBBF',
     accentLight1: '#EBFFF7',
     accentLight2: '#EBEBF7',
     accentLight3: '#00B5E3',
     accentLight4: '#EBEBF7',
     primary: '#1E063D',
     secondary: '#0AEBBF',
-    text: '#753BBD',
+    text: '#000000',
     background: '#EBEBF7',
     primaryDark: '#120329',
     primaryMedium1: '#32105F',

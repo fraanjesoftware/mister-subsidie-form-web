@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ProgressSteps, Navigation } from './components/form';
 import { 
@@ -10,10 +10,10 @@ import {
 } from './components/steps';
 // import { DocuSignModal } from './components/DocuSignModal';  // Not needed for SignWell
 import { STEPS } from './constants/steps';
-import { useFormData, useStepValidation, useTenantInfo } from './hooks';
+import { useFormData, useStepValidation } from './hooks';
 import { prepareFormData } from './utils/prepareFormData';
 import { buildSigningSession } from './utils/buildSigningSession';
-import { applyTenantTheme } from './theme/tenants';
+import { useTenant } from './context/TenantProvider';
 
 const App = () => {
   const navigate = useNavigate();
@@ -25,11 +25,7 @@ const App = () => {
   const [signingStatus, setSigningStatus] = useState<'idle' | 'completed' | 'cancelled'>('idle');
   const { formData, handleInputChange, handleNestedInputChange } = useFormData();
   const { isStepValid } = useStepValidation(formData);
-  const tenantInfo = useTenantInfo();
-
-  useEffect(() => {
-    applyTenantTheme(tenantInfo.tenantId);
-  }, [tenantInfo.tenantId]);
+  const tenantInfo = useTenant();
 
 
   const handleNext = () => {
