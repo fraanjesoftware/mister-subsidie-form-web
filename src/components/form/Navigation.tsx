@@ -32,9 +32,9 @@ export const Navigation = ({
         Vorige
       </button>
       
-      <div className="text-sm text-[var(--color-gray-medium)] font-medium">
+      {/* <div className="text-sm text-[var(--color-gray-medium)] font-medium">
         Stap {currentStep + 1} van {totalSteps}
-      </div>
+      </div> */}
       
       {!isLastStep && (
         <button

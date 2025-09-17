@@ -69,7 +69,7 @@ export const TenantFooter = () => {
             alt={`${config.logo.alt} logo`}
             className={`${config.logo.className} opacity-90 transition-opacity duration-200 hover:opacity-100`}
           />
-        
+     
         </div>
         <div className="flex flex-col items-start gap-2 text-sm sm:items-end">
           <a
@@ -78,7 +78,15 @@ export const TenantFooter = () => {
           >
             {config.contact.label}
           </a>
-          <p className="text-xs text-white/60">© {year} {config.legalName}. Alle rechten voorbehouden.</p>
+          <p className="text-xs text-white/40">© {year} {config.legalName}. Alle rechten voorbehouden.</p>
+          <a
+            href="https://fraanjesoftware.com"
+            target="_blank"
+            rel="noreferrer"
+            className="text-xs text-white/40 transition hover:text-white/70"
+          >
+            Ontwikkeld door Fraanje Software
+          </a>
         </div>
       </div>
     </footer>
