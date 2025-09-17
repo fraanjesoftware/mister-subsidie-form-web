@@ -1,5 +1,6 @@
 import { FormData } from '../../types';
 import { Checkbox, Card } from '../ui';
+import { useAuthorizationInfo } from '../../hooks';
 
 interface AuthorizationProps {
   formData: FormData;
@@ -11,6 +12,8 @@ interface AuthorizationProps {
 }
 
 export const Authorization = ({ formData, onInputChange, onSign, signingError, signingStatus, isLoading }: AuthorizationProps) => {
+  const { authorization, status: authorizationStatus, error: authorizationError, meta: authorizationMeta, tenantId } = useAuthorizationInfo();
+  const organizationName = authorization.organisatie;
 
   const handleSign = async () => {
     // Call the sign function
@@ -22,7 +25,7 @@ export const Authorization = ({ formData, onInputChange, onSign, signingError, s
       <div>
         <h3 className="text-xl font-semibold text-gray-800 mb-2">Machtiging Mistersubsidie</h3>
         <p className="text-gray-600 mb-6">
-          Geef Tim Otte/NOT-Company (handelend onder de naam Mistersubsidie) toestemming om namens uw onderneming 
+          Geef {organizationName} toestemming om namens uw onderneming 
           de SLIM-subsidie aan te vragen.
         </p>
       </div>
@@ -32,26 +35,38 @@ export const Authorization = ({ formData, onInputChange, onSign, signingError, s
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
           <div>
             <p className="text-gray-600">Organisatie:</p>
-            <p className="font-medium">Tim Otte/NOT-Company bv h.o.d.n. Mistersubsidie</p>
+            <p className="font-medium">{authorizationStatus === 'loading' ? 'Gegevens laden...' : authorization.organisatie}</p>
           </div>
           <div>
             <p className="text-gray-600">KvK-nummer:</p>
-            <p className="font-medium">24353031</p>
+            <p className="font-medium">{authorizationStatus === 'loading' ? '--' : authorization.kvkNummer}</p>
           </div>
           <div>
             <p className="text-gray-600">Contactpersoon:</p>
-            <p className="font-medium">Tim Otte</p>
+            <p className="font-medium">{authorizationStatus === 'loading' ? '--' : authorization.contactpersoon}</p>
           </div>
           <div>
             <p className="text-gray-600">E-mail:</p>
-            <p className="font-medium">Tim@mistersubsidie.nl</p>
+            <p className="font-medium">{authorizationStatus === 'loading' ? '--' : authorization.email}</p>
           </div>
           <div>
             <p className="text-gray-600">Telefoon:</p>
-            <p className="font-medium">06 11 24 13 60</p>
+            <p className="font-medium">{authorizationStatus === 'loading' ? '--' : authorization.telefoon}</p>
           </div>
         </div>
       </Card>
+
+      {authorizationStatus === 'loading' && (
+        <p className="text-sm text-gray-500">Gemachtigde gegevens worden geladen...</p>
+      )}
+
+      {authorizationError && (
+        <p className="text-sm text-orange-600">
+          Kon gemachtigde gegevens niet laden. Standaardgegevens worden getoond.
+        </p>
+      )}
+
+      
       
       <div className="space-y-4">
         <h4 className="font-semibold text-gray-700">Verklaringen en toestemmingen</h4>
