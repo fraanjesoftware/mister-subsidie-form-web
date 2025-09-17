@@ -25,10 +25,10 @@ export const Navigation = ({
         className={`flex items-center px-6 py-3 rounded-2xl font-extrabold transition-all ${
           currentStep === 0
             ? 'bg-gray-200 text-gray-400 cursor-not-allowed opacity-50'
-            : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-300 shadow-sm cursor-pointer'
+            : 'text-[var(--color-gray-5)] hover:bg-gray-50 text-[var(--color-step-text)]  cursor-pointer'
         }`}
       >
-        <IconChevronLeft className="w-5 h-5 mr-2" />
+        <IconChevronLeft className="w-5 h-5 mr-2 " />
         Vorige
       </button>
       
