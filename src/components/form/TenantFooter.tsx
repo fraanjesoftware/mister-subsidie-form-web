@@ -32,6 +32,21 @@ const FOOTER_CONFIG = {
     legalName: 'Mistersubsidie',
     accentClass: 'text-white/80 hover:text-white',
   },
+  test: {
+    logo: {
+      src: '/Mistersubsidie logo.png',
+      alt: 'Mistersubsidie',
+      className: 'h-[12px] w-auto sm:h-[15px]',
+    },
+    background: '#132d28',
+    textClass: 'text-white',
+    contact: {
+      label: 'info@mistersubsidie.nl',
+      href: 'mailto:info@mistersubsidie.nl',
+    },
+    legalName: 'Mistersubsidie',
+    accentClass: 'text-white/80 hover:text-white',
+  },
   ignite: {
     logo: {
       src: '/Ignite-Group-Primary-Logo-Mint.svg',
@@ -64,11 +79,11 @@ export const TenantFooter = () => {
         className={`mx-auto flex w-full max-w-4xl flex-col gap-6 px-4 py-6 sm:flex-row sm:items-center sm:justify-between sm:gap-4 sm:px-6 ${config.textClass}`}
       >
         <div className="flex items-center gap-3">
-          <img
+          {/* <img
             src={config.logo.src}
             alt={`${config.logo.alt} logo`}
             className={`${config.logo.className} opacity-90 transition-opacity duration-200 hover:opacity-100`}
-          />
+          /> */}
      
         </div>
         <div className="flex flex-col items-start gap-2 text-sm sm:items-end">

@@ -3,7 +3,7 @@ import { DEFAULT_AUTHORIZATION_CONFIG, type AuthorizationConfig } from '../confi
 import { getApiBaseUrl, getOptionalFunctionCode } from '../config/api';
 import { isLocalHostname } from '../utils/environment';
 
-export type TenantId = 'default' | 'mistersubsidie' | 'ignite';
+export type TenantId = 'default' | 'mistersubsidie' | 'ignite' | 'test';
 
 export interface TenantInfoMeta {
   requestedId: string | null;
@@ -30,7 +30,7 @@ export interface UseTenantInfoResult {
   meta: TenantInfoMeta | null;
 }
 
-const KNOWN_TENANTS: TenantId[] = ['default', 'mistersubsidie', 'ignite'];
+const KNOWN_TENANTS: TenantId[] = ['default', 'mistersubsidie', 'ignite', 'test'];
 
 const coerceTenantId = (candidate?: string | null): TenantId => {
   if (!candidate) return 'default';
@@ -81,14 +81,22 @@ const determineTenantId = (): TenantId => {
     return 'mistersubsidie';
   }
 
+  if (hostname.includes('test')) {
+    return 'test';
+  }
+
   const [subdomain] = hostname.split('.');
 
   if (subdomain?.includes('ignite')) {
     return 'ignite';
   }
 
-  if (subdomain?.includes('mister') || subdomain?.includes('ms')) {
+  if (subdomain?.includes('mister')) {
     return 'mistersubsidie';
+  }
+
+    if (subdomain?.includes('test')) {
+    return 'test';
   }
 
   return 'default';

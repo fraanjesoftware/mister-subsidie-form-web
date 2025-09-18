@@ -12,6 +12,11 @@ const LOGO_BY_TENANT = {
     alt: 'Mistersubsidie',
     className: 'h-[12px] w-auto sm:h-[15px]'
   },
+  test: {
+    src: '/Mistersubsidie logo.png',
+    alt: 'Mistersubsidie',
+    className: 'h-[12px] w-auto sm:h-[15px]'
+  },
   ignite: {
     src: '/Ignite-Group-Primary-Logo-Mint.svg',
     alt: 'Ignite Group',
@@ -19,30 +24,22 @@ const LOGO_BY_TENANT = {
   },
 } as const;
 
-const ACTION_BY_TENANT = {
-  default: {
-    label: 'Hulp nodig?',
-    href: 'mailto:info@mistersubsidie.nl',
-  },
-  mistersubsidie: {
-    label: 'Hulp nodig?',
-    href: 'mailto:info@mistersubsidie.nl',
-  },
-  ignite: {
-    label: 'Neem contact op',
-    href: 'mailto:hello@ignitegroup.nl',
-  },
-} as const;
 
 const HEADER_STYLES = {
   default: {
-    background: '#1E3E36',
+    background: '#122E28',
     textClass: 'text-white',
     buttonClass:
       'border-black/30 bg-white/10 text-white hover:bg-white hover:text-[var(--color-primary)]',
   },
   mistersubsidie: {
-    background: '#1E3E36',
+    background: '#122E28',
+    textClass: 'text-white',
+    buttonClass:
+      'border-white/30 bg-white/10 text-white hover:bg-white hover:text-[var(--color-primary)]',
+  },
+  test: {
+    background: '#122E28',
     textClass: 'text-white',
     buttonClass:
       'border-white/30 bg-white/10 text-white hover:bg-white hover:text-[var(--color-primary)]',
@@ -58,11 +55,10 @@ const HEADER_STYLES = {
 export const TenantHeader = () => {
   const { tenantId } = useTenant();
 
-  const { logo, action, style } = useMemo(() => {
+  const { logo, style } = useMemo(() => {
     const resolvedLogo = LOGO_BY_TENANT[tenantId] ?? LOGO_BY_TENANT.default;
-    const resolvedAction = ACTION_BY_TENANT[tenantId] ?? ACTION_BY_TENANT.default;
     const resolvedStyle = HEADER_STYLES[tenantId] ?? HEADER_STYLES.default;
-    return { logo: resolvedLogo, action: resolvedAction, style: resolvedStyle };
+    return { logo: resolvedLogo, style: resolvedStyle };
   }, [tenantId]);
 
   return (
