@@ -64,7 +64,7 @@ const App = () => {
     const payload = {
       ...signingData,
       tenantId: tenantInfo.tenantId,
-      test: isLocalEnvironment(),
+      test: tenantInfo.tenantId === 'ignite' || tenantInfo.tenantId === 'test',
     };
 
     

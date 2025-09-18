@@ -74,12 +74,11 @@ export const TenantHeader = () => {
           alt={`${logo.alt} logo`}
           className={`${logo.className} opacity-90 transition-opacity duration-200 hover:opacity-100`}
         />
-        {/* <a
-          href={action.href}
-          className={`inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-medium shadow-sm transition ${style.buttonClass}`}
-        >
-          {action.label}
-        </a> */}
+        {tenantId === 'test' && (
+          <span className="rounded-full border border-white/40 bg-white/10 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-white">
+            Test
+          </span>
+        )}
       </div>
     </header>
   );
