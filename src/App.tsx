@@ -14,7 +14,6 @@ import { useFormData, useStepValidation } from './hooks';
 import { buildSigningSession } from './utils/buildSigningSession';
 import { useTenant } from './context/TenantProvider';
 import { getApiBaseUrl, getFunctionCode, getSignWellTemplateId } from './config/api';
-import { isLocalEnvironment } from './utils/environment';
 
 const App = () => {
   const navigate = useNavigate();
@@ -64,7 +63,7 @@ const App = () => {
     const payload = {
       ...signingData,
       tenantId: tenantInfo.tenantId,
-      test: tenantInfo.tenantId === 'ignite' || tenantInfo.tenantId === 'test',
+      test: tenantInfo.tenantId === 'test',
     };
 
     
