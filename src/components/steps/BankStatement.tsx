@@ -162,8 +162,8 @@ export const BankStatement = ({ formData, onInputChange }: BankStatementProps) =
             <Checkbox
               label={
                 <span>
-                  Ik geef toestemming voor het verwerken van dit bankafschrift voor verificatie van mijn
-                  bankrekeningnummer in het kader van de subsidieaanvraag, conform de{' '}
+                  Ik geef toestemming voor het verwerken en bewaren van dit bankafschrift voor verificatie
+                  van mijn bankrekeningnummer ten behoeve van de subsidieaanvraag, conform de{' '}
                   <a
                     href="https://mistersubsidie.nl/wp-content/uploads/2025/08/Privacyverklaring-mistersubsidie.pdf"
                     target="_blank"
