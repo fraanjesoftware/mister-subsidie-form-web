@@ -22,7 +22,7 @@ export interface FormData {
   // Contact informatie
   contactNaam: string;
   contactTelefoon: string;
-  contactGeslacht: '' | 'dhr' | 'mvr' | 'anders';
+  contactGeslacht: '' | 'man' | 'vrouw' | 'anders';
   hoofdcontactPersoon: '' | 'Wout' | 'Tim' | 'Nathalie';
 
   // Bestuurder gegevens
