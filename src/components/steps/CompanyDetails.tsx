@@ -18,9 +18,9 @@ const PROVINCIES = [
   { value: 'Zuid-Holland', label: 'Zuid-Holland' }
 ];
 
-const GESLACHT_OPTIES = [
-  { value: 'man', label: 'Man' },
-  { value: 'vrouw', label: 'Vrouw' },
+const AANHEF_OPTIES = [
+  { value: 'dhr', label: 'Dhr.' },
+  { value: 'mvr', label: 'Mvr.' },
   { value: 'anders', label: 'Anders' }
 ];
 
@@ -95,16 +95,14 @@ export const CompanyDetails = ({ formData, onInputChange }: CompanyDetailsProps)
           />
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <Input
-              label="Postcode"
-              value={formData.postcode}
-              onChange={(e) => onInputChange('postcode', e.target.value.toUpperCase())}
-              placeholder="1234 AB"
-              autoComplete="postal-code"
-              name="postal-code"
-              maxLength={7}
-              validationRules={[validators.dutchPostcode()]}
+            <Select
+              label="Provincie"
+              options={PROVINCIES}
+              value={formData.provincie}
+              onChange={(value) => onInputChange('provincie', value)}
+              placeholder="Selecteer een provincie"
             />
+           
 
             <Input
               label="Plaats"
@@ -114,14 +112,17 @@ export const CompanyDetails = ({ formData, onInputChange }: CompanyDetailsProps)
               autoComplete="address-level2"
               name="city"
             />
-
-            <Select
-              label="Provincie"
-              options={PROVINCIES}
-              value={formData.provincie}
-              onChange={(value) => onInputChange('provincie', value)}
-              placeholder="Selecteer een provincie"
+           <Input
+              label="Postcode"
+              value={formData.postcode}
+              onChange={(e) => onInputChange('postcode', e.target.value.toUpperCase())}
+              placeholder="1234 AB"
+              autoComplete="postal-code"
+              name="postal-code"
+              maxLength={7}
+              validationRules={[validators.dutchPostcode()]}
             />
+            
           </div>
 
           <Input
@@ -140,14 +141,27 @@ export const CompanyDetails = ({ formData, onInputChange }: CompanyDetailsProps)
       <div>
         <h3 className="text-lg font-semibold text-[var(--color-gray-dark-1)] mb-4">Contactinformatie</h3>
         <div className="space-y-6">
-          <Input
-            label="Naam contactpersoon *"
-            value={formData.contactNaam}
-            onChange={(e) => onInputChange('contactNaam', e.target.value)}
-            placeholder="Volledige naam"
-            autoComplete="name"
-            validationRules={[validators.required(), validators.minLength(2)]}
-          />
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+            <Select
+              label="Aanhef *"
+              options={AANHEF_OPTIES}
+              value={formData.contactGeslacht}
+              onChange={(value) => onInputChange('contactGeslacht', value)}
+              placeholder="Selecteer"
+              validationRules={[validators.required()]}
+            />
+
+            <div className="md:col-span-3">
+              <Input
+                label="Naam contactpersoon *"
+                value={formData.contactNaam}
+                onChange={(e) => onInputChange('contactNaam', e.target.value)}
+                placeholder="Volledige naam"
+                autoComplete="name"
+                validationRules={[validators.required(), validators.minLength(2)]}
+              />
+            </div>
+          </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <Input
@@ -172,25 +186,14 @@ export const CompanyDetails = ({ formData, onInputChange }: CompanyDetailsProps)
             />
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <Select
-              label="Geslacht *"
-              options={GESLACHT_OPTIES}
-              value={formData.contactGeslacht}
-              onChange={(value) => onInputChange('contactGeslacht', value)}
-              placeholder="Selecteer geslacht"
-              validationRules={[validators.required()]}
-            />
-
-            <Select
-              label="Hoofdcontactpersoon bij ons *"
-              options={HOOFDCONTACT_OPTIES}
-              value={formData.hoofdcontactPersoon}
-              onChange={(value) => onInputChange('hoofdcontactPersoon', value)}
-              placeholder="Selecteer contactpersoon"
-              validationRules={[validators.required()]}
-            />
-          </div>
+          <Select
+            label="Hoofdcontactpersoon bij ons *"
+            options={HOOFDCONTACT_OPTIES}
+            value={formData.hoofdcontactPersoon}
+            onChange={(value) => onInputChange('hoofdcontactPersoon', value)}
+            placeholder="Selecteer contactpersoon"
+            validationRules={[validators.required()]}
+          />
         </div>
       </div>
     </div>
