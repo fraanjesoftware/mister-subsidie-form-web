@@ -11,6 +11,7 @@ interface BankStatementProps {
 
 export const BankStatement = ({ formData, onInputChange }: BankStatementProps) => {
   const [dragActive, setDragActive] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const handleDrag = (e: React.DragEvent) => {
     e.preventDefault();
@@ -39,15 +40,18 @@ export const BankStatement = ({ formData, onInputChange }: BankStatementProps) =
   };
 
   const handleFile = (file: File) => {
+    // Clear any previous error
+    setErrorMessage(null);
+
     // Validate file type (PDF only)
     if (file.type !== 'application/pdf') {
-      alert('Alleen PDF-bestanden zijn toegestaan');
+      setErrorMessage('Alleen PDF-bestanden zijn toegestaan');
       return;
     }
 
     // Validate file size (max 10MB)
     if (file.size > 10 * 1024 * 1024) {
-      alert('Het bestand mag niet groter zijn dan 10MB');
+      setErrorMessage('Het bestand mag niet groter zijn dan 10MB');
       return;
     }
 
@@ -55,6 +59,7 @@ export const BankStatement = ({ formData, onInputChange }: BankStatementProps) =
   };
 
   const handleRemoveFile = () => {
+    setErrorMessage(null);
     onInputChange('bankStatement', null);
     onInputChange('bankStatementConsent', false);
   };
@@ -74,10 +79,16 @@ export const BankStatement = ({ formData, onInputChange }: BankStatementProps) =
             Dit is een vereiste voor de subsidieaanvraag.
           </p>
           <p className="mt-2">
-            <strong>Let op:</strong> U mag alle financiële bedragen op het bankafschrift onleesbaar maken voor privacy. 
+            <strong>Let op:</strong> U mag alle financiële bedragen op het bankafschrift onleesbaar maken voor privacy.
           </p>
         </div>
       </Alert>
+
+      {errorMessage && (
+        <Alert type="error">
+          {errorMessage}
+        </Alert>
+      )}
 
       <div className="space-y-4">
         {!formData.bankStatement ? (
@@ -151,8 +162,17 @@ export const BankStatement = ({ formData, onInputChange }: BankStatementProps) =
             <Checkbox
               label={
                 <span>
-                  Ik ga akkoord met het delen van dit bankafschrift voor verificatiedoeleinden en
-                  bevestig dat de getoonde informatie correct is. <span className="text-red-500">*</span>
+                  Ik geef toestemming voor het verwerken van dit bankafschrift voor verificatie van mijn
+                  bankrekeningnummer in het kader van de subsidieaanvraag, conform de{' '}
+                  <a
+                    href="https://mistersubsidie.nl/wp-content/uploads/2025/08/Privacyverklaring-mistersubsidie.pdf"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-[var(--color-accent)] hover:underline"
+                  >
+                    privacyverklaring
+                  </a>
+                  . <span className="text-red-500">*</span>
                 </span>
               }
               checked={formData.bankStatementConsent}
