@@ -15,31 +15,35 @@ export interface FormData {
   adres: string;
   postcode: string;
   plaats: string;
-  
+
   // Bestuurder gegevens
   bestuurder1: Bestuurder;
   bestuurder2: Bestuurder;
-  
+
+  // Bankgegevens
+  bankStatement: File | null;
+  bankStatementConsent: boolean;
+
   // MKB gegevens
   aantalFte: string;
   laatsteBoekjaar: number;
   jaaromzet: string;
   balanstotaal: string;
   naceClassificatie: string;
-  
+
   // De-minimis
   deMinimisType: 'geen' | 'wel' | 'andere';
   deMinimisAmount: string;
   andereStaatssteunAmount: string;
   andereStaatssteunDatum: string;
-  
+
   // Machtiging
   akkoordMachtiging: boolean;
   akkoordWaarheid: boolean;
   machtigingIndienen: boolean;
   machtigingHandelingen: boolean;
   machtigingBezwaar: boolean;
-  
+
   // Meta
   ondernemingType: '' | 'klein' | 'middelgroot' | 'groot';
   datum: string;
@@ -48,6 +52,7 @@ export interface FormData {
 export type StepKey =
   | 'companyDetails'
   | 'directors'
+  | 'bankStatement'
   | 'companySize'
   | 'stateAid'
   | 'authorization';

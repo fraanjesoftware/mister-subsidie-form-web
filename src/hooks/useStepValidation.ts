@@ -22,6 +22,8 @@ export const useStepValidation = (formData: FormData) => {
             return bestuurder1Valid && bestuurder2Valid;
           }
           return bestuurder1Valid;
+        case 'bankStatement':
+          return !!(formData.bankStatement && formData.bankStatementConsent);
         case 'companySize':
           return !!(formData.aantalFte && formData.jaaromzet && formData.balanstotaal && formData.laatsteBoekjaar);
         case 'stateAid':
@@ -33,8 +35,8 @@ export const useStepValidation = (formData: FormData) => {
           }
           return !!formData.deMinimisType;
         case 'authorization':
-          return !!(formData.akkoordMachtiging && formData.akkoordWaarheid && 
-                 formData.machtigingIndienen && formData.machtigingHandelingen && 
+          return !!(formData.akkoordMachtiging && formData.akkoordWaarheid &&
+                 formData.machtigingIndienen && formData.machtigingHandelingen &&
                  formData.machtigingBezwaar);
         default:
           return true;

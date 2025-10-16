@@ -10,7 +10,7 @@ const initialFormData: FormData = {
   adres: '',
   postcode: '',
   plaats: '',
-  
+
   // Bestuurder gegevens
   bestuurder1: {
     voorletters: '',
@@ -27,27 +27,31 @@ const initialFormData: FormData = {
     volledigeNaam: '',
     nodig: false
   },
-  
+
+  // Bankgegevens
+  bankStatement: null,
+  bankStatementConsent: false,
+
   // MKB gegevens
   aantalFte: '',
   laatsteBoekjaar: new Date().getFullYear() - 1,
   jaaromzet: '',
   balanstotaal: '',
   naceClassificatie: '',
-  
+
   // De-minimis
   deMinimisType: 'geen',
   deMinimisAmount: '',
   andereStaatssteunAmount: '',
   andereStaatssteunDatum: '',
-  
+
   // Machtiging
   akkoordMachtiging: false,
   akkoordWaarheid: false,
   machtigingIndienen: false,
   machtigingHandelingen: false,
   machtigingBezwaar: false,
-  
+
   // Meta
   ondernemingType: '',
   datum: new Date().toISOString().split('T')[0]

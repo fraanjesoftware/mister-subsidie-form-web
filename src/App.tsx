@@ -2,11 +2,12 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ProgressSteps, Navigation } from './components/form';
 import { AppLayout } from './components/layout';
-import { 
-  CompanyDetails, 
-  Directors, 
-  CompanySize, 
-  StateAid, 
+import {
+  CompanyDetails,
+  Directors,
+  BankStatement,
+  CompanySize,
+  StateAid,
   Authorization
 } from './components/steps';
 import { STEPS } from './constants/steps';
@@ -114,19 +115,21 @@ const App = () => {
       case 0:
         return <CompanyDetails formData={formData} onInputChange={handleInputChange} />;
       case 1:
-        return <Directors formData={formData} onNestedInputChange={handleNestedInputChange} />;
+        return <BankStatement formData={formData} onInputChange={handleInputChange} />;
       case 2:
-        return <CompanySize formData={formData} onInputChange={handleInputChange} />;
+        return <Directors formData={formData} onNestedInputChange={handleNestedInputChange} />;
       case 3:
-        return <StateAid formData={formData} onInputChange={handleInputChange} />;
+        return <CompanySize formData={formData} onInputChange={handleInputChange} />;
       case 4:
+        return <StateAid formData={formData} onInputChange={handleInputChange} />;
+      case 5:
         return (
-          <Authorization 
-            formData={formData} 
-            onInputChange={handleInputChange} 
-            onSign={handleSignDocuments} 
-            signingError={signingError} 
-            signingStatus={signingStatus} 
+          <Authorization
+            formData={formData}
+            onInputChange={handleInputChange}
+            onSign={handleSignDocuments}
+            signingError={signingError}
+            signingStatus={signingStatus}
             isLoading={signLoading}
             tenantInfo={tenantInfo}
           />
