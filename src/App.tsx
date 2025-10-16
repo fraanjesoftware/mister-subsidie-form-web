@@ -15,6 +15,7 @@ import { useFormData, useStepValidation } from './hooks';
 import { buildSigningSession } from './utils/buildSigningSession';
 import { useTenant } from './context/TenantProvider';
 import { getApiBaseUrl, getFunctionCode, getSignWellTemplateId } from './config/api';
+import { uploadBankStatement } from './utils/fileUpload';
 
 const App = () => {
   const navigate = useNavigate();
@@ -27,12 +28,25 @@ const App = () => {
   const tenantInfo = useTenant();
 
 
-  const handleNext = () => {
+  const handleNext = async () => {
     if (currentStep < STEPS.length - 1) {
       // Sync email when moving from CompanyDetails to Directors
       if (currentStep === 0 && formData.email && !formData.bestuurder1.email) {
         handleNestedInputChange('bestuurder1', 'email', formData.email);
       }
+
+      // Upload bank statement when leaving the bank statement step
+      if (currentStep === 1 && formData.bankStatement && !formData.bankStatementUploaded) {
+        const uploaded = await uploadBankStatement(formData.bankStatement, {
+          kvkNummer: formData.kvkNummer,
+          bedrijfsnaam: formData.bedrijfsnaam,
+        });
+
+        if (uploaded) {
+          handleInputChange('bankStatementUploaded', true);
+        }
+      }
+
       setCurrentStep(currentStep + 1);
     }
   };

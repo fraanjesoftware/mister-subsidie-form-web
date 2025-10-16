@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { FormData, Bestuurder } from '../types';
 import { getCompanyType } from '../utils/companyClassification';
+import { saveFormDataToStorage, loadFormDataFromStorage } from '../utils/localStorage';
 
 const initialFormData: FormData = {
   // Algemene bedrijfsgegevens
@@ -31,6 +32,7 @@ const initialFormData: FormData = {
   // Bankgegevens
   bankStatement: null,
   bankStatementConsent: false,
+  bankStatementUploaded: false,
 
   // MKB gegevens
   aantalFte: '',
@@ -60,16 +62,10 @@ const initialFormData: FormData = {
 export const useFormData = () => {
   // Load form data from localStorage on initialization
   const [formData, setFormData] = useState<FormData>(() => {
-    const savedData = localStorage.getItem('slimFormDataDraft');
+    const savedData = loadFormDataFromStorage();
     if (savedData) {
-      try {
-        const parsed = JSON.parse(savedData);
-        // Merge with initial data to handle new fields
-        return { ...initialFormData, ...parsed };
-      } catch (e) {
-        console.error('Error parsing saved form data:', e);
-        return initialFormData;
-      }
+      // Merge with initial data to handle new fields
+      return { ...initialFormData, ...savedData };
     }
     return initialFormData;
   });
@@ -103,9 +99,9 @@ export const useFormData = () => {
   // Save form data to localStorage whenever it changes
   useEffect(() => {
     const timeoutId = setTimeout(() => {
-      localStorage.setItem('slimFormDataDraft', JSON.stringify(formData));
+      saveFormDataToStorage(formData);
     }, 500); // Debounce to avoid too many writes
-    
+
     return () => clearTimeout(timeoutId);
   }, [formData]);
 

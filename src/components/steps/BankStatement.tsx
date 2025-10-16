@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { IconUpload, IconFileTypePdf, IconX } from '@tabler/icons-react';
+import { IconUpload, IconFileTypePdf, IconX, IconCheck } from '@tabler/icons-react';
 import { FormData } from '../../types';
 import { Checkbox, Alert } from '../ui';
 import { StepIntro } from './StepIntro';
@@ -64,6 +64,12 @@ export const BankStatement = ({ formData, onInputChange }: BankStatementProps) =
     onInputChange('bankStatementConsent', false);
   };
 
+  const handleReupload = () => {
+    onInputChange('bankStatementUploaded', false);
+    onInputChange('bankStatement', null);
+    onInputChange('bankStatementConsent', false);
+  };
+
   return (
     <div className="space-y-6">
       <StepIntro
@@ -91,7 +97,31 @@ export const BankStatement = ({ formData, onInputChange }: BankStatementProps) =
       )}
 
       <div className="space-y-4">
-        {!formData.bankStatement ? (
+        {formData.bankStatementUploaded ? (
+          // Show uploaded state
+          <div className="border-2 border-green-500 bg-green-50 rounded-lg p-6">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-3">
+                <div className="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center">
+                  <IconCheck className="w-7 h-7 text-white" />
+                </div>
+                <div>
+                  <p className="font-semibold text-gray-900">Bankafschrift geüpload</p>
+                  <p className="text-sm text-gray-600">
+                    Uw bankafschrift is succesvol geüpload en opgeslagen.
+                  </p>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={handleReupload}
+                className="px-4 py-2 text-sm font-medium text-[var(--color-accent)] hover:bg-blue-50 border border-[var(--color-accent)] rounded-lg transition-colors"
+              >
+                Opnieuw uploaden
+              </button>
+            </div>
+          </div>
+        ) : !formData.bankStatement ? (
           <div
             className={`relative border-2 border-dashed rounded-lg p-8 text-center transition-colors ${
               dragActive
@@ -157,7 +187,7 @@ export const BankStatement = ({ formData, onInputChange }: BankStatementProps) =
           </div>
         )}
 
-        {formData.bankStatement && (
+        {formData.bankStatement && !formData.bankStatementUploaded && (
           <div className="pt-2">
             <Checkbox
               label={

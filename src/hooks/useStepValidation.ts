@@ -23,7 +23,8 @@ export const useStepValidation = (formData: FormData) => {
           }
           return bestuurder1Valid;
         case 'bankStatement':
-          return !!(formData.bankStatement && formData.bankStatementConsent);
+          // Valid if file is uploaded to API, or if file is selected with consent
+          return formData.bankStatementUploaded || !!(formData.bankStatement && formData.bankStatementConsent);
         case 'companySize':
           return !!(formData.aantalFte && formData.jaaromzet && formData.balanstotaal && formData.laatsteBoekjaar);
         case 'stateAid':

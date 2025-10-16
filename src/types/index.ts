@@ -23,6 +23,7 @@ export interface FormData {
   // Bankgegevens
   bankStatement: File | null;
   bankStatementConsent: boolean;
+  bankStatementUploaded: boolean;
 
   // MKB gegevens
   aantalFte: string;
