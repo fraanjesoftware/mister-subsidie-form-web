@@ -16,6 +16,7 @@ import { buildSigningSession } from './utils/buildSigningSession';
 import { useTenant } from './context/TenantProvider';
 import { getApiBaseUrl, getFunctionCode, getSignWellTemplateId } from './config/api';
 import { uploadBankStatement } from './utils/fileUpload';
+import { submitClientInfo } from './services/clientInfo';
 
 const App = () => {
   const navigate = useNavigate();
@@ -81,10 +82,12 @@ const App = () => {
       test: tenantInfo.tenantId === 'test',
     };
 
-    
+
     try {
       const apiBaseUrl = getApiBaseUrl();
       const apiFunctionCode = getFunctionCode();
+
+      // Submit to SignWell
       const response = await fetch(
         `${apiBaseUrl}/api/createSignWellTemplateSession?code=${apiFunctionCode}`,
         {
@@ -97,8 +100,14 @@ const App = () => {
       );
 
       const result = await response.json();
-      
+
       if (result.success || result.documentId) {
+        // Submit client info to CRM (fire and forget - don't block on this)
+        submitClientInfo(formData, tenantInfo.tenantId).catch((error) => {
+          console.error('Failed to submit client info to CRM:', error);
+          // Don't fail the whole process if CRM submission fails
+        });
+
         // SignWell will send an email to the user
         setSigningStatus('completed');
         // Navigate to success page
@@ -120,7 +129,7 @@ const App = () => {
     } finally {
       setSignLoading(false);
     }
-    
+
     return false;
   };
 

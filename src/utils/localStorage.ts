@@ -1,58 +1,34 @@
 import { FormData } from '../types';
 
-/**
- * Serializes FormData for localStorage storage
- * Files cannot be stored in localStorage, so we exclude them
- */
-export const serializeFormData = (formData: FormData): string => {
-  const serializable = { ...formData };
+const STORAGE_KEY = 'mister-subsidie-form-data';
 
-  // Remove File object - cannot be serialized
-  // The bankStatementUploaded flag will track if it was sent to the API
-  if (formData.bankStatement instanceof File) {
-    (serializable as any).bankStatement = null;
-  }
-
-  return JSON.stringify(serializable);
-};
-
-/**
- * Deserializes FormData from localStorage
- * Note: Files cannot be restored from localStorage
- */
-export const deserializeFormData = (jsonString: string): Partial<FormData> => {
-  const parsed = JSON.parse(jsonString);
-
-  // Ensure bankStatement is null (files can't be persisted)
-  parsed.bankStatement = null;
-
-  return parsed;
-};
-
-/**
- * Saves form data to localStorage with proper file handling
- */
 export const saveFormDataToStorage = (formData: FormData): void => {
   try {
-    const serialized = serializeFormData(formData);
-    localStorage.setItem('slimFormDataDraft', serialized);
+    const dataToStore = {
+      ...formData,
+      bankStatement: null // Don't store file in localStorage
+    };
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(dataToStore));
   } catch (error) {
-    console.error('Error saving form data to localStorage:', error);
+    console.error('Failed to save form data to localStorage:', error);
   }
 };
 
-/**
- * Loads form data from localStorage with proper file handling
- */
-export const loadFormDataFromStorage = (): Partial<FormData> | null => {
+export const loadFormDataFromStorage = (): FormData | null => {
   try {
-    const savedData = localStorage.getItem('slimFormDataDraft');
-    if (!savedData) {
-      return null;
-    }
-    return deserializeFormData(savedData);
+    const stored = localStorage.getItem(STORAGE_KEY);
+    if (!stored) return null;
+    return JSON.parse(stored);
   } catch (error) {
-    console.error('Error loading form data from localStorage:', error);
+    console.error('Failed to load form data from localStorage:', error);
     return null;
+  }
+};
+
+export const clearFormDataFromStorage = (): void => {
+  try {
+    localStorage.removeItem(STORAGE_KEY);
+  } catch (error) {
+    console.error('Failed to clear form data from localStorage:', error);
   }
 };

@@ -1,7 +1,34 @@
 import { FormData } from '../../types';
-import { Input } from '../ui';
+import { Input, Select } from '../ui';
 import { validators } from '../../utils/validation';
 import { StepIntro } from './StepIntro';
+
+const PROVINCIES = [
+  { value: 'Drenthe', label: 'Drenthe' },
+  { value: 'Flevoland', label: 'Flevoland' },
+  { value: 'Friesland', label: 'Friesland' },
+  { value: 'Gelderland', label: 'Gelderland' },
+  { value: 'Groningen', label: 'Groningen' },
+  { value: 'Limburg', label: 'Limburg' },
+  { value: 'Noord-Brabant', label: 'Noord-Brabant' },
+  { value: 'Noord-Holland', label: 'Noord-Holland' },
+  { value: 'Overijssel', label: 'Overijssel' },
+  { value: 'Utrecht', label: 'Utrecht' },
+  { value: 'Zeeland', label: 'Zeeland' },
+  { value: 'Zuid-Holland', label: 'Zuid-Holland' }
+];
+
+const GESLACHT_OPTIES = [
+  { value: 'man', label: 'Man' },
+  { value: 'vrouw', label: 'Vrouw' },
+  { value: 'anders', label: 'Anders' }
+];
+
+const HOOFDCONTACT_OPTIES = [
+  { value: 'Wout', label: 'Wout' },
+  { value: 'Tim', label: 'Tim' },
+  { value: 'Nathalie', label: 'Nathalie' }
+];
 
 interface CompanyDetailsProps {
   formData: FormData;
@@ -10,85 +37,157 @@ interface CompanyDetailsProps {
 
 export const CompanyDetails = ({ formData, onInputChange }: CompanyDetailsProps) => {
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       <StepIntro
         title="Bedrijfsgegevens"
         description="Vul de algemene gegevens van uw onderneming in."
       />
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="md:col-span-2">
+      {/* Bedrijfsinformatie */}
+      <div>
+        <h3 className="text-lg font-semibold text-[var(--color-gray-dark-1)] mb-4">Bedrijfsinformatie</h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="md:col-span-2">
+            <Input
+              label="Bedrijfsnaam *"
+              value={formData.bedrijfsnaam}
+              onChange={(e) => onInputChange('bedrijfsnaam', e.target.value)}
+              placeholder="Uw bedrijfsnaam"
+              autoComplete="organization"
+              name="company"
+              validationRules={[validators.required(), validators.minLength(2)]}
+            />
+          </div>
+
           <Input
-            label="Bedrijfsnaam *"
-            value={formData.bedrijfsnaam}
-            onChange={(e) => onInputChange('bedrijfsnaam', e.target.value)}
-            placeholder="Uw bedrijfsnaam"
-            autoComplete="organization"
-            name="company"
+            label="KvK-nummer *"
+            value={formData.kvkNummer}
+            onChange={(e) => onInputChange('kvkNummer', e.target.value.replace(/\D/g, ''))}
+            placeholder="12345678"
+            maxLength={8}
+            validationRules={[validators.required(), validators.kvkNumber()]}
+          />
+
+          <Input
+            label="BTW-identificatienummer"
+            value={formData.btwId}
+            onChange={(e) => onInputChange('btwId', e.target.value.toUpperCase())}
+            placeholder="NL123456789B01"
+            maxLength={14}
+            validationRules={[validators.btwId()]}
+          />
+
+          <Input
+            type="email"
+            label="E-mailadres *"
+            value={formData.email}
+            onChange={(e) => onInputChange('email', e.target.value)}
+            placeholder="info@uwbedrijf.nl"
+            autoComplete="email"
+            name="email"
+            validationRules={[validators.required(), validators.email()]}
+          />
+
+          <Input
+            label="Website"
+            value={formData.website}
+            onChange={(e) => onInputChange('website', e.target.value)}
+            placeholder="www.uwbedrijf.nl"
+            validationRules={[validators.url()]}
+          />
+
+          <div className="md:col-span-2">
+            <Input
+              label="Adres"
+              value={formData.adres}
+              onChange={(e) => onInputChange('adres', e.target.value)}
+              placeholder="Straatnaam 123"
+              autoComplete="street-address"
+              name="address"
+            />
+          </div>
+
+          <Input
+            label="Postcode"
+            value={formData.postcode}
+            onChange={(e) => onInputChange('postcode', e.target.value.toUpperCase())}
+            placeholder="1234 AB"
+            autoComplete="postal-code"
+            name="postal-code"
+            maxLength={7}
+            validationRules={[validators.dutchPostcode()]}
+          />
+
+          <Input
+            label="Plaats"
+            value={formData.plaats}
+            onChange={(e) => onInputChange('plaats', e.target.value)}
+            placeholder="Amsterdam"
+            autoComplete="address-level2"
+            name="city"
+          />
+
+          <Select
+            label="Provincie"
+            options={PROVINCIES}
+            value={formData.provincie}
+            onChange={(value) => onInputChange('provincie', value)}
+            placeholder="Selecteer een provincie"
+          />
+
+          <Input
+            label="NACE-classificatie"
+            hint="Eerste 4 cijfers van uw SBI-code"
+            value={formData.naceClassificatie}
+            onChange={(e) => onInputChange('naceClassificatie', e.target.value.replace(/\D/g, ''))}
+            placeholder="0000"
+            maxLength={4}
+            validationRules={[validators.naceCode()]}
+          />
+        </div>
+      </div>
+
+      {/* Contactinformatie */}
+      <div>
+        <h3 className="text-lg font-semibold text-[var(--color-gray-dark-1)] mb-4">Contactinformatie</h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <Input
+            label="Naam contactpersoon *"
+            value={formData.contactNaam}
+            onChange={(e) => onInputChange('contactNaam', e.target.value)}
+            placeholder="Volledige naam"
+            autoComplete="name"
             validationRules={[validators.required(), validators.minLength(2)]}
           />
-        </div>
-        
-        <Input
-          label="KvK-nummer *"
-          value={formData.kvkNummer}
-          onChange={(e) => onInputChange('kvkNummer', e.target.value.replace(/\D/g, ''))}
-          placeholder="12345678"
-          maxLength={8}
-          validationRules={[validators.required(), validators.kvkNumber()]}
-        />
-        
-        <Input
-          type="email"
-          label="E-mailadres *"
-          value={formData.email}
-          onChange={(e) => onInputChange('email', e.target.value)}
-          placeholder="info@uwbedrijf.nl"
-          autoComplete="email"
-          name="email"
-          validationRules={[validators.required(), validators.email()]}
-        />
-        
-        <div className="md:col-span-2">
+
           <Input
-            label="Adres"
-            value={formData.adres}
-            onChange={(e) => onInputChange('adres', e.target.value)}
-            placeholder="Straatnaam 123"
-            autoComplete="street-address"
-            name="address"
+            label="Telefoonnummer *"
+            type="tel"
+            value={formData.contactTelefoon}
+            onChange={(e) => onInputChange('contactTelefoon', e.target.value)}
+            placeholder="0612345678"
+            autoComplete="tel"
+            validationRules={[validators.required(), validators.dutchPhone()]}
+          />
+
+          <Select
+            label="Geslacht *"
+            options={GESLACHT_OPTIES}
+            value={formData.contactGeslacht}
+            onChange={(value) => onInputChange('contactGeslacht', value)}
+            placeholder="Selecteer geslacht"
+            validationRules={[validators.required()]}
+          />
+
+          <Select
+            label="Hoofdcontactpersoon bij ons *"
+            options={HOOFDCONTACT_OPTIES}
+            value={formData.hoofdcontactPersoon}
+            onChange={(value) => onInputChange('hoofdcontactPersoon', value)}
+            placeholder="Selecteer contactpersoon"
+            validationRules={[validators.required()]}
           />
         </div>
-        
-        <Input
-          label="Postcode"
-          value={formData.postcode}
-          onChange={(e) => onInputChange('postcode', e.target.value.toUpperCase())}
-          placeholder="1234 AB"
-          autoComplete="postal-code"
-          name="postal-code"
-          maxLength={7}
-          validationRules={[validators.dutchPostcode()]}
-        />
-        
-        <Input
-          label="Plaats"
-          value={formData.plaats}
-          onChange={(e) => onInputChange('plaats', e.target.value)}
-          placeholder="Amsterdam"
-          autoComplete="address-level2"
-          name="city"
-        />
-        
-        <Input
-          label="NACE-classificatie"
-          hint="Eerste 4 cijfers van uw SBI-code"
-          value={formData.naceClassificatie}
-          onChange={(e) => onInputChange('naceClassificatie', e.target.value.replace(/\D/g, ''))}
-          placeholder="0000"
-          maxLength={4}
-          validationRules={[validators.naceCode()]}
-        />
       </div>
     </div>
   );

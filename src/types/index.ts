@@ -15,6 +15,15 @@ export interface FormData {
   adres: string;
   postcode: string;
   plaats: string;
+  btwId: string;
+  website: string;
+  provincie: string;
+
+  // Contact informatie
+  contactNaam: string;
+  contactTelefoon: string;
+  contactGeslacht: '' | 'man' | 'vrouw' | 'anders';
+  hoofdcontactPersoon: '' | 'Wout' | 'Tim' | 'Nathalie';
 
   // Bestuurder gegevens
   bestuurder1: Bestuurder;

@@ -134,6 +134,38 @@ export const validators = {
       return date < today;
     },
     message
+  }),
+
+  btwId: (message = 'BTW-nummer moet geldig zijn (bijv. NL123456789B01)'): ValidationRule => ({
+    validate: (value) => {
+      if (!value) return true;
+      const btwRegex = /^[A-Z]{2}[0-9]{9}B[0-9]{2}$/i;
+      return btwRegex.test(value.replace(/\s/g, ''));
+    },
+    message
+  }),
+
+  url: (message = 'Voer een geldige URL in'): ValidationRule => ({
+    validate: (value) => {
+      if (!value) return true;
+      try {
+        new URL(value.startsWith('http') ? value : `https://${value}`);
+        return true;
+      } catch {
+        return false;
+      }
+    },
+    message
+  }),
+
+  dutchPhone: (message = 'Voer een geldig Nederlands telefoonnummer in'): ValidationRule => ({
+    validate: (value) => {
+      if (!value) return true;
+      const cleaned = value.replace(/[\s\-\(\)]/g, '');
+      const phoneRegex = /^(\+31|0031|0)[1-9][0-9]{8}$/;
+      return phoneRegex.test(cleaned);
+    },
+    message
   })
 };
 

@@ -11,6 +11,15 @@ const initialFormData: FormData = {
   adres: '',
   postcode: '',
   plaats: '',
+  btwId: '',
+  website: '',
+  provincie: '',
+
+  // Contact informatie
+  contactNaam: '',
+  contactTelefoon: '',
+  contactGeslacht: '',
+  hoofdcontactPersoon: '',
 
   // Bestuurder gegevens
   bestuurder1: {
