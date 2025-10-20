@@ -138,8 +138,19 @@ export const CompanyDetails = ({ formData, onInputChange }: CompanyDetailsProps)
       </div>
 
       {/* Contactinformatie */}
-      <div>
-        <h3 className="text-lg font-semibold text-[var(--color-gray-dark-1)] mb-4">Contactinformatie</h3>
+      <div className="border border-[var(--color-gray-light-4)] rounded-xl bg-gradient-to-br from-[var(--color-accent-light-4)] to-white p-6">
+        <div className="flex items-start gap-3 mb-6">
+          <div className="flex-shrink-0 w-10 h-10 rounded-full bg-[var(--color-accent)] flex items-center justify-center">
+            <svg className="w-5 h-5 text-[var(--color-primary-dark)]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+            </svg>
+          </div>
+          <div>
+            <h3 className="text-lg font-semibold text-[var(--color-gray-dark-1)]">Contactinformatie</h3>
+            <p className="text-sm text-[var(--color-gray-dark-2)] mt-1">Gegevens van uw contactpersoon bij uw bedrijf</p>
+          </div>
+        </div>
+
         <div className="space-y-6">
           <Input
             label="Naam contactpersoon *"
@@ -173,22 +184,26 @@ export const CompanyDetails = ({ formData, onInputChange }: CompanyDetailsProps)
             />
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <Select
-              label="Geslacht *"
-              options={GESLACHT_OPTIES}
-              value={formData.contactGeslacht}
-              onChange={(value) => onInputChange('contactGeslacht', value)}
-              placeholder="Selecteer geslacht"
-              validationRules={[validators.required()]}
-            />
+          <Select
+            label="Geslacht *"
+            options={GESLACHT_OPTIES}
+            value={formData.contactGeslacht}
+            onChange={(value) => onInputChange('contactGeslacht', value)}
+            placeholder="Selecteer geslacht"
+            validationRules={[validators.required()]}
+          />
 
+          <div className="pt-4 border-t border-[var(--color-gray-light-4)]">
+            <div className="mb-4">
+              <h4 className="text-sm font-semibold text-[var(--color-gray-dark-1)]">Uw vaste contactpersoon bij ons</h4>
+              <p className="text-sm text-[var(--color-gray-dark-2)] mt-1">Wie zal uw hoofdcontactpersoon zijn bij Mister Subsidie?</p>
+            </div>
             <Select
-              label="Hoofdcontactpersoon bij ons *"
+              label="Hoofdcontactpersoon *"
               options={HOOFDCONTACT_OPTIES}
               value={formData.hoofdcontactPersoon}
               onChange={(value) => onInputChange('hoofdcontactPersoon', value)}
-              placeholder="Selecteer contactpersoon"
+              placeholder="Selecteer uw contactpersoon"
               validationRules={[validators.required()]}
             />
           </div>
