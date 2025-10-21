@@ -1,5 +1,5 @@
 import type { FormData } from '../types';
-import { getApiBaseUrl, getFunctionCode, getSignWellTemplateId } from '../config/api';
+import { getApiBaseUrl, getFunctionCode, getSignWellTemplateId, getOptionalFunctionCode } from '../config/api';
 import { buildSigningSession } from '../utils/buildSigningSession';
 
 /**
@@ -127,4 +127,37 @@ export const createSigningSession = async (
       error: error instanceof Error ? error.message : 'Onbekende fout',
     };
   }
+};
+
+/**
+ * Fetches tenant authorization info from backend
+ */
+export const fetchTenantInfo = async (
+  tenantId: string
+): Promise<{
+  gemachtigde?: string;
+  gemachtigde_email?: string;
+  gemachtigde_naam?: string;
+  gemachtigde_telefoon?: string;
+  gemachtigde_kvk?: string;
+  meta?: any;
+}> => {
+  const endpoint = new URL(`${getApiBaseUrl().replace(/\/$/, '')}/api/getAuthorizedRepresentativeInfo`);
+
+  const functionCode = getOptionalFunctionCode();
+  if (functionCode) {
+    endpoint.searchParams.set('code', functionCode);
+  }
+
+  const response = await fetch(endpoint.toString(), {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ id: tenantId }),
+  });
+
+  if (!response.ok) {
+    throw new Error(`Request failed with status ${response.status}`);
+  }
+
+  return await response.json();
 };

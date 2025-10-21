@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { DEFAULT_AUTHORIZATION_CONFIG, type AuthorizationConfig } from '../config/authorization';
-import { getApiBaseUrl, getOptionalFunctionCode } from '../config/api';
 import { isLocalHostname } from '../utils/environment';
+import { fetchTenantInfo } from '../services/api';
 
 export type TenantId = 'default' | 'mistersubsidie' | 'ignite' | 'test';
 
@@ -121,55 +121,29 @@ export const useTenantInfo = (): UseTenantInfoResult => {
   useEffect(() => {
     let isMounted = true;
 
-    const fetchAuthorization = async () => {
+    const loadTenantInfo = async () => {
       setStatus('loading');
       setError(null);
 
       try {
-        const apiBaseUrl = getApiBaseUrl();
-        const apiFunctionCode = getOptionalFunctionCode();
+        const data = await fetchTenantInfo(tenantId);
 
-        const endpoint = new URL(`${apiBaseUrl.replace(/\/$/, '')}/api/getAuthorizedRepresentativeInfo`);
-
-        if (apiFunctionCode) {
-          endpoint.searchParams.set('code', apiFunctionCode);
-        }
-
-        const response = await fetch(endpoint.toString(), {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ id: tenantId }),
-        });
-
-        if (!response.ok) {
-          throw new Error(`Request failed with status ${response.status}`);
-        }
-
-        const data = (await response.json()) as TenantInfoResponse;
-
-        if (!isMounted) {
-          return;
-        }
+        if (!isMounted) return;
 
         setAuthorization(mapResponseToAuthorization(data));
         setMeta(data.meta ?? null);
         setStatus('success');
       } catch (err) {
-        if (!isMounted) {
-          return;
-        }
+        if (!isMounted) return;
 
         console.error('Failed to load authorized representative info:', err);
         setError(err instanceof Error ? err.message : 'Onbekende fout');
         setStatus('error');
         setMeta(null);
-        // Keep default authorization data as fallback
       }
     };
 
-    fetchAuthorization();
+    loadTenantInfo();
 
     return () => {
       isMounted = false;
