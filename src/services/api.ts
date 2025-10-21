@@ -1,5 +1,6 @@
 import type { FormData } from '../types';
-import { getApiBaseUrl, getFunctionCode } from '../config/api';
+import { getApiBaseUrl, getFunctionCode, getSignWellTemplateId } from '../config/api';
+import { buildSigningSession } from '../utils/buildSigningSession';
 
 /**
  * API Service - Single responsibility for all backend communication
@@ -9,6 +10,14 @@ import { getApiBaseUrl, getFunctionCode } from '../config/api';
 interface ApiResponse {
   success: boolean;
   error?: string;
+}
+
+interface SignWellResponse {
+  success?: boolean;
+  documentId?: string;
+  error?: string;
+  message?: string;
+  validationErrors?: string[];
 }
 
 /**
@@ -73,5 +82,49 @@ export const uploadBankStatement = async (
     }
 
     return false;
+  }
+};
+
+/**
+ * Creates SignWell signing session
+ * Returns success status and error message if failed
+ */
+export const createSigningSession = async (
+  formData: FormData,
+  tenantId: string
+): Promise<{ success: boolean; error?: string }> => {
+  try {
+    const signingData = buildSigningSession(formData, getSignWellTemplateId());
+
+    const payload = {
+      ...signingData,
+      applicationId: formData.applicationId,
+      tenantId,
+      test: tenantId === 'test',
+    };
+
+    const response = await fetch(
+      `${getApiBaseUrl()}/api/createSignWellTemplateSession?code=${getFunctionCode()}`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      }
+    );
+
+    const result: SignWellResponse = await response.json();
+
+    if (result.success || result.documentId) {
+      return { success: true };
+    }
+
+    const errorMessage = result.validationErrors?.join(', ') || result.message || result.error || 'Unknown error';
+    return { success: false, error: errorMessage };
+  } catch (error) {
+    console.error('Error calling SignWell API:', error);
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Onbekende fout',
+    };
   }
 };

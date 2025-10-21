@@ -12,11 +12,9 @@ import {
 } from './components/steps';
 import { STEPS } from './constants/steps';
 import { useFormData, useStepValidation } from './hooks';
-import { buildSigningSession } from './utils/buildSigningSession';
 import { useTenant } from './context/TenantProvider';
-import { getApiBaseUrl, getFunctionCode, getSignWellTemplateId } from './config/api';
 import { generateApplicationId } from './utils/applicationId';
-import { submitCompanyData, uploadBankStatement } from './services/api';
+import { submitCompanyData, uploadBankStatement, createSigningSession } from './services/api';
 
 const App = () => {
   const navigate = useNavigate();
@@ -82,61 +80,17 @@ const App = () => {
     setSignLoading(true);
     setSigningError('');
 
-    // Build signing session data using the type-safe helper
-    const signingData = buildSigningSession(
-      formData,
-      getSignWellTemplateId()
-    );
+    const result = await createSigningSession(formData, tenantInfo.tenantId);
 
-    const payload = {
-      ...signingData,
-      applicationId: formData.applicationId,
-      tenantId: tenantInfo.tenantId,
-      test: tenantInfo.tenantId === 'test',
-    };
-
-
-    try {
-      const apiBaseUrl = getApiBaseUrl();
-      const apiFunctionCode = getFunctionCode();
-
-      // Submit to SignWell
-      const response = await fetch(
-        `${apiBaseUrl}/api/createSignWellTemplateSession?code=${apiFunctionCode}`,
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(payload),
-        }
-      );
-
-      const result = await response.json();
-
-      if (result.success || result.documentId) {
-        // SignWell will send an email to the user
-        setSigningStatus('completed');
-        // Navigate to success page
-        navigate('/bedankt');
-        return true;
-      } else if (result.error) {
-        // Show error message
-        console.error('SignWell error:', result.error, result.validationErrors);
-        const errorMessage = result.validationErrors?.join(', ') || result.message || result.error;
-        setSigningError(`Fout bij ondertekenen: ${errorMessage}`);
-        setSignLoading(false);
-        return false;
-      }
-    } catch (error) {
-      console.error('Error calling SignWell API:', error);
-      setSigningError(`Fout bij verbinding: ${error instanceof Error ? error.message : 'Onbekende fout'}`);
+    if (result.success) {
+      setSigningStatus('completed');
+      navigate('/bedankt');
       setSignLoading(false);
-      return false;
-    } finally {
-      setSignLoading(false);
+      return true;
     }
 
+    setSigningError(`Fout bij ondertekenen: ${result.error}`);
+    setSignLoading(false);
     return false;
   };
 
