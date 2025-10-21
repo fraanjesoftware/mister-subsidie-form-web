@@ -19,6 +19,7 @@ import { submitCompanyInfo, uploadBankStatement, createSigningSession } from './
 const App = () => {
   const navigate = useNavigate();
   const [currentStep, setCurrentStep] = useState(0);
+  const [isNextLoading, setIsNextLoading] = useState(false);
   const [signLoading, setSignLoading] = useState(false);
   const [signingError, setSigningError] = useState<string>('');
   const [signingStatus, setSigningStatus] = useState<'idle' | 'completed' | 'cancelled'>('idle');
@@ -28,61 +29,68 @@ const App = () => {
 
 
   const handleNext = async () => {
-    if (currentStep >= STEPS.length - 1) {
+    if (currentStep >= STEPS.length - 1 || isNextLoading) {
       return;
     }
 
-    if (currentStep === 0) {
-      const applicationId = formData.applicationId ?? generateApplicationId(formData);
+    setIsNextLoading(true);
 
-      if (!formData.applicationId) {
-        handleInputChange('applicationId', applicationId);
+    try {
+      if (currentStep === 0) {
+        const applicationId = formData.applicationId ?? generateApplicationId(formData);
+
+        if (!formData.applicationId) {
+          handleInputChange('applicationId', applicationId);
+        }
+
+        const dataToSubmit = { ...formData, applicationId };
+
+        if (tenantInfo?.tenantId) {
+          const companyInfoResult = await submitCompanyInfo(
+            dataToSubmit,
+            applicationId,
+            tenantInfo.tenantId
+          );
+
+          if (!companyInfoResult.success) {
+            console.error('Failed to submit company info', companyInfoResult.error);
+            return;
+          }
+
+          if (companyInfoResult.folderId && companyInfoResult.folderId !== formData.folderId) {
+            handleInputChange('folderId', companyInfoResult.folderId);
+          }
+        }
+
+        if (formData.email && !formData.bestuurder1.email) {
+          handleNestedInputChange('bestuurder1', 'email', formData.email);
+        }
       }
 
-      const dataToSubmit = { ...formData, applicationId };
-
-      if (tenantInfo?.tenantId) {
-        const companyInfoResult = await submitCompanyInfo(
-          dataToSubmit,
-          applicationId,
-          tenantInfo.tenantId
+      if (
+        currentStep === 1 &&
+        formData.bankStatement &&
+        !formData.bankStatementUploaded
+      ) {
+        const uploaded = await uploadBankStatement(
+          formData.bankStatement,
+          formData.applicationId!,
+          { kvkNummer: formData.kvkNummer, bedrijfsnaam: formData.bedrijfsnaam },
+          tenantInfo.tenantId,
+          formData.folderId
         );
 
-        if (!companyInfoResult.success) {
-          console.error('Failed to submit company info', companyInfoResult.error);
-          return;
+        if (!uploaded) {
+          return; // Don't proceed if upload failed
         }
 
-        if (companyInfoResult.folderId && companyInfoResult.folderId !== formData.folderId) {
-          handleInputChange('folderId', companyInfoResult.folderId);
-        }
+        handleInputChange('bankStatementUploaded', true);
       }
 
-      if (formData.email && !formData.bestuurder1.email) {
-        handleNestedInputChange('bestuurder1', 'email', formData.email);
-      }
+      setCurrentStep((step) => step + 1);
+    } finally {
+      setIsNextLoading(false);
     }
-
-    if (
-      currentStep === 1 &&
-      formData.bankStatement &&
-      !formData.bankStatementUploaded
-    ) {
-      const uploaded = await uploadBankStatement(
-        formData.bankStatement,
-        formData.applicationId!,
-        { kvkNummer: formData.kvkNummer, bedrijfsnaam: formData.bedrijfsnaam },
-        formData.folderId
-      );
-
-      if (!uploaded) {
-        return; // Don't proceed if upload failed
-      }
-
-      handleInputChange('bankStatementUploaded', true);
-    }
-
-    setCurrentStep((step) => step + 1);
   };
 
   const handlePrev = () => {
@@ -166,6 +174,7 @@ const App = () => {
           onPrev={handlePrev}
           onNext={handleNext}
           isStepValid={isStepValid(currentStep)}
+          isLoading={isNextLoading}
         />
       </div>
     </AppLayout>

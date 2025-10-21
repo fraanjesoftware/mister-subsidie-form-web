@@ -1,8 +1,10 @@
 import type { FormData } from '../types';
 import type { CompanyInfo } from '../types/companyInfo';
+import type { TenantId } from '../hooks/useTenantInfo';
 import { getApiBaseUrl, getFunctionCode, getSignWellTemplateId, getOptionalFunctionCode } from '../config/api';
 import { buildSigningSession } from '../utils/buildSigningSession';
 import { mapFormDataToCompanyInfo } from '../utils/mappers';
+import { loadFormDataFromStorage } from '../utils/localStorage';
 
 /**
  * API Service - Single responsibility for all backend communication
@@ -32,14 +34,20 @@ interface SignWellResponse {
 export const submitCompanyInfo = async (
   formData: FormData,
   applicationId: string,
-  tenantId: string
+  tenantId: TenantId
 ): Promise<ApiResponse> => {
   try {
     // Extract only Step 0 fields
     const companyInfo: CompanyInfo = mapFormDataToCompanyInfo(formData, applicationId, tenantId);
+    if (!companyInfo.folderId) {
+      const stored = loadFormDataFromStorage();
+      if (stored?.folderId) {
+        companyInfo.folderId = stored.folderId;
+      }
+    }
 
     const response = await fetch(
-      `${getApiBaseUrl()}/api/submitCompanyInfo?code=${getFunctionCode()}`,
+      `${getApiBaseUrl(tenantId)}/api/submitCompanyInfo?code=${getFunctionCode(tenantId)}`,
       {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -64,6 +72,7 @@ export const uploadBankStatement = async (
   file: File,
   applicationId: string,
   metadata: { kvkNummer: string; bedrijfsnaam: string },
+  tenantId: TenantId,
   folderId?: string | null
 ): Promise<boolean> => {
   try {
@@ -72,11 +81,17 @@ export const uploadBankStatement = async (
     formData.append('applicationId', applicationId);
     formData.append('kvkNummer', metadata.kvkNummer);
     formData.append('bedrijfsnaam', metadata.bedrijfsnaam);
-    if (folderId) {
-      formData.append('folderId', folderId);
+    const effectiveFolderId = folderId ?? loadFormDataFromStorage()?.folderId ?? undefined;
+    if (effectiveFolderId) {
+      formData.append('folderId', effectiveFolderId);
     }
 
-    const response = await fetch('/api/bankStatements', {
+    const uploadEndpoint =
+      tenantId === 'test'
+        ? `${getApiBaseUrl(tenantId)}/api/uploadBankStatement?code=${getFunctionCode(tenantId)}`
+        : '/api/bankStatements';
+
+    const response = await fetch(uploadEndpoint, {
       method: 'POST',
       body: formData,
     });
@@ -104,7 +119,7 @@ export const uploadBankStatement = async (
  */
 export const createSigningSession = async (
   formData: FormData,
-  tenantId: string
+  tenantId: TenantId
 ): Promise<{ success: boolean; error?: string }> => {
   try {
     const signingData = buildSigningSession(formData, getSignWellTemplateId());
@@ -118,7 +133,7 @@ export const createSigningSession = async (
     };
 
     const response = await fetch(
-      `${getApiBaseUrl()}/api/createSignWellTemplateSession?code=${getFunctionCode()}`,
+      `${getApiBaseUrl(tenantId)}/api/createSignWellTemplateSession?code=${getFunctionCode(tenantId)}`,
       {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },

@@ -117,10 +117,23 @@ export const useFormData = () => {
   }, [formData]);
 
   const handleInputChange = (field: keyof FormData, value: any) => {
-    setFormData(prev => ({
-      ...prev,
-      [field]: value
-    }));
+    setFormData(prev => {
+      if (field === 'bedrijfsnaam') {
+        const nextName = typeof value === 'string' ? value : String(value ?? '');
+        if (prev.applicationId && nextName !== prev.bedrijfsnaam) {
+          return {
+            ...prev,
+            [field]: value,
+            applicationId: null,
+          };
+        }
+      }
+
+      return {
+        ...prev,
+        [field]: value,
+      };
+    });
   };
 
   const handleNestedInputChange = (parent: 'bestuurder1' | 'bestuurder2', field: keyof Bestuurder, value: any) => {
