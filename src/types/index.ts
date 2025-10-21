@@ -57,6 +57,7 @@ export interface FormData {
   // Meta
   ondernemingType: '' | 'klein' | 'middelgroot' | 'groot';
   datum: string;
+  applicationId: string | null;
 }
 
 export type StepKey =

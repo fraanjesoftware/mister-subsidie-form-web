@@ -65,7 +65,8 @@ const initialFormData: FormData = {
 
   // Meta
   ondernemingType: '',
-  datum: new Date().toISOString().split('T')[0]
+  datum: new Date().toISOString().split('T')[0],
+  applicationId: null
 };
 
 export const useFormData = () => {

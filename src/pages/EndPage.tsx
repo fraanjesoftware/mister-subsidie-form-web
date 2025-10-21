@@ -1,13 +1,12 @@
 import React, { useEffect } from 'react';
 import { IconCircleCheck } from '@tabler/icons-react';
 import { AppLayout } from '../components/layout';
+import { clearFormDataFromStorage } from '../utils/localStorage';
 
 export const EndPage: React.FC = () => {
   useEffect(() => {
-    // Clear form data when this page loads
-    localStorage.removeItem('slimFormDataDraft');
-    localStorage.removeItem('slimSigningStatus');
-    localStorage.removeItem('slimSigningDate');
+    // Clear all form data including applicationId when user completes the form
+    clearFormDataFromStorage();
     sessionStorage.removeItem('signwell_signing_in_progress');
   }, []);
 

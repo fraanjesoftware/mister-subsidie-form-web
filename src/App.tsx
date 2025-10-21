@@ -15,8 +15,8 @@ import { useFormData, useStepValidation } from './hooks';
 import { buildSigningSession } from './utils/buildSigningSession';
 import { useTenant } from './context/TenantProvider';
 import { getApiBaseUrl, getFunctionCode, getSignWellTemplateId } from './config/api';
-import { uploadBankStatement } from './utils/fileUpload';
-import { submitClientInfo } from './services/clientInfo';
+import { generateApplicationId } from './utils/applicationId';
+import { submitCompanyData, uploadBankStatement } from './services/api';
 
 const App = () => {
   const navigate = useNavigate();
@@ -31,20 +31,32 @@ const App = () => {
 
   const handleNext = async () => {
     if (currentStep < STEPS.length - 1) {
-      // Sync email when moving from CompanyDetails to Directors
+      // Step 0: Generate ID and submit company data
+      if (currentStep === 0 && !formData.applicationId) {
+        const applicationId = generateApplicationId(formData);
+        handleInputChange('applicationId', applicationId);
+
+        // Submit to backend (fire-and-forget)
+        submitCompanyData(formData, applicationId, tenantInfo.tenantId);
+      }
+
+      // Sync email to bestuurder1
       if (currentStep === 0 && formData.email && !formData.bestuurder1.email) {
         handleNestedInputChange('bestuurder1', 'email', formData.email);
       }
 
-      // Upload bank statement when leaving the bank statement step
+      // Step 1: Upload bank statement
       if (currentStep === 1 && formData.bankStatement && !formData.bankStatementUploaded) {
-        const uploaded = await uploadBankStatement(formData.bankStatement, {
-          kvkNummer: formData.kvkNummer,
-          bedrijfsnaam: formData.bedrijfsnaam,
-        });
+        const uploaded = await uploadBankStatement(
+          formData.bankStatement,
+          formData.applicationId!,
+          { kvkNummer: formData.kvkNummer, bedrijfsnaam: formData.bedrijfsnaam }
+        );
 
         if (uploaded) {
           handleInputChange('bankStatementUploaded', true);
+        } else {
+          return; // Don't proceed if upload failed
         }
       }
 
@@ -78,6 +90,7 @@ const App = () => {
 
     const payload = {
       ...signingData,
+      applicationId: formData.applicationId,
       tenantId: tenantInfo.tenantId,
       test: tenantInfo.tenantId === 'test',
     };
@@ -102,12 +115,6 @@ const App = () => {
       const result = await response.json();
 
       if (result.success || result.documentId) {
-        // Submit client info to CRM (fire and forget - don't block on this)
-        submitClientInfo(formData, tenantInfo.tenantId).catch((error) => {
-          console.error('Failed to submit client info to CRM:', error);
-          // Don't fail the whole process if CRM submission fails
-        });
-
         // SignWell will send an email to the user
         setSigningStatus('completed');
         // Navigate to success page
