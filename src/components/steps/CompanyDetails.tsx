@@ -2,6 +2,8 @@ import { FormData } from '../../types';
 import { Input, Select } from '../ui';
 import { validators } from '../../utils/validation';
 import { StepIntro } from './StepIntro';
+import { useTenant } from '../../context/TenantProvider';
+import type { TenantId } from '../../hooks/useTenantInfo';
 
 const PROVINCIES = [
   { value: 'Drenthe', label: 'Drenthe' },
@@ -36,6 +38,16 @@ interface CompanyDetailsProps {
 }
 
 export const CompanyDetails = ({ formData, onInputChange }: CompanyDetailsProps) => {
+  const { tenantId } = useTenant();
+  const tenantContactLabel: Record<TenantId, string> = {
+    default: 'Mister Subsidie',
+    mistersubsidie: 'Mister Subsidie',
+    ignite: 'Ignite',
+    test: 'Mister Subsidie',
+  };
+
+  const tenantContactName = tenantContactLabel[tenantId] ?? tenantContactLabel.default;
+
   return (
     <div className="space-y-8">
       <StepIntro
@@ -184,10 +196,12 @@ export const CompanyDetails = ({ formData, onInputChange }: CompanyDetailsProps)
         {/* Uw contactpersoon bij ons */}
         <div className="pt-6 border-t border-[var(--color-gray-light-3)]">
           <h3 className="text-base font-semibold text-[var(--color-gray-dark-1)] mb-1">Uw vaste contactpersoon bij ons</h3>
-          <p className="text-sm text-[var(--color-gray-dark-2)] mb-6">Wie zal uw hoofdcontactpersoon zijn bij Mister Subsidie?</p>
+          <p className="text-sm text-[var(--color-gray-dark-2)] mb-6">
+            Wie zal uw vertegenwoordiger zijn bij {tenantContactName}?
+          </p>
 
           <Select
-            label="Hoofdcontactpersoon *"
+            label="Vertegenwoordiger *"
             options={HOOFDCONTACT_OPTIES}
             value={formData.hoofdcontactPersoon}
             onChange={(value) => onInputChange('hoofdcontactPersoon', value)}

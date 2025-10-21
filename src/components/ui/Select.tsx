@@ -108,7 +108,7 @@ export const Select = ({
           onClick={() => !disabled && setIsOpen(!isOpen)}
           onBlur={handleBlur}
           disabled={disabled}
-          className={`w-full h-10 px-3 py-2 text-sm font-medium border rounded-md bg-white text-left cursor-pointer transition-all duration-200 shadow-sm focus:ring-2 focus:ring-[var(--color-accent)] focus:ring-offset-0 focus:border-[var(--color-accent)] focus:outline-none hover:bg-gray-50 flex items-center justify-between ${
+          className={`w-full px-4 py-2 text-base font-medium border rounded-lg bg-white text-left cursor-pointer transition-all duration-200 shadow-sm focus:ring-2 focus:ring-[var(--color-accent)] focus:ring-offset-0 focus:border-[var(--color-accent)] focus:outline-none hover:bg-gray-50 flex items-center justify-between ${
             error
               ? 'border-red-500 focus:ring-red-500 focus:border-red-500'
               : 'border-[var(--color-gray-light-4)] focus:border-[var(--color-accent)]'
@@ -148,7 +148,7 @@ export const Select = ({
                   key={option.value}
                   type="button"
                   onClick={() => handleSelect(option.value)}
-                  className={`w-full px-3 py-2 text-sm text-left transition-colors duration-150 hover:bg-gray-100 focus:bg-gray-100 focus:outline-none ${
+                  className={`w-full px-3 py-2 text-base text-left transition-colors duration-150 hover:bg-gray-100 focus:bg-gray-100 focus:outline-none ${
                     option.value === value
                       ? 'bg-[var(--color-accent-light-4)] text-[var(--color-gray-dark-1)] font-medium'
                       : 'text-[var(--color-gray-dark-1)]'
