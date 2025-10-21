@@ -13,5 +13,5 @@ export const generateApplicationId = (formData: FormData): string => {
   const month = String(today.getMonth() + 1).padStart(2, '0');
   const year = today.getFullYear();
 
-  return `${companyName}-${day}-${month}-${year}`;
+  return `${companyName} - ${day}-${month}-${year}`;
 };

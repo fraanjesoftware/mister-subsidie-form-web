@@ -87,9 +87,7 @@ export const uploadBankStatement = async (
     }
 
     const uploadEndpoint =
-      tenantId === 'test'
-        ? `${getApiBaseUrl(tenantId)}/api/uploadBankStatement?code=${getFunctionCode(tenantId)}`
-        : '/api/bankStatements';
+        `${getApiBaseUrl(tenantId)}/api/uploadBankStatement?code=${getFunctionCode(tenantId)}`
 
     const response = await fetch(uploadEndpoint, {
       method: 'POST',
