@@ -16,6 +16,7 @@ export const mapFormDataToCompanyInfo = (
     applicationId,
     tenantId,
     datum: formData.datum,
+    folderId: formData.folderId ?? undefined,
 
     // Bedrijfsinformatie (Step 0 only)
     bedrijfsnaam: formData.bedrijfsnaam,

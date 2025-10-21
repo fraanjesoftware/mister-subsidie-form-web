@@ -58,6 +58,7 @@ export interface FormData {
   ondernemingType: '' | 'klein' | 'middelgroot' | 'groot';
   datum: string;
   applicationId: string | null;
+  folderId: string | null;
 }
 
 export type StepKey =

@@ -12,6 +12,8 @@ import { mapFormDataToCompanyInfo } from '../utils/mappers';
 interface ApiResponse {
   success: boolean;
   error?: string;
+  folderId?: string;
+  applicationId?: string;
 }
 
 interface SignWellResponse {
@@ -47,7 +49,8 @@ export const submitCompanyInfo = async (
 
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
 
-    return await response.json();
+    const result: ApiResponse = await response.json();
+    return result;
   } catch (error) {
     console.error('Failed to submit company data:', error);
     return { success: false, error: error instanceof Error ? error.message : 'Unknown error' };
@@ -60,7 +63,8 @@ export const submitCompanyInfo = async (
 export const uploadBankStatement = async (
   file: File,
   applicationId: string,
-  metadata: { kvkNummer: string; bedrijfsnaam: string }
+  metadata: { kvkNummer: string; bedrijfsnaam: string },
+  folderId?: string | null
 ): Promise<boolean> => {
   try {
     const formData = new FormData();
@@ -68,6 +72,9 @@ export const uploadBankStatement = async (
     formData.append('applicationId', applicationId);
     formData.append('kvkNummer', metadata.kvkNummer);
     formData.append('bedrijfsnaam', metadata.bedrijfsnaam);
+    if (folderId) {
+      formData.append('folderId', folderId);
+    }
 
     const response = await fetch('/api/bankStatements', {
       method: 'POST',
@@ -105,6 +112,7 @@ export const createSigningSession = async (
     const payload = {
       ...signingData,
       applicationId: formData.applicationId,
+      folderId: formData.folderId,
       tenantId,
       test: tenantId === 'test',
     };

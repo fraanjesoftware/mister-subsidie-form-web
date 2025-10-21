@@ -28,38 +28,61 @@ const App = () => {
 
 
   const handleNext = async () => {
-    if (currentStep < STEPS.length - 1) {
-      // Step 0: Generate ID and submit company data
-      if (currentStep === 0 && !formData.applicationId) {
-        const applicationId = generateApplicationId(formData);
+    if (currentStep >= STEPS.length - 1) {
+      return;
+    }
+
+    if (currentStep === 0) {
+      const applicationId = formData.applicationId ?? generateApplicationId(formData);
+
+      if (!formData.applicationId) {
         handleInputChange('applicationId', applicationId);
-
-        // Submit to backend (fire-and-forget)
-        submitCompanyInfo(formData, applicationId, tenantInfo.tenantId);
       }
 
-      // Sync email to bestuurder1
-      if (currentStep === 0 && formData.email && !formData.bestuurder1.email) {
-        handleNestedInputChange('bestuurder1', 'email', formData.email);
-      }
+      const dataToSubmit = { ...formData, applicationId };
 
-      // Step 1: Upload bank statement
-      if (currentStep === 1 && formData.bankStatement && !formData.bankStatementUploaded) {
-        const uploaded = await uploadBankStatement(
-          formData.bankStatement,
-          formData.applicationId!,
-          { kvkNummer: formData.kvkNummer, bedrijfsnaam: formData.bedrijfsnaam }
+      if (tenantInfo?.tenantId) {
+        const companyInfoResult = await submitCompanyInfo(
+          dataToSubmit,
+          applicationId,
+          tenantInfo.tenantId
         );
 
-        if (uploaded) {
-          handleInputChange('bankStatementUploaded', true);
-        } else {
-          return; // Don't proceed if upload failed
+        if (!companyInfoResult.success) {
+          console.error('Failed to submit company info', companyInfoResult.error);
+          return;
+        }
+
+        if (companyInfoResult.folderId && companyInfoResult.folderId !== formData.folderId) {
+          handleInputChange('folderId', companyInfoResult.folderId);
         }
       }
 
-      setCurrentStep(currentStep + 1);
+      if (formData.email && !formData.bestuurder1.email) {
+        handleNestedInputChange('bestuurder1', 'email', formData.email);
+      }
     }
+
+    if (
+      currentStep === 1 &&
+      formData.bankStatement &&
+      !formData.bankStatementUploaded
+    ) {
+      const uploaded = await uploadBankStatement(
+        formData.bankStatement,
+        formData.applicationId!,
+        { kvkNummer: formData.kvkNummer, bedrijfsnaam: formData.bedrijfsnaam },
+        formData.folderId
+      );
+
+      if (!uploaded) {
+        return; // Don't proceed if upload failed
+      }
+
+      handleInputChange('bankStatementUploaded', true);
+    }
+
+    setCurrentStep((step) => step + 1);
   };
 
   const handlePrev = () => {

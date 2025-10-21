@@ -8,6 +8,7 @@ export interface CompanyInfo {
   applicationId: string;
   tenantId: string;
   datum: string;
+  folderId?: string | null;
 
   // Bedrijfsinformatie
   bedrijfsnaam: string;
