@@ -14,7 +14,7 @@ import { STEPS } from './constants/steps';
 import { useFormData, useStepValidation } from './hooks';
 import { useTenant } from './context/TenantProvider';
 import { generateApplicationId } from './utils/applicationId';
-import { submitCompanyData, uploadBankStatement, createSigningSession } from './services/api';
+import { submitCompanyInfo, uploadBankStatement, createSigningSession } from './services/api';
 
 const App = () => {
   const navigate = useNavigate();
@@ -35,7 +35,7 @@ const App = () => {
         handleInputChange('applicationId', applicationId);
 
         // Submit to backend (fire-and-forget)
-        submitCompanyData(formData, applicationId, tenantInfo.tenantId);
+        submitCompanyInfo(formData, applicationId, tenantInfo.tenantId);
       }
 
       // Sync email to bestuurder1

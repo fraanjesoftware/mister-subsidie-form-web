@@ -1,6 +1,8 @@
 import type { FormData } from '../types';
+import type { CompanyInfo } from '../types/companyInfo';
 import { getApiBaseUrl, getFunctionCode, getSignWellTemplateId, getOptionalFunctionCode } from '../config/api';
 import { buildSigningSession } from '../utils/buildSigningSession';
+import { mapFormDataToCompanyInfo } from '../utils/mappers';
 
 /**
  * API Service - Single responsibility for all backend communication
@@ -21,21 +23,25 @@ interface SignWellResponse {
 }
 
 /**
- * Submits company data to backend
+ * Submits company info from Step 0 to backend
  * Backend creates folder and generates Excel file
+ * Uses type-safe CompanyInfo model (Step 0 fields only)
  */
-export const submitCompanyData = async (
+export const submitCompanyInfo = async (
   formData: FormData,
   applicationId: string,
   tenantId: string
 ): Promise<ApiResponse> => {
   try {
+    // Extract only Step 0 fields
+    const companyInfo: CompanyInfo = mapFormDataToCompanyInfo(formData, applicationId, tenantId);
+
     const response = await fetch(
-      `${getApiBaseUrl()}/api/submitCompanyData?code=${getFunctionCode()}`,
+      `${getApiBaseUrl()}/api/submitCompanyInfo?code=${getFunctionCode()}`,
       {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...formData, applicationId, tenantId }),
+        body: JSON.stringify(companyInfo),
       }
     );
 
