@@ -12,7 +12,8 @@ export interface FormData {
   bedrijfsnaam: string;
   kvkNummer: string;
   email: string;
-  adres: string;
+  straat: string;
+  huisnummer: string;
   postcode: string;
   plaats: string;
   btwId: string;

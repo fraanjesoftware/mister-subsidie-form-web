@@ -1,5 +1,6 @@
 import type { FormData } from '../types';
 import type { CompanyInfo } from '../types/companyInfo';
+import { formatAddress } from './address';
 
 /**
  * Maps FormData to CompanyInfo
@@ -23,7 +24,7 @@ export const mapFormDataToCompanyInfo = (
     kvkNummer: formData.kvkNummer,
     btwId: formData.btwId,
     website: formData.website,
-    adres: formData.adres,
+    adres: formatAddress(formData.straat, formData.huisnummer),
     postcode: formData.postcode,
     plaats: formData.plaats,
     provincie: formData.provincie,

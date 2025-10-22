@@ -95,15 +95,30 @@ export const CompanyDetails = ({ formData, onInputChange }: CompanyDetailsProps)
           validationRules={[validators.url()]}
         />
 
-        <Input
-          label="Adres *"
-          value={formData.adres}
-          onChange={(e) => onInputChange('adres', e.target.value)}
-          placeholder="Straatnaam 123"
-          autoComplete="street-address"
-          name="address"
-          validationRules={[validators.required()]}
-        />
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="md:col-span-2">
+            <Input
+              label="Straatnaam *"
+              value={formData.straat}
+              onChange={(e) => onInputChange('straat', e.target.value)}
+              placeholder="Straatnaam"
+              autoComplete="street-address"
+              name="street"
+              validationRules={[validators.required(), validators.minLength(2)]}
+            />
+          </div>
+
+          <div className="md:col-span-1">
+            <Input
+              label="Huisnummer *"
+              value={formData.huisnummer}
+              onChange={(e) => onInputChange('huisnummer', e.target.value)}
+              placeholder="123"
+              name="house-number"
+              validationRules={[validators.required(), validators.dutchHouseNumber()]}
+            />
+          </div>
+        </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <Select

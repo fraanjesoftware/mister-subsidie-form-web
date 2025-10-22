@@ -1,6 +1,7 @@
 import { FormData } from '../../types';
 import { Card } from '../ui';
 import { StepIntro } from './StepIntro';
+import { formatAddress } from '../../utils/address';
 
 interface ReviewProps {
   formData: FormData;
@@ -33,7 +34,7 @@ export const Review = ({ formData }: ReviewProps) => {
             </div>
             <div>
               <p className="text-gray-600">Adres:</p>
-              <p className="font-medium">{formData.adres || '-'}</p>
+              <p className="font-medium">{formData.straat && formData.huisnummer ? formatAddress(formData.straat, formData.huisnummer) : '-'}</p>
             </div>
             <div>
               <p className="text-gray-600">Postcode & Plaats:</p>

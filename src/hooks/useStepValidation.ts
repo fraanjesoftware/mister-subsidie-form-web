@@ -27,7 +27,8 @@ export const useStepValidation = (formData: FormData) => {
           return (
             isFilled(formData.bedrijfsnaam) &&
             isFilled(formData.kvkNummer) &&
-            isFilled(formData.adres) &&
+            isFilled(formData.straat) &&
+            isFilled(formData.huisnummer) &&
             isFilled(formData.plaats) &&
             isFilled(formData.postcode) &&
             isFilled(formData.email) &&

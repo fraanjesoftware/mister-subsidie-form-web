@@ -7,6 +7,7 @@ import {
 } from '../types/sign';
 import { formatCurrency, sanitizeNumericInput } from './numberFormat';
 import { getCompanySizeLabel, getCompanyRadioValue } from './companyClassification';
+import { formatAddress } from './address';
 
 // Build signing session data for SignWell API
 export const buildSigningSession = (
@@ -74,7 +75,7 @@ export const buildSigningSession = (
         createTextTab('functie-tekenbevoegde-2', formData.bestuurder2.functie),
         createTextTab('nace', formData.naceClassificatie || ''),
         createTextTab('kvk', formData.kvkNummer),
-        createTextTab('onderneming-adres', formData.adres),
+        createTextTab('onderneming-adres', formatAddress(formData.straat, formData.huisnummer)),
         createTextTab('postcode', formData.postcode),
         createTextTab('plaats', formData.plaats),
         createTextTab('fte', formData.aantalFte),

@@ -166,6 +166,17 @@ export const validators = {
       return phoneRegex.test(cleaned);
     },
     message
+  }),
+
+  dutchHouseNumber: (message = 'Voer een geldig huisnummer in (bijv. 12, 123A, 301B)'): ValidationRule => ({
+    validate: (value) => {
+      if (!value) return true;
+      // Dutch house numbers: digits optionally followed by letters or -letters
+      // Examples: 12, 123, 301B, 45-A, 12bis, 34-2
+      const houseNumberRegex = /^[1-9]\d{0,4}([A-Za-z]{1,3}|-[A-Za-z0-9]{1,3}|[A-Za-z]{1,3}-\d{1,2})?$/;
+      return houseNumberRegex.test(value.trim());
+    },
+    message
   })
 };
 
