@@ -157,7 +157,7 @@ export const CompanyDetails = ({ formData, onInputChange }: CompanyDetailsProps)
         <Input
             label="BTW-identificatienummer"
             value={formData.btwId}
-            hint=' '
+            hint='Bijvoorbeeld NL123456789B01'
             onChange={(e) => onInputChange('btwId', e.target.value.toUpperCase())}
             placeholder="NL123456789B01"
             maxLength={14}
