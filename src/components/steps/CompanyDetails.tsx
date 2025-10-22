@@ -96,12 +96,13 @@ export const CompanyDetails = ({ formData, onInputChange }: CompanyDetailsProps)
         />
 
         <Input
-          label="Adres"
+          label="Adres *"
           value={formData.adres}
           onChange={(e) => onInputChange('adres', e.target.value)}
           placeholder="Straatnaam 123"
           autoComplete="street-address"
           name="address"
+          validationRules={[validators.required()]}
         />
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -114,34 +115,36 @@ export const CompanyDetails = ({ formData, onInputChange }: CompanyDetailsProps)
           />
           
           <Input
-            label="Plaats"
+            label="Plaats *"
             value={formData.plaats}
             onChange={(e) => onInputChange('plaats', e.target.value)}
             placeholder="Amsterdam"
             autoComplete="address-level2"
             name="city"
+            validationRules={[validators.required()]}
+
           />
           <Input
-            label="Postcode"
+            label="Postcode *"
             value={formData.postcode}
             onChange={(e) => onInputChange('postcode', e.target.value.toUpperCase())}
             placeholder="1234 AB"
             autoComplete="postal-code"
             name="postal-code"
             maxLength={7}
-            validationRules={[validators.dutchPostcode()]}
+            validationRules={[validators.required(), validators.dutchPostcode()]}
           />
           
         </div>
 
         <Input
-          label="NACE-classificatie"
+          label="NACE-classificatie *"
           hint="Eerste 4 cijfers van uw SBI-code"
           value={formData.naceClassificatie}
           onChange={(e) => onInputChange('naceClassificatie', e.target.value.replace(/\D/g, ''))}
           placeholder="0000"
           maxLength={4}
-          validationRules={[validators.naceCode()]}
+          validationRules={[validators.required(), validators.naceCode()]}
         />
 
         {/* Contactpersoon */}
@@ -183,12 +186,11 @@ export const CompanyDetails = ({ formData, onInputChange }: CompanyDetailsProps)
             </div>
 
             <Select
-              label="Geslacht *"
+              label="Geslacht"
               options={GESLACHT_OPTIES}
               value={formData.contactGeslacht}
               onChange={(value) => onInputChange('contactGeslacht', value)}
               placeholder="Selecteer geslacht"
-              validationRules={[validators.required()]}
             />
           </div>
         </div>

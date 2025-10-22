@@ -3,6 +3,16 @@ import { STEP_KEYS } from '../constants/steps';
 import { validateStep } from '../utils/validation';
 
 export const useStepValidation = (formData: FormData) => {
+  const isFilled = (value: unknown) => {
+    if (typeof value === 'string') {
+      return value.trim().length > 0;
+    }
+    if (typeof value === 'number') {
+      return !isNaN(value);
+    }
+    return !!value;
+  };
+
   const isStepValid = (currentStep: number): boolean => {
     const stepKey = STEP_KEYS[currentStep];
 
@@ -14,7 +24,18 @@ export const useStepValidation = (formData: FormData) => {
     const hasRequiredFields = (() => {
       switch (stepKey) {
         case 'companyDetails':
-          return !!(formData.bedrijfsnaam && formData.kvkNummer && formData.email);
+          return (
+            isFilled(formData.bedrijfsnaam) &&
+            isFilled(formData.kvkNummer) &&
+            isFilled(formData.adres) &&
+            isFilled(formData.plaats) &&
+            isFilled(formData.postcode) &&
+            isFilled(formData.email) &&
+            isFilled(formData.contactNaam) &&
+            isFilled(formData.contactTelefoon) &&
+            isFilled(formData.naceClassificatie) &&
+            isFilled(formData.hoofdcontactPersoon)
+          );
         case 'directors':
           const bestuurder1Valid = !!(formData.bestuurder1.voorletters && formData.bestuurder1.achternaam && formData.bestuurder1.email);
           if (formData.bestuurder2?.nodig) {
