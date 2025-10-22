@@ -158,11 +158,12 @@ export const validators = {
     message
   }),
 
-  dutchPhone: (message = 'Voer een geldig Nederlands telefoonnummer in'): ValidationRule => ({
+  phone: (message = 'Voer een geldig telefoonnummer in'): ValidationRule => ({
     validate: (value) => {
       if (!value) return true;
       const cleaned = value.replace(/[\s\-\(\)]/g, '');
-      const phoneRegex = /^(\+31|0031|0)[1-9][0-9]{8}$/;
+      // International phone format: optional +, followed by 7-15 digits
+      const phoneRegex = /^\+?[0-9]{7,15}$/;
       return phoneRegex.test(cleaned);
     },
     message
@@ -202,7 +203,7 @@ export const fieldValidations = {
   postcode: [validators.required(), validators.dutchPostcode()],
   naceClassificatie: [validators.required(), validators.naceCode()],
   contactNaam: [validators.required(), validators.minLength(2)],
-  contactTelefoon: [validators.required(), validators.dutchPhone()],
+  contactTelefoon: [validators.required(), validators.phone()],
   hoofdcontactPersoon: [validators.required()],
   
   // Directors

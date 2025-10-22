@@ -198,9 +198,9 @@ export const CompanyDetails = ({ formData, onInputChange }: CompanyDetailsProps)
                 type="tel"
                 value={formData.contactTelefoon}
                 onChange={(e) => onInputChange('contactTelefoon', e.target.value)}
-                placeholder="0612345678"
+                placeholder="+31612345678"
                 autoComplete="tel"
-                validationRules={[validators.required(), validators.dutchPhone()]}
+                validationRules={[validators.required(), validators.phone()]}
               />
             </div>
 

@@ -19,7 +19,7 @@ export const useStepValidation = (formData: FormData) => {
     if (!stepKey) {
       return true;
     }
-    
+
     // First check if required fields are filled
     const hasRequiredFields = (() => {
       switch (stepKey) {
@@ -69,7 +69,7 @@ export const useStepValidation = (formData: FormData) => {
     if (!hasRequiredFields) {
       return false;
     }
-    
+
     // Then check validation rules
     if (stepKey) {
       const errors = validateStep(stepKey, formData);
