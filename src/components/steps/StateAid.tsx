@@ -1,6 +1,7 @@
+import { useMemo } from 'react';
 import { FormData } from '../../types';
 import { Input, Alert, RadioGroup } from '../ui';
-import { validators } from '../../utils/validation';
+import { validators, validateStep } from '../../utils/validation';
 import { StepIntro } from './StepIntro';
 
 interface StateAidProps {
@@ -9,6 +10,21 @@ interface StateAidProps {
 }
 
 export const StateAid = ({ formData, onInputChange }: StateAidProps) => {
+  const errors = useMemo(() => validateStep('stateAid', formData), [formData]);
+  const deMinimisAmountError =
+    formData.deMinimisType === 'wel' ? errors.deMinimisAmount : undefined;
+  const andereAmountError =
+    formData.deMinimisType === 'andere' ? errors.andereStaatssteunAmount : undefined;
+  const andereDateError =
+    formData.deMinimisType === 'andere' ? errors.andereStaatssteunDatum : undefined;
+
+  const numberInputClasses = (hasError: boolean) =>
+    `w-full pl-8 pr-4 py-2 border rounded-lg font-medium focus:ring-2 focus:outline-none ${
+      hasError
+        ? 'border-red-500 focus:ring-red-500 focus:border-red-500'
+        : 'border-gray-300 focus:ring-blue-500 focus:border-blue-500'
+    }`;
+
   const options = [
     {
       value: 'geen',
@@ -29,7 +45,7 @@ export const StateAid = ({ formData, onInputChange }: StateAidProps) => {
               <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 pointer-events-none">€</span>
               <input
                 type="number"
-                className="w-full pl-8 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                className={numberInputClasses(!!deMinimisAmountError)}
                 value={formData.deMinimisAmount}
                 onChange={(e) => onInputChange('deMinimisAmount', e.target.value)}
                 placeholder="0"
@@ -39,6 +55,9 @@ export const StateAid = ({ formData, onInputChange }: StateAidProps) => {
             <p className="text-xs text-gray-500 mt-1">
               Maximaal €299.999 (de drempel is €300.000)
             </p>
+            {deMinimisAmountError && (
+              <p className="mt-1 text-sm text-red-600 font-medium">{deMinimisAmountError}</p>
+            )}
           </div>
         </div>
       )
@@ -57,18 +76,22 @@ export const StateAid = ({ formData, onInputChange }: StateAidProps) => {
               <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 pointer-events-none">€</span>
               <input
                 type="number"
-                className="w-full pl-8 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                className={numberInputClasses(!!andereAmountError)}
                 value={formData.andereStaatssteunAmount}
                 onChange={(e) => onInputChange('andereStaatssteunAmount', e.target.value)}
                 placeholder="0"
               />
             </div>
+            {andereAmountError && (
+              <p className="mt-1 text-sm text-red-600 font-medium">{andereAmountError}</p>
+            )}
           </div>
           <Input
             type="date"
             label="Datum besluit Europese Commissie"
             value={formData.andereStaatssteunDatum}
             onChange={(e) => onInputChange('andereStaatssteunDatum', e.target.value)}
+            error={andereDateError}
             validationRules={[validators.dateInPast()]}
           />
         </div>

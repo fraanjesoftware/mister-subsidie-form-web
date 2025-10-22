@@ -196,8 +196,13 @@ export const fieldValidations = {
   bedrijfsnaam: [validators.required(), validators.minLength(2)],
   kvkNummer: [validators.required(), validators.kvkNumber()],
   email: [validators.required(), validators.email()],
-  postcode: [validators.dutchPostcode()],
-  naceClassificatie: [validators.naceCode()],
+  adres: [validators.required()],
+  plaats: [validators.required()],
+  postcode: [validators.required(), validators.dutchPostcode()],
+  naceClassificatie: [validators.required(), validators.naceCode()],
+  contactNaam: [validators.required(), validators.minLength(2)],
+  contactTelefoon: [validators.required(), validators.dutchPhone()],
+  hoofdcontactPersoon: [validators.required()],
   
   // Directors
   voorletters: [validators.required(), validators.initials()],
@@ -224,29 +229,27 @@ export const validateStep = (stepName: string, formData: any): Record<string, st
   
   switch (stepName) {
     case 'companyDetails':
-      const companyFields = ['bedrijfsnaam', 'kvkNummer', 'email'];
+      const companyFields = [
+        'bedrijfsnaam',
+        'kvkNummer',
+        'email',
+        'adres',
+        'plaats',
+        'postcode',
+        'naceClassificatie',
+        'contactNaam',
+        'contactTelefoon',
+        'hoofdcontactPersoon'
+      ] as const;
       companyFields.forEach(field => {
-        if (fieldValidations[field as keyof typeof fieldValidations]) {
-          const result = validate(formData[field], fieldValidations[field as keyof typeof fieldValidations]);
+        const rules = fieldValidations[field as keyof typeof fieldValidations];
+        if (rules) {
+          const result = validate(formData[field], rules);
           if (!result.isValid && result.error) {
             errors[field] = result.error;
           }
         }
       });
-      
-      if (formData.postcode) {
-        const postcodeResult = validate(formData.postcode, [validators.dutchPostcode()]);
-        if (!postcodeResult.isValid && postcodeResult.error) {
-          errors.postcode = postcodeResult.error;
-        }
-      }
-      
-      if (formData.naceClassificatie) {
-        const naceResult = validate(formData.naceClassificatie, [validators.naceCode()]);
-        if (!naceResult.isValid && naceResult.error) {
-          errors.naceClassificatie = naceResult.error;
-        }
-      }
       break;
       
     case 'directors':
@@ -296,10 +299,14 @@ export const validateStep = (stepName: string, formData: any): Record<string, st
       break;
       
     case 'stateAid':
-      if (formData.deMinimisType === 'wel' && formData.deMinimisAmount) {
-        const result = validate(formData.deMinimisAmount, fieldValidations.deMinimisAmount);
-        if (!result.isValid && result.error) {
-          errors.deMinimisAmount = result.error;
+      if (formData.deMinimisType === 'wel') {
+        if (!formData.deMinimisAmount) {
+          errors.deMinimisAmount = 'Dit veld is verplicht';
+        } else {
+          const result = validate(formData.deMinimisAmount, fieldValidations.deMinimisAmount);
+          if (!result.isValid && result.error) {
+            errors.deMinimisAmount = result.error;
+          }
         }
       }
       
@@ -320,3 +327,4 @@ export const validateStep = (stepName: string, formData: any): Record<string, st
   
   return errors;
 };
+

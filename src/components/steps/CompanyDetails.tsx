@@ -67,7 +67,6 @@ export const CompanyDetails = ({ formData, onInputChange }: CompanyDetailsProps)
           validationRules={[validators.required(), validators.minLength(2)]}
         />
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <Input
             label="KvK-nummer *"
             value={formData.kvkNummer}
@@ -77,23 +76,7 @@ export const CompanyDetails = ({ formData, onInputChange }: CompanyDetailsProps)
             validationRules={[validators.required(), validators.kvkNumber()]}
           />
 
-          <Input
-            label="BTW-identificatienummer"
-            value={formData.btwId}
-            onChange={(e) => onInputChange('btwId', e.target.value.toUpperCase())}
-            placeholder="NL123456789B01"
-            maxLength={14}
-            validationRules={[validators.btwId()]}
-          />
-        </div>
-
-        <Input
-          label="Website"
-          value={formData.website}
-          onChange={(e) => onInputChange('website', e.target.value)}
-          placeholder="www.uwbedrijf.nl"
-          validationRules={[validators.url()]}
-        />
+       
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div className="md:col-span-2">
@@ -121,12 +104,15 @@ export const CompanyDetails = ({ formData, onInputChange }: CompanyDetailsProps)
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <Select
-            label="Provincie"
-            options={PROVINCIES}
-            value={formData.provincie}
-            onChange={(value) => onInputChange('provincie', value)}
-            placeholder="Selecteer provincie"
+           <Input
+            label="Postcode *"
+            value={formData.postcode}
+            onChange={(e) => onInputChange('postcode', e.target.value.toUpperCase())}
+            placeholder="1234 AB"
+            autoComplete="postal-code"
+            name="postal-code"
+            maxLength={7}
+            validationRules={[validators.required(), validators.dutchPostcode()]}
           />
           
           <Input
@@ -139,18 +125,25 @@ export const CompanyDetails = ({ formData, onInputChange }: CompanyDetailsProps)
             validationRules={[validators.required()]}
 
           />
-          <Input
-            label="Postcode *"
-            value={formData.postcode}
-            onChange={(e) => onInputChange('postcode', e.target.value.toUpperCase())}
-            placeholder="1234 AB"
-            autoComplete="postal-code"
-            name="postal-code"
-            maxLength={7}
-            validationRules={[validators.required(), validators.dutchPostcode()]}
+         
+          <Select
+            label="Provincie"
+            options={PROVINCIES}
+            value={formData.provincie}
+            onChange={(value) => onInputChange('provincie', value)}
+            placeholder="Selecteer provincie"
           />
           
         </div>
+          <Input
+          label="Website"
+          value={formData.website}
+          onChange={(e) => onInputChange('website', e.target.value)}
+          placeholder="www.uwbedrijf.nl"
+          validationRules={[validators.url()]}
+        />
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 
         <Input
           label="NACE-classificatie *"
@@ -161,6 +154,17 @@ export const CompanyDetails = ({ formData, onInputChange }: CompanyDetailsProps)
           maxLength={4}
           validationRules={[validators.required(), validators.naceCode()]}
         />
+        <Input
+            label="BTW-identificatienummer"
+            value={formData.btwId}
+            hint=' '
+            onChange={(e) => onInputChange('btwId', e.target.value.toUpperCase())}
+            placeholder="NL123456789B01"
+            maxLength={14}
+            validationRules={[validators.btwId()]}
+          />
+        </div>
+        
 
         {/* Contactpersoon */}
         <div className="pt-6 border-t border-[var(--color-gray-light-3)]">

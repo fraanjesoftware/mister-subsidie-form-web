@@ -15,6 +15,7 @@ import { useFormData, useStepValidation } from './hooks';
 import { useTenant } from './context/TenantProvider';
 import { generateApplicationId } from './utils/applicationId';
 import { submitCompanyInfo, uploadBankStatement, createSigningSession } from './services/api';
+import { Alert } from './components/ui';
 
 const App = () => {
   const navigate = useNavigate();
@@ -23,6 +24,7 @@ const App = () => {
   const [signLoading, setSignLoading] = useState(false);
   const [signingError, setSigningError] = useState<string>('');
   const [signingStatus, setSigningStatus] = useState<'idle' | 'completed' | 'cancelled'>('idle');
+  const [companyInfoWarning, setCompanyInfoWarning] = useState<string | null>(null);
   const { formData, handleInputChange, handleNestedInputChange } = useFormData();
   const { isStepValid } = useStepValidation(formData);
   const tenantInfo = useTenant();
@@ -54,11 +56,17 @@ const App = () => {
 
           if (!companyInfoResult.success) {
             console.error('Failed to submit company info', companyInfoResult.error);
-            return;
-          }
+            setCompanyInfoWarning(
+              'Het is niet gelukt om uw gegevens direct in ons systeem op te slaan. Wij verwerken dit handmatig, u kunt veilig doorgaan.'
+            );
+          } else {
+            if (companyInfoWarning) {
+              setCompanyInfoWarning(null);
+            }
 
-          if (companyInfoResult.folderId && companyInfoResult.folderId !== formData.folderId) {
-            handleInputChange('folderId', companyInfoResult.folderId);
+            if (companyInfoResult.folderId && companyInfoResult.folderId !== formData.folderId) {
+              handleInputChange('folderId', companyInfoResult.folderId);
+            }
           }
         }
 
@@ -165,6 +173,13 @@ const App = () => {
         />
         
         <div className="bg-white rounded-xl shadow-lg p-8 mb-6">
+          {companyInfoWarning && (
+            <div className="mb-6">
+              <Alert type="warning">
+                {companyInfoWarning}
+              </Alert>
+            </div>
+          )}
           {renderStep()}
         </div>
         
